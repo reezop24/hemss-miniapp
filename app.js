@@ -11,13 +11,13 @@ const btn = document.getElementById("btnSubmit");
 
 
 // =============================
-// KEBERADAAN GURU - ADD / REMOVE ROW (FIXED)
+// KEBERADAAN GURU - ADD / REMOVE ROW (FINAL FIX)
 // =============================
 
 document.addEventListener("click", function (e) {
 
   // TAMBAH BARIS
-  if (e.target.classList.contains("add-btn")) {
+  if (e.target.classList.contains("add-btn") && e.target.id !== "btnSubmit") {
     const container = document.getElementById("guru-container");
     if (!container) return;
 
@@ -26,11 +26,8 @@ document.addEventListener("click", function (e) {
 
     const newRow = firstRow.cloneNode(true);
 
-    // reset input
-    const input = newRow.querySelector("input");
-    const select = newRow.querySelector("select");
-    if (input) input.value = "";
-    if (select) select.selectedIndex = 0;
+    newRow.querySelector("input").value = "";
+    newRow.querySelector("select").selectedIndex = 0;
 
     container.appendChild(newRow);
   }
