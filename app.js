@@ -10,26 +10,14 @@ const btn = document.getElementById("btnSubmit");
 const attendanceBody = document.getElementById("attendanceBody");
 
 function addAttendanceRow() {
-  const row = document.createElement("tr");
+  const kelasSelect = document.createElement("select");
 
-  row.innerHTML = `
-    <td>
-      <select class="tingkatan">
-        <option>1</option><option>2</option><option>3</option>
-        <option>4</option><option>5</option>
-      </select>
-    </td>
-    <td>
-      <select class="kelas">
-        <option>Seroja</option><option>Mawar</option><option>Melati</option>
-        <option>Teratai</option><option>Kenanga</option>
-      </select>
-    </td>
-    <td>
-      <input type="number" class="hadir small" min="0"> /
-      <input type="number" class="daftar small" min="0">
-    </td>
-  `;
+PRESET_KELAS.forEach(kelas => {
+  const opt = document.createElement("option");
+  opt.value = kelas;
+  opt.textContent = kelas;
+  kelasSelect.appendChild(opt);
+});
 
   attendanceBody.appendChild(row);
 
@@ -71,19 +59,14 @@ const guruContainer = document.getElementById("guruContainer");
 const addRowBtn = document.getElementById("addRow");
 
 addRowBtn.addEventListener("click", () => {
-  const row = document.createElement("div");
-  row.className = "guru-row";
+  const statusSelect = document.createElement("select");
 
-  row.innerHTML = `
-    <select>
-      <option>CR</option>
-      <option>MC</option>
-      <option>Mesyuarat</option>
-      <option>Lain-lain</option>
-    </select>
-    <input placeholder="Nama Guru">
-    <button type="button" class="remove-btn">−</button>
-  `;
+PRESET_KEBERADAAN.forEach(item => {
+  const opt = document.createElement("option");
+  opt.value = item;
+  opt.textContent = item;
+  statusSelect.appendChild(opt);
+});
 
   guruContainer.appendChild(row);
 });
