@@ -1,14 +1,21 @@
-// ===============================
-// HEMSS MINI APP - app.js
-// ===============================
+// =======================================
+// HEMSS MINI APP — app.js (FINAL)
+// =======================================
 
-// WAJIB: init Telegram WebApp
+// ===============================
+// INIT TELEGRAM WEB APP
+// ===============================
 const tg = window.Telegram.WebApp;
+
+if (!tg) {
+  alert("Telegram WebApp tidak dijumpai.");
+}
+
 tg.ready();
-tg.expand();
+tg.expand(); // full height
 
 // ===============================
-// AMBIL PARAMETER SECTION (URL)
+// AMBIL PARAMETER SECTION
 // contoh: ?section=tandas
 // ===============================
 const params = new URLSearchParams(window.location.search);
@@ -23,13 +30,12 @@ const btnSubmit = document.getElementById("btnSubmit");
 // ===============================
 // SAFETY CHECK
 // ===============================
-if (!tg || !tg.sendData) {
-  alert("Telegram WebApp tidak dijumpai.");
+if (!form || !btnSubmit) {
+  alert("Elemen borang tidak lengkap.");
 }
 
 // ===============================
-// CLICK HANDLER SAHAJA
-// (TIADA form.submit, TIADA auto)
+// SUBMIT HANDLER (MANUAL)
 // ===============================
 btnSubmit.addEventListener("click", () => {
 
@@ -37,28 +43,52 @@ btnSubmit.addEventListener("click", () => {
   // KUTIP DATA FORM
   // ===========================
   const formData = {};
+  let hasError = false;
 
-  // semua input/select/textarea
   const elements = form.querySelectorAll("input, select, textarea");
 
   elements.forEach(el => {
     if (!el.name) return;
-    formData[el.name] = el.value;
+
+    const value = el.value.trim();
+
+    // VALIDATION RINGKAS
+    if (el.hasAttribute("required") && value === "") {
+      el.style.border = "2px solid red";
+      hasError = true;
+    } else {
+      el.style.border = "";
+    }
+
+    formData[el.name] = value;
   });
+
+  // ===========================
+  // JIKA ADA ERROR → STOP
+  // ===========================
+  if (hasError) {
+    tg.showAlert("Sila lengkapkan semua maklumat wajib.");
+    return;
+  }
 
   // ===========================
   // PAYLOAD AKHIR
   // ===========================
   const payload = {
     section: section,
-    timestamp: new Date().toISOString(),
+    submitted_at: new Date().toISOString(),
     data: formData
   };
 
   // ===========================
   // HANTAR KE BOT
   // ===========================
-  tg.sendData(JSON.stringify(payload));
+  try {
+    tg.sendData(JSON.stringify(payload));
+  } catch (err) {
+    tg.showAlert("Gagal menghantar data.");
+    return;
+  }
 
   // ===========================
   // TUTUP MINI APP
