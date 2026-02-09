@@ -1,32 +1,32 @@
 // ===============================
-// PRESET DATA HEMSS
+// HEMSS MINI APP - presets.js
 // ===============================
 
-// SENARAI KELAS
-const PRESET_KELAS = [
-  "Seroja",
-  "Mawar",
-  "Melati",
-  "Teratai",
-  "Kenanga",
-  "Cempaka",
-  "Anggerik",
-  "Orkid",
-  "Bakawali",
-  "Ros"
+// Tingkatan
+const tingkatanList = ["1", "2", "3", "4", "5"];
+
+// Kelas
+const kelasList = [
+  "Seroja", "Mawar", "Melati", "Teratai", "Kenanga",
+  "Cempaka", "Anggerik", "Orkid", "Bakawali", "Ros"
 ];
 
-// KEBERADAAN GURU
-const PRESET_KEBERADAAN = [
+// Hari
+const hariList = ["Isnin", "Selasa", "Rabu", "Khamis", "Jumaat"];
+
+// Status keberadaan guru
+const statusGuruList = [
   "CR",
-  "CTR",
-  "CRK",
   "MC",
-  "Kuarantin",
-  "Bengkel",
   "Mesyuarat",
-  "Taklimat",
   "Temujanji",
+  "Bengkel",
+  "Kuarantin",
   "Rawatan",
   "Lain-lain"
 ];
+
+// helper (HTML option builder)
+function buildOptions(list) {
+  return list.map(v => `<option value="${v}">${v}</option>`).join("");
+}
