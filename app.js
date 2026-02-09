@@ -60,11 +60,10 @@ function kiraKehadiran() {
   document.getElementById("peratusHadir").innerText = `${peratus}%`;
 }
 
-/* DEFAULT 5 ROW */
-for (let i = 0; i < 5; i++) {
+/* DEFAULT 30 ROW (STATIK) */
+for (let i = 0; i < 30; i++) {
   addAttendanceRow();
 }
-
 /* =========================
    KEBERADAAN GURU
 ========================= */
