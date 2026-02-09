@@ -1,22 +1,27 @@
-const tg = window.Telegram.WebApp;
-tg.ready();
-tg.expand();
+// ===============================
+// HEMSS MINI APP - app.js (FINAL)
+// ===============================
 
-const btn = document.getElementById("btnSubmit");
+const tg = window.Telegram.WebApp;
+tg.ready(); // ❗ JANGAN expand
+
 const form = document.getElementById("reportForm");
+const btn = document.getElementById("btnSubmit");
 
 btn.addEventListener("click", () => {
   const data = {};
-  form.querySelectorAll("input, select, textarea").forEach(el => {
+
+  const elements = form.querySelectorAll("input, select, textarea");
+  elements.forEach(el => {
     if (el.name) data[el.name] = el.value;
   });
 
-  tg.sendData(JSON.stringify({
+  const payload = {
     section: "tandas",
     data: data,
     submitted_at: new Date().toISOString()
-  }));
+  };
 
-  // WAJIB PANGGIL
+  tg.sendData(JSON.stringify(payload));
   tg.close();
 });
