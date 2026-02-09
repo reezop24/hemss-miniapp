@@ -1,77 +1,79 @@
+// ===============================
+// HEMSS MINI APP - app.js (STABLE)
+// ===============================
+
 const tg = window.Telegram.WebApp;
 tg.ready();
 
-const form = document.getElementById("reportForm");
-const btn = document.getElementById("btnSubmit");
-
-/* =========================
-   KEHADIRAN MURID
-========================= */
+// ---------- ELEMENT ----------
 const attendanceBody = document.getElementById("attendanceBody");
-
-function addAttendanceRow() {
-  const kelasSelect = document.createElement("select");
-
-PRESET_KELAS.forEach(kelas => {
-  const opt = document.createElement("option");
-  opt.value = kelas;
-  opt.textContent = kelas;
-  kelasSelect.appendChild(opt);
-});
-
-  attendanceBody.appendChild(row);
-
-  row.querySelectorAll("input").forEach(input => {
-    input.addEventListener("input", kiraKehadiran);
-  });
-}
-
-function kiraKehadiran() {
-  let totalHadir = 0;
-  let totalDaftar = 0;
-
-  document.querySelectorAll(".hadir").forEach((el, i) => {
-    const hadir = parseInt(el.value) || 0;
-    const daftar = parseInt(document.querySelectorAll(".daftar")[i].value) || 0;
-
-    totalHadir += hadir;
-    totalDaftar += daftar;
-  });
-
-  document.getElementById("jumlahHadir").innerText =
-    `${totalHadir} / ${totalDaftar}`;
-
-  const peratus = totalDaftar === 0
-    ? 0
-    : Math.round((totalHadir / totalDaftar) * 100);
-
-  document.getElementById("peratusHadir").innerText = `${peratus}%`;
-}
-
-/* DEFAULT 30 ROW (STATIK) */
-for (let i = 0; i < 30; i++) {
-  addAttendanceRow();
-}
-/* =========================
-   KEBERADAAN GURU
-========================= */
-const guruContainer = document.getElementById("guruContainer");
 const addRowBtn = document.getElementById("addRow");
+const guruContainer = document.getElementById("guruContainer");
+const btnSubmit = document.getElementById("btnSubmit");
+const form = document.getElementById("reportForm");
 
+// ---------- PRESET ----------
+const kelasList = [
+  "Seroja","Mawar","Melati","Teratai","Kenanga",
+  "Cempaka","Anggerik","Orkid","Bakawali","Ros"
+];
+
+// ---------- CREATE 30 ROW MURID ----------
+function createAttendanceRows() {
+  attendanceBody.innerHTML = "";
+
+  for (let i = 0; i < 30; i++) {
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      <td>
+        <select name="tingkatan_${i}">
+          <option>1</option><option>2</option><option>3</option>
+          <option>4</option><option>5</option>
+        </select>
+      </td>
+
+      <td>
+        <select name="kelas_${i}">
+          ${kelasList.map(k => `<option>${k}</option>`).join("")}
+        </select>
+      </td>
+
+      <td>
+        <input class="small" type="number" name="hadir_${i}"> /
+        <input class="small" type="number" name="daftar_${i}">
+      </td>
+    `;
+
+    attendanceBody.appendChild(tr);
+  }
+}
+
+// ---------- GURU ADD / REMOVE ----------
 addRowBtn.addEventListener("click", () => {
-  const statusSelect = document.createElement("select");
+  const count = guruContainer.children.length + 1;
 
-PRESET_KEBERADAAN.forEach(item => {
-  const opt = document.createElement("option");
-  opt.value = item;
-  opt.textContent = item;
-  statusSelect.appendChild(opt);
-});
+  const row = document.createElement("div");
+  row.className = "guru-row";
+
+  row.innerHTML = `
+    <select name="status_${count}">
+      <option>CR</option>
+      <option>MC</option>
+      <option>Mesyuarat</option>
+      <option>Lain-lain</option>
+    </select>
+
+    <input name="nama_status_${count}" placeholder="Nama Guru">
+
+    <button type="button" class="remove-btn">−</button>
+  `;
 
   guruContainer.appendChild(row);
 });
 
-guruContainer.addEventListener("click", e => {
+// remove guru row (event delegation)
+guruContainer.addEventListener("click", (e) => {
   if (e.target.classList.contains("remove-btn")) {
     if (guruContainer.children.length > 1) {
       e.target.parentElement.remove();
@@ -79,26 +81,26 @@ guruContainer.addEventListener("click", e => {
   }
 });
 
-/* =========================
-   SIMPAN LAPORAN
-========================= */
-btn.addEventListener("click", () => {
+// ---------- SAVE ----------
+btnSubmit.addEventListener("click", () => {
   const data = {};
 
-  form.querySelectorAll("input, select, textarea").forEach(el => {
-    if (el.value) {
-      data[el.name || el.className] = el.value;
+  const elements = form.querySelectorAll("input, select, textarea");
+  elements.forEach(el => {
+    if (el.name && el.value !== "") {
+      data[el.name] = el.value;
     }
   });
 
-  data.jumlah_hadir = document.getElementById("jumlahHadir").innerText;
-  data.peratus_hadir = document.getElementById("peratusHadir").innerText;
-
-  tg.sendData(JSON.stringify({
-    section: "kehadiran",
-    data,
+  const payload = {
+    section: "bahagian1",
+    data: data,
     submitted_at: new Date().toISOString()
-  }));
+  };
 
+  tg.sendData(JSON.stringify(payload));
   tg.close();
 });
+
+// ---------- INIT ----------
+createAttendanceRows();
