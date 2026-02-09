@@ -1,3 +1,4 @@
+alert("JS HIDUP");
 const tg = window.Telegram.WebApp;
 tg.ready();
 
