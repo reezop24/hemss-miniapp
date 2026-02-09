@@ -1,20 +1,22 @@
 const tg = window.Telegram.WebApp;
 tg.ready();
+tg.expand();
 
+const btn = document.getElementById("btnSubmit");
 const form = document.getElementById("reportForm");
 
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-
+btn.addEventListener("click", () => {
   const data = {};
   form.querySelectorAll("input, select, textarea").forEach(el => {
     if (el.name) data[el.name] = el.value;
   });
 
   tg.sendData(JSON.stringify({
-    section: new URLSearchParams(window.location.search).get("section"),
-    data: data
+    section: "tandas",
+    data: data,
+    submitted_at: new Date().toISOString()
   }));
 
+  // WAJIB PANGGIL
   tg.close();
 });
