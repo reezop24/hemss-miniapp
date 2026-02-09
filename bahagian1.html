@@ -188,30 +188,29 @@
   <label>4. Laporan Kehadiran Murid</label>
 
   <table>
+  <thead>
     <tr>
       <th>Tingkatan</th>
       <th>Kelas</th>
       <th>Hadir / Daftar</th>
     </tr>
+  </thead>
 
+  <tbody id="attendanceBody">
+    <!-- ROW AKAN DIBUAT OLEH JS -->
+  </tbody>
+
+  <tfoot>
     <tr>
-      <td>
-        <select name="tingkatan_1">
-          <option>1</option><option>2</option><option>3</option>
-          <option>4</option><option>5</option>
-        </select>
-      </td>
-      <td>
-        <select name="kelas_1">
-          <option>Seroja</option><option>Mawar</option><option>Melati</option>
-        </select>
-      </td>
-      <td>
-        <input class="small" name="hadir_1" type="number"> /
-        <input class="small" name="daftar_1" type="number">
-      </td>
+      <td colspan="2"><strong>Jumlah Hadir</strong></td>
+      <td id="jumlahHadir">0 / 0</td>
     </tr>
-  </table>
+    <tr>
+      <td colspan="2"><strong>Peratus Kehadiran</strong></td>
+      <td id="peratusHadir">0%</td>
+    </tr>
+  </tfoot>
+</table>
 
   <hr>
 
