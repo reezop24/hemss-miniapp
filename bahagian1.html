@@ -16,10 +16,8 @@
 
     .container {
       padding: 16px;
-      max-width: 100%;
     }
 
-    /* ===== HEADER ===== */
     .header {
       text-align: center;
       margin-bottom: 12px;
@@ -28,13 +26,11 @@
     .header h1 {
       font-size: 18px;
       margin: 0;
-      font-weight: 600;
     }
 
     .header h2 {
       font-size: 15px;
-      margin: 6px 0 0;
-      font-weight: 500;
+      margin-top: 6px;
     }
 
     hr {
@@ -43,46 +39,21 @@
       margin: 16px 0;
     }
 
-    /* ===== SECTION ===== */
-    .section {
-      margin-bottom: 20px;
-    }
-
     .section-title {
       font-weight: 600;
       margin-bottom: 8px;
     }
 
-    label {
-      display: block;
-      font-size: 14px;
-      margin-bottom: 4px;
-    }
-
     input, select, textarea {
       width: 100%;
       min-height: 44px;
-      font-size: 16px;
-      padding: 8px 10px;
+      padding: 8px;
       margin-bottom: 8px;
       border-radius: 6px;
       border: 1px solid #ccc;
-      box-sizing: border-box;
+      font-size: 16px;
     }
 
-    textarea {
-      min-height: 80px;
-      resize: vertical;
-    }
-
-    /* ===== GRID ===== */
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-
-    /* ===== TABLE ===== */
     table {
       width: 100%;
       border-collapse: collapse;
@@ -97,37 +68,26 @@
 
     th {
       background: #eee;
-      font-weight: 600;
     }
 
-    .small-input {
-      width: 42px !important;
-      min-height: 30px !important;
-      font-size: 13px !important;
-      padding: 2px !important;
-    }
-
-    .slash {
-      width: 4%;
-      display: inline-block;
-      text-align: center;
-      font-weight: 600;
-    }
-
-    /* ===== KEHADIRAN ROW ===== */
     .attendance-box {
       display: flex;
       justify-content: center;
-      align-items: center;
-      gap: 2px;
+      gap: 4px;
     }
-    /* ===== GURU ROW ===== */
+
+    .small-input {
+      width: 48px;
+      min-height: 32px;
+      font-size: 14px;
+    }
+
     .guru-row {
       display: grid;
       grid-template-columns: 120px 1fr 40px;
       gap: 6px;
-      align-items: center;
       margin-bottom: 6px;
+      align-items: center;
     }
 
     .remove-btn {
@@ -150,198 +110,109 @@
       margin-top: 8px;
     }
 
-    table select {
-      min-height: 42px;
-      font-size: 15px;
-      padding: 6px 8px;
-    }
-    table input:not(.small-input),
-    table select {
-      min-height: 46px;
+    .save-btn {
+      background: #27ae60;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      height: 48px;
       font-size: 16px;
+      width: 100%;
     }
   </style>
 </head>
 
 <body>
-  <form class="container" id="reportForm">
 
-    <!-- HEADER -->
-    <div class="header">
-      <h1>Unit HEM SMK Seri Sendayan</h1>
-      <h2>LAPORAN GURU BERTUGAS MINGGUAN</h2>
-    </div>
+<form class="container" id="reportForm">
 
-    <hr>
+  <div class="header">
+    <h1>Unit HEM SMK Seri Sendayan</h1>
+    <h2>LAPORAN GURU BERTUGAS MINGGUAN</h2>
+  </div>
 
-    <!-- 1. KUMPULAN GURU -->
-    <div class="section">
-      <div class="section-title">1. Kumpulan Guru Bertugas</div>
-      <input type="text" placeholder="Nama Guru 1">
-      <input type="text" placeholder="Nama Guru 2">
-      <input type="text" placeholder="Nama Guru 3">
-      <input type="text" placeholder="Nama Guru 4">
-      <input type="text" placeholder="Nama Guru 5">
-    </div>
+  <hr>
 
-    <hr>
+  <div>
+    <div class="section-title">1. Kumpulan Guru Bertugas</div>
+    <input name="guru1" placeholder="Nama Guru 1">
+    <input name="guru2" placeholder="Nama Guru 2">
+    <input name="guru3" placeholder="Nama Guru 3">
+    <input name="guru4" placeholder="Nama Guru 4">
+    <input name="guru5" placeholder="Nama Guru 5">
+  </div>
 
-    <!-- 2. MINGGU -->
-    <div class="section">
-      <div class="section-title">2. Minggu</div>
-      <select>
-        <option>Minggu 1</option>
-        <option>Minggu 2</option>
-        <option>Minggu 3</option>
-        <option>Minggu 4</option>
-        <option>Minggu 5</option>
-      </select>
-    </div>
+  <hr>
 
-    <hr>
+  <div>
+    <div class="section-title">2. Minggu</div>
+    <select name="minggu">
+      <option value="1">Minggu 1</option>
+      <option value="2">Minggu 2</option>
+      <option value="3">Minggu 3</option>
+      <option value="4">Minggu 4</option>
+      <option value="5">Minggu 5</option>
+    </select>
+  </div>
 
-    <!-- 3. TARIKH -->
-    <div class="section">
-      <div class="section-title">3. Tarikh</div>
-      <input type="date">
-    </div>
+  <hr>
 
-    <hr>
+  <div>
+    <div class="section-title">3. Tarikh</div>
+    <input type="date" name="tarikh">
+  </div>
 
-    <!-- 4. HARI -->
-    <div class="section">
-      <div class="section-title">4. Hari</div>
-      <select>
-        <option>Isnin</option>
-        <option>Selasa</option>
-        <option>Rabu</option>
-        <option>Khamis</option>
-        <option>Jumaat</option>
-      </select>
-    </div>
+  <hr>
 
-    <hr>
+  <div>
+    <div class="section-title">4. Hari</div>
+    <select name="hari">
+      <option>Isnin</option>
+      <option>Selasa</option>
+      <option>Rabu</option>
+      <option>Khamis</option>
+      <option>Jumaat</option>
+    </select>
+  </div>
 
-    <!-- 5. KEHADIRAN MURID -->
-    <div class="section">
-      <div class="section-title">5. Laporan Kehadiran Murid</div>
+  <hr>
 
-      <label>Pilih Hari</label>
-      <select>
-        <option>Isnin</option>
-        <option>Selasa</option>
-        <option>Rabu</option>
-        <option>Khamis</option>
-        <option>Jumaat</option>
-      </select>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Tingkatan</th>
-            <th>Kelas</th>
-            <th>Hadir / Daftar</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- 30 ROW INPUT -->
-          <!-- contoh 1 row, copy statik sampai 30 -->
-          <!-- (aku ringkaskan paparan, kau boleh duplicate) -->
-          <tr>
-            <td>
-              <select>
-                <option value="">Pilih</option>
-                <option value="1">Tingkatan 1</option>
-                <option value="2">Tingkatan 2</option>
-                <option value="3">Tingkatan 3</option>
-                <option value="4">Tingkatan 4</option>
-                <option value="5">Tingkatan 5</option>
-              </select>
-            </td>
-            <td>
-              <select>
-                <option value="">Pilih</option>
-                <option value="Seroja">Seroja</option>
-                <option value="Mawar">Mawar</option>
-                <option value="Melati">Melati</option>
-                <option value="Teratai">Teratai</option>
-                <option value="Kenanga">Kenanga</option>
-                <option value="Cempaka">Cempaka</option>
-                <option value="Anggerik">Anggerik</option>
-                <option value="Orkid">Orkid</option>
-                <option value="Bakawali">Bakawali</option>
-                <option value="Ros">Ros</option>
-              </select>
-                          </td>
-            <td>
-              <div class="attendance-box">
-                <input class="small-input" type="number">
-                <span class="slash">/</span>
-                <input class="small-input" type="number">
-              </div>
-            </td>
-          </tr>
-
-          <!-- Row 31 -->
-          <tr>
-            <td colspan="2"><strong>Jumlah Hadir</strong></td>
-            <td>Auto</td>
-          </tr>
-
-          <!-- Row 32 -->
-          <tr>
-            <td colspan="2"><strong>Peratus Kehadiran</strong></td>
-            <td>Auto</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <hr>
-
-    <!-- 6. KEBERADAAN GURU -->
-    <div class="section">
+  <div>
     <div class="section-title">6. Keberadaan Guru</div>
-  
+
     <div id="guru-container">
       <div class="guru-row">
-        <select>
-          <option value="">Pilih</option>
-          <option value="CR">CR</option>
-          <option value="CTR">CTR</option>
-          <option value="CRK">CRK</option>
-          <option value="MC">MC</option>
-          <option value="Kuarantin">Kuarantin</option>
-          <option value="Bengkel">Bengkel</option>
-          <option value="Mesyuarat">Mesyuarat</option>
-          <option value="Taklimat">Taklimat</option>
-          <option value="Temujanji">Temujanji</option>
-          <option value="Rawatan">Rawatan</option>
-          <option value="Lain-lain">Lain-lain</option>
+        <select name="status[]">
+          <option>CR</option>
+          <option>CTR</option>
+          <option>CRK</option>
+          <option>MC</option>
+          <option>Kuarantin</option>
+          <option>Bengkel</option>
+          <option>Mesyuarat</option>
+          <option>Taklimat</option>
+          <option>Temujanji</option>
+          <option>Rawatan</option>
+          <option>Lain-lain</option>
         </select>
-  
-        <input type="text" placeholder="Nama Guru">
-  
+        <input name="nama_guru[]" placeholder="Nama Guru">
         <button type="button" class="remove-btn">−</button>
       </div>
     </div>
-  
+
     <button type="button" class="add-btn">+ Tambah Baris</button>
   </div>
 
-    <hr>
+  <hr>
 
-    <!-- KOMEN -->
-    <div class="section">
-      <div class="section-title">Komen</div>
-      <textarea placeholder="Komen tambahan (jika ada)"></textarea>
-    </div>
+  <div>
+    <div class="section-title">Komen</div>
+    <textarea name="komen"></textarea>
+  </div>
 
-    <div class="section">
-      <button type="button" id="btnSubmit" class="add-btn">
-        💾 Simpan Laporan
-      </button>
-    </div>
+  <button type="button" id="btnSubmit" class="save-btn">
+    💾 Simpan Laporan
+  </button>
 
 </form>
 
