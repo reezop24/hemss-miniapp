@@ -301,24 +301,33 @@
 
     <!-- 6. KEBERADAAN GURU -->
     <div class="section">
-      <div class="section-title">6. Keberadaan Guru</div>
-
-      <!-- Default 8 row -->
+    <div class="section-title">6. Keberadaan Guru</div>
+  
+    <div id="guru-container">
       <div class="guru-row">
         <select>
-          <option>CR</option><option>CTR</option><option>CRK</option><option>MC</option>
-          <option>Kuarantin</option><option>Bengkel</option><option>Mesyuarat</option>
-          <option>Taklimat</option><option>Temujanji</option>
-          <option>Rawatan</option><option>Lain-lain</option>
+          <option value="">Pilih</option>
+          <option value="CR">CR</option>
+          <option value="CTR">CTR</option>
+          <option value="CRK">CRK</option>
+          <option value="MC">MC</option>
+          <option value="Kuarantin">Kuarantin</option>
+          <option value="Bengkel">Bengkel</option>
+          <option value="Mesyuarat">Mesyuarat</option>
+          <option value="Taklimat">Taklimat</option>
+          <option value="Temujanji">Temujanji</option>
+          <option value="Rawatan">Rawatan</option>
+          <option value="Lain-lain">Lain-lain</option>
         </select>
+  
         <input type="text" placeholder="Nama Guru">
-        <button class="remove-btn">−</button>
+  
+        <button type="button" class="remove-btn">−</button>
       </div>
-
-      <!-- (Duplicate row ini sampai 8 kali) -->
-
-      <button class="add-btn">+ Tambah Baris</button>
     </div>
+  
+    <button type="button" class="add-btn">+ Tambah Baris</button>
+  </div>
 
     <hr>
 
