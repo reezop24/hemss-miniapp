@@ -1,44 +1,51 @@
-alert("JS HIDUP");
 const tg = window.Telegram.WebApp;
 tg.ready();
 
-console.log("APP JS LOADED");
+const form = document.getElementById("reportForm");
+const btn = document.getElementById("btnSubmit");
+const addRowBtn = document.getElementById("addRow");
+const guruContainer = document.getElementById("guruContainer");
 
-// ADD / REMOVE ROW
-document.addEventListener("click", (e) => {
+/* ======================
+   TAMBAH / BUANG GURU
+====================== */
+addRowBtn.addEventListener("click", () => {
+  const count = guruContainer.children.length + 1;
 
-  if (e.target.classList.contains("add-btn")) {
-    const container = document.getElementById("guru-container");
-    const firstRow = container.querySelector(".guru-row");
-    const clone = firstRow.cloneNode(true);
+  const row = document.createElement("div");
+  row.className = "guru-row";
 
-    clone.querySelector("input").value = "";
-    clone.querySelector("select").selectedIndex = 0;
+  row.innerHTML = `
+    <select name="status_${count}">
+      <option>CR</option>
+      <option>MC</option>
+      <option>Mesyuarat</option>
+      <option>Lain-lain</option>
+    </select>
+    <input name="nama_status_${count}" placeholder="Nama Guru">
+    <button type="button" class="remove-btn">−</button>
+  `;
 
-    container.appendChild(clone);
-  }
+  guruContainer.appendChild(row);
+});
 
+guruContainer.addEventListener("click", (e) => {
   if (e.target.classList.contains("remove-btn")) {
-    const rows = document.querySelectorAll(".guru-row");
-    if (rows.length > 1) {
-      e.target.closest(".guru-row").remove();
+    if (guruContainer.children.length > 1) {
+      e.target.parentElement.remove();
     }
   }
 });
 
-// SUBMIT
-document.getElementById("btnSubmit").addEventListener("click", () => {
-  const form = document.getElementById("reportForm");
+/* ======================
+   SIMPAN LAPORAN
+====================== */
+btn.addEventListener("click", () => {
   const data = {};
 
   form.querySelectorAll("input, select, textarea").forEach(el => {
-    if (el.name) {
-      if (el.name.endsWith("[]")) {
-        if (!data[el.name]) data[el.name] = [];
-        data[el.name].push(el.value);
-      } else {
-        data[el.name] = el.value;
-      }
+    if (el.name && el.value) {
+      data[el.name] = el.value;
     }
   });
 
@@ -47,8 +54,6 @@ document.getElementById("btnSubmit").addEventListener("click", () => {
     data: data,
     submitted_at: new Date().toISOString()
   };
-
-  console.log(payload);
 
   tg.sendData(JSON.stringify(payload));
   tg.close();
