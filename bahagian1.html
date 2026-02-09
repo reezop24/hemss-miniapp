@@ -90,6 +90,58 @@
       color: white;
     }
 
+    /* ===== UI POLISH ===== */
+
+    /* ruang antara section */
+    hr {
+      margin: 20px 0;
+    }
+    
+    /* input kemas */
+    input, select, textarea {
+      background: #fff;
+    }
+    
+    /* jadual responsif */
+    table {
+      margin-top: 10px;
+      background: #fff;
+    }
+    
+    th {
+      background: #f0f0f0;
+    }
+    
+    /* hadapan / daftar kecik cantik */
+    .small {
+      text-align: center;
+    }
+    
+    /* guru row lebih selesa */
+    .guru-row {
+      background: #fff;
+      padding: 6px;
+      border-radius: 6px;
+    }
+    
+    /* button spacing */
+    .add-btn,
+    .save-btn {
+      margin-top: 16px;
+    }
+    
+    /* elak elemen rapat */
+    label {
+      margin-top: 14px;
+    }
+    
+    /* mobile polish */
+    @media (max-width: 480px) {
+      .guru-row {
+        grid-template-columns: 1fr 1fr 40px;
+      }
+    }
+
     .add-btn { background: #2ecc71; }
     .save-btn { background: #27ae60; }
   </style>
