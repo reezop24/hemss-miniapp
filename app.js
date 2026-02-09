@@ -1,15 +1,18 @@
 const tg = window.Telegram.WebApp;
+tg.ready();
 tg.expand();
 
-document.getElementById("reportForm").addEventListener("submit", function (e) {
+const form = document.getElementById("reportForm");
+
+form.addEventListener("submit", function (e) {
   e.preventDefault();
 
-  const formData = new FormData(e.target);
-  const data = Object.fromEntries(formData.entries());
-
-  // HANTAR KE BOT
-  tg.sendData(JSON.stringify({
+  const data = {
     section: "tandas",
-    answers: data
-  }));
+    tandas_lelaki: form.tandas_lelaki.value,
+    komen: form.komen.value
+  };
+
+  tg.sendData(JSON.stringify(data));
+  tg.close();
 });
