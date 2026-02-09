@@ -7,8 +7,8 @@ tg.ready();
 
 // ---------- ELEMENT ----------
 const attendanceBody = document.getElementById("attendanceBody");
-const addRowBtn = document.getElementById("addRow");
 const guruContainer = document.getElementById("guruContainer");
+const addRowBtn = document.getElementById("addRow");
 const btnSubmit = document.getElementById("btnSubmit");
 const form = document.getElementById("reportForm");
 
@@ -18,7 +18,7 @@ const kelasList = [
   "Cempaka","Anggerik","Orkid","Bakawali","Ros"
 ];
 
-// ---------- CREATE 30 ROW MURID ----------
+// ---------- CREATE 30 ROW KEHADIRAN ----------
 function createAttendanceRows() {
   attendanceBody.innerHTML = "";
 
@@ -27,21 +27,21 @@ function createAttendanceRows() {
 
     tr.innerHTML = `
       <td>
-        <select name="tingkatan_${i}">
+        <select name="tingkatan[]">
           <option>1</option><option>2</option><option>3</option>
           <option>4</option><option>5</option>
         </select>
       </td>
 
       <td>
-        <select name="kelas_${i}">
+        <select name="kelas[]">
           ${kelasList.map(k => `<option>${k}</option>`).join("")}
         </select>
       </td>
 
       <td>
-        <input class="small" type="number" name="hadir_${i}"> /
-        <input class="small" type="number" name="daftar_${i}">
+        <input class="small" type="number" name="hadir[]"> /
+        <input class="small" type="number" name="daftar[]">
       </td>
     `;
 
@@ -49,22 +49,20 @@ function createAttendanceRows() {
   }
 }
 
-// ---------- GURU ADD / REMOVE ----------
+// ---------- ADD GURU ROW ----------
 addRowBtn.addEventListener("click", () => {
-  const count = guruContainer.children.length + 1;
-
   const row = document.createElement("div");
   row.className = "guru-row";
 
   row.innerHTML = `
-    <select name="status_${count}">
+    <select name="status[]">
       <option>CR</option>
       <option>MC</option>
       <option>Mesyuarat</option>
       <option>Lain-lain</option>
     </select>
 
-    <input name="nama_status_${count}" placeholder="Nama Guru">
+    <input name="nama_status[]" placeholder="Nama Guru">
 
     <button type="button" class="remove-btn">−</button>
   `;
@@ -72,11 +70,11 @@ addRowBtn.addEventListener("click", () => {
   guruContainer.appendChild(row);
 });
 
-// remove guru row (event delegation)
+// ---------- REMOVE GURU ROW ----------
 guruContainer.addEventListener("click", (e) => {
   if (e.target.classList.contains("remove-btn")) {
     if (guruContainer.children.length > 1) {
-      e.target.parentElement.remove();
+      e.target.closest(".guru-row").remove();
     }
   }
 });
@@ -84,11 +82,14 @@ guruContainer.addEventListener("click", (e) => {
 // ---------- SAVE ----------
 btnSubmit.addEventListener("click", () => {
   const data = {};
-
   const elements = form.querySelectorAll("input, select, textarea");
+
   elements.forEach(el => {
-    if (el.name && el.value !== "") {
-      data[el.name] = el.value;
+    if (el.name) {
+      if (!data[el.name]) {
+        data[el.name] = [];
+      }
+      data[el.name].push(el.value);
     }
   });
 
