@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bahagian 1 - Laporan Guru Bertugas</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bahagian 1 - Laporan</title>
 
   <!-- Telegram WebApp -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -11,24 +11,15 @@
   <style>
     body {
       margin: 0;
-      padding: 0;
       font-family: system-ui, sans-serif;
       background: #f5f5f5;
     }
 
-    .container {
-      padding: 16px;
-    }
-
-    h1, h2 {
-      text-align: center;
-      margin: 4px 0;
-    }
-
+    .container { padding: 16px; }
+    h1, h2 { text-align: center; margin: 4px 0; }
     h1 { font-size: 18px; }
     h2 { font-size: 15px; font-weight: normal; }
-
-    hr { margin: 18px 0; }
+    hr { margin: 20px 0; }
 
     label {
       display: block;
@@ -52,8 +43,8 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 10px;
       background: #fff;
+      margin-top: 10px;
     }
 
     th, td {
@@ -62,12 +53,17 @@
       text-align: center;
     }
 
-    th {
-      background: #eee;
+    th { background: #f0f0f0; }
+
+    .attendance-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
     }
 
     .small {
-      width: 50px;
+      width: 48px;
       text-align: center;
     }
 
@@ -76,7 +72,7 @@
       display: grid;
       grid-template-columns: 120px 1fr 40px;
       gap: 6px;
-      margin-top: 8px;
+      margin-top: 6px;
       background: #fff;
       padding: 6px;
       border-radius: 6px;
@@ -84,7 +80,7 @@
 
     .remove-btn {
       background: #e74c3c;
-      color: #fff;
+      color: white;
       border: none;
       border-radius: 6px;
       font-size: 18px;
@@ -97,16 +93,19 @@
       font-size: 16px;
       border: none;
       border-radius: 6px;
-      color: #fff;
+      color: white;
     }
 
     .add-btn { background: #2ecc71; }
     .save-btn { background: #27ae60; }
+
+    @media (max-width: 480px) {
+      .guru-row { grid-template-columns: 1fr 1fr 40px; }
+    }
   </style>
 </head>
 
 <body>
-
 <form id="reportForm">
 <div class="container">
 
@@ -115,7 +114,7 @@
 
   <hr>
 
-  <!-- 1. Guru Bertugas -->
+  <!-- 1. Kumpulan Guru -->
   <label>1. Kumpulan Guru Bertugas</label>
   <input name="guru1" placeholder="Nama Guru 1">
   <input name="guru2" placeholder="Nama Guru 2">
@@ -145,13 +144,7 @@
 
   <!-- 4. Hari -->
   <label>4. Hari</label>
-  <select name="hari">
-    <option>Isnin</option>
-    <option>Selasa</option>
-    <option>Rabu</option>
-    <option>Khamis</option>
-    <option>Jumaat</option>
-  </select>
+  <select name="hari" id="hariSelect"></select>
 
   <hr>
 
@@ -166,11 +159,7 @@
         <th>Hadir / Daftar</th>
       </tr>
     </thead>
-
-    <tbody id="attendanceBody">
-      <!-- JS isi 30 row -->
-    </tbody>
-
+    <tbody id="attendanceBody"></tbody>
     <tfoot>
       <tr>
         <td colspan="2"><strong>Jumlah Hadir</strong></td>
@@ -190,12 +179,7 @@
 
   <div id="guruContainer">
     <div class="guru-row">
-      <select name="status[]">
-        <option>CR</option>
-        <option>MC</option>
-        <option>Mesyuarat</option>
-        <option>Lain-lain</option>
-      </select>
+      <select name="status[]"></select>
       <input name="nama_status[]" placeholder="Nama Guru">
       <button type="button" class="remove-btn">−</button>
     </div>
@@ -209,13 +193,12 @@
   <label>Komen</label>
   <textarea name="komen"></textarea>
 
-  <button type="button" class="save-btn" id="btnSubmit">
-    💾 Simpan Laporan
-  </button>
+  <button type="button" class="save-btn" id="btnSubmit">💾 Simpan Laporan</button>
 
 </div>
 </form>
 
+<script src="presets.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
