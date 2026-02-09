@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bahagian 1 - Laporan</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bahagian 1 - Laporan Guru Bertugas</title>
 
-  <!-- Telegram WebApp WAJIB -->
+  <!-- Telegram WebApp -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
   <style>
@@ -28,12 +28,12 @@
     h1 { font-size: 18px; }
     h2 { font-size: 15px; font-weight: normal; }
 
-    hr { margin: 20px 0; }
+    hr { margin: 18px 0; }
 
     label {
+      display: block;
       font-weight: 600;
       margin-top: 14px;
-      display: block;
     }
 
     input, select, textarea {
@@ -48,7 +48,7 @@
 
     textarea { min-height: 80px; }
 
-    /* TABLE */
+    /* ===== TABLE ===== */
     table {
       width: 100%;
       border-collapse: collapse;
@@ -63,20 +63,20 @@
     }
 
     th {
-      background: #f0f0f0;
+      background: #eee;
     }
 
     .small {
-      width: 48px;
+      width: 50px;
       text-align: center;
     }
 
-    /* GURU */
+    /* ===== GURU ROW ===== */
     .guru-row {
       display: grid;
       grid-template-columns: 120px 1fr 40px;
       gap: 6px;
-      margin-top: 6px;
+      margin-top: 8px;
       background: #fff;
       padding: 6px;
       border-radius: 6px;
@@ -84,7 +84,7 @@
 
     .remove-btn {
       background: #e74c3c;
-      color: white;
+      color: #fff;
       border: none;
       border-radius: 6px;
       font-size: 18px;
@@ -97,21 +97,16 @@
       font-size: 16px;
       border: none;
       border-radius: 6px;
-      color: white;
+      color: #fff;
     }
 
     .add-btn { background: #2ecc71; }
     .save-btn { background: #27ae60; }
-
-    @media (max-width: 480px) {
-      .guru-row {
-        grid-template-columns: 1fr 1fr 40px;
-      }
-    }
   </style>
 </head>
 
 <body>
+
 <form id="reportForm">
 <div class="container">
 
@@ -120,7 +115,7 @@
 
   <hr>
 
-  <!-- 1 -->
+  <!-- 1. Guru Bertugas -->
   <label>1. Kumpulan Guru Bertugas</label>
   <input name="guru1" placeholder="Nama Guru 1">
   <input name="guru2" placeholder="Nama Guru 2">
@@ -130,7 +125,7 @@
 
   <hr>
 
-  <!-- 2 -->
+  <!-- 2. Minggu -->
   <label>2. Minggu</label>
   <select name="minggu">
     <option>Minggu 1</option>
@@ -142,13 +137,13 @@
 
   <hr>
 
-  <!-- 3 -->
+  <!-- 3. Tarikh -->
   <label>3. Tarikh</label>
   <input type="date" name="tarikh">
 
   <hr>
 
-  <!-- 4 -->
+  <!-- 4. Hari -->
   <label>4. Hari</label>
   <select name="hari">
     <option>Isnin</option>
@@ -160,7 +155,7 @@
 
   <hr>
 
-  <!-- 5 -->
+  <!-- 5. Kehadiran Murid -->
   <label>5. Laporan Kehadiran Murid</label>
 
   <table>
@@ -172,7 +167,9 @@
       </tr>
     </thead>
 
-    <tbody id="attendanceBody"></tbody>
+    <tbody id="attendanceBody">
+      <!-- JS isi 30 row -->
+    </tbody>
 
     <tfoot>
       <tr>
@@ -188,25 +185,18 @@
 
   <hr>
 
-  <!-- 6 -->
+  <!-- 6. Keberadaan Guru -->
   <label>6. Keberadaan Guru</label>
 
   <div id="guruContainer">
     <div class="guru-row">
-      <select name="status_1">
+      <select name="status[]">
         <option>CR</option>
-        <option>CTR</option>
-        <option>CRK</option>
         <option>MC</option>
-        <option>Kuarantin</option>
-        <option>Bengkel</option>
         <option>Mesyuarat</option>
-        <option>Taklimat</option>
-        <option>Temujanji</option>
-        <option>Rawatan</option>
         <option>Lain-lain</option>
       </select>
-      <input name="nama_status_1" placeholder="Nama Guru">
+      <input name="nama_status[]" placeholder="Nama Guru">
       <button type="button" class="remove-btn">−</button>
     </div>
   </div>
@@ -215,10 +205,13 @@
 
   <hr>
 
+  <!-- Komen -->
   <label>Komen</label>
   <textarea name="komen"></textarea>
 
-  <button type="button" class="save-btn" id="btnSubmit">💾 Simpan Laporan</button>
+  <button type="button" class="save-btn" id="btnSubmit">
+    💾 Simpan Laporan
+  </button>
 
 </div>
 </form>
