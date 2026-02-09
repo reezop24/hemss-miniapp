@@ -1,11 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html lang="ms">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <title>HEMSS Mini App</title>
+
+  <!-- Telegram WebApp -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>HEMSS Mini App</h1>
-  <p>Mini app sedang dibina.</p>
+
+  <div class="app">
+    <h1>📋 Laporan Guru Bertugas</h1>
+
+    <p class="desc">
+      Sila lengkapkan bahagian laporan di bawah.
+      Semua jawapan akan disimpan secara automatik.
+    </p>
+
+    <div class="section-list">
+      <button data-section="kehadiran">Bahagian 1 · Kehadiran</button>
+      <button data-section="perhimpunan">Bahagian 2 · Perhimpunan</button>
+      <button data-section="tandas">Bahagian 3 · Tandas</button>
+      <button data-section="pagar">Bahagian 4 · Pagar</button>
+      <button data-section="disiplin">Bahagian 5 · Disiplin & Kemalangan</button>
+    </div>
+
+    <div class="actions">
+      <button id="btn-full">📄 Semak Laporan Penuh</button>
+      <button id="btn-close" class="danger">🏠 Menu Utama</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>
