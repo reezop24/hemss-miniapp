@@ -2,62 +2,56 @@
 <html lang="ms">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>Bahagian 1 - Laporan Kehadiran</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bahagian 1 - Laporan</title>
+
+  <!-- Telegram WebApp WAJIB -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
   <style>
     body {
       margin: 0;
       padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #f7f7f7;
-      color: #222;
+      font-family: system-ui, sans-serif;
+      background: #f5f5f5;
     }
 
     .container {
       padding: 16px;
     }
 
-    .header {
+    h1, h2 {
       text-align: center;
-      margin-bottom: 12px;
+      margin: 4px 0;
     }
 
-    .header h1 {
-      font-size: 18px;
-      margin: 0;
-    }
+    h1 { font-size: 18px; }
+    h2 { font-size: 15px; font-weight: normal; }
 
-    .header h2 {
-      font-size: 15px;
-      margin-top: 6px;
-    }
+    hr { margin: 16px 0; }
 
-    hr {
-      border: none;
-      border-top: 1px solid #ddd;
-      margin: 16px 0;
-    }
-
-    .section-title {
+    label {
       font-weight: 600;
-      margin-bottom: 8px;
+      margin-top: 8px;
+      display: block;
     }
 
     input, select, textarea {
       width: 100%;
-      min-height: 44px;
-      padding: 8px;
-      margin-bottom: 8px;
+      padding: 10px;
+      margin-top: 6px;
       border-radius: 6px;
       border: 1px solid #ccc;
-      font-size: 16px;
+      font-size: 15px;
     }
 
+    textarea { min-height: 80px; }
+
+    /* ===== KEHADIRAN TABLE ===== */
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 14px;
+      margin-top: 8px;
     }
 
     th, td {
@@ -66,157 +60,138 @@
       text-align: center;
     }
 
-    th {
-      background: #eee;
-    }
-
-    .attendance-box {
-      display: flex;
-      justify-content: center;
-      gap: 4px;
-    }
-
-    .small-input {
+    .small {
       width: 48px;
-      min-height: 32px;
-      font-size: 14px;
     }
 
+    /* ===== GURU ROW ===== */
     .guru-row {
       display: grid;
       grid-template-columns: 120px 1fr 40px;
       gap: 6px;
-      margin-bottom: 6px;
-      align-items: center;
+      margin-top: 6px;
     }
 
     .remove-btn {
       background: #e74c3c;
-      color: #fff;
+      color: white;
       border: none;
       border-radius: 6px;
-      height: 40px;
       font-size: 18px;
     }
 
-    .add-btn {
-      background: #2ecc71;
-      color: #fff;
+    .add-btn, .save-btn {
+      width: 100%;
+      padding: 12px;
+      margin-top: 12px;
+      font-size: 16px;
       border: none;
       border-radius: 6px;
-      height: 44px;
-      font-size: 16px;
-      width: 100%;
-      margin-top: 8px;
+      color: white;
     }
 
-    .save-btn {
-      background: #27ae60;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      height: 48px;
-      font-size: 16px;
-      width: 100%;
-    }
+    .add-btn { background: #2ecc71; }
+    .save-btn { background: #27ae60; }
   </style>
 </head>
 
 <body>
+<form id="reportForm">
+<div class="container">
 
-<form class="container" id="reportForm">
-
-  <div class="header">
-    <h1>Unit HEM SMK Seri Sendayan</h1>
-    <h2>LAPORAN GURU BERTUGAS MINGGUAN</h2>
-  </div>
+  <h1>Unit HEM SMK Seri Sendayan</h1>
+  <h2>LAPORAN GURU BERTUGAS MINGGUAN</h2>
 
   <hr>
 
-  <div>
-    <div class="section-title">1. Kumpulan Guru Bertugas</div>
-    <input name="guru1" placeholder="Nama Guru 1">
-    <input name="guru2" placeholder="Nama Guru 2">
-    <input name="guru3" placeholder="Nama Guru 3">
-    <input name="guru4" placeholder="Nama Guru 4">
-    <input name="guru5" placeholder="Nama Guru 5">
-  </div>
+  <!-- 1. Guru -->
+  <label>1. Kumpulan Guru Bertugas</label>
+  <input name="guru1" placeholder="Nama Guru 1">
+  <input name="guru2" placeholder="Nama Guru 2">
+  <input name="guru3" placeholder="Nama Guru 3">
+  <input name="guru4" placeholder="Nama Guru 4">
+  <input name="guru5" placeholder="Nama Guru 5">
 
   <hr>
 
-  <div>
-    <div class="section-title">2. Minggu</div>
-    <select name="minggu">
-      <option value="1">Minggu 1</option>
-      <option value="2">Minggu 2</option>
-      <option value="3">Minggu 3</option>
-      <option value="4">Minggu 4</option>
-      <option value="5">Minggu 5</option>
-    </select>
-  </div>
+  <!-- 2. Minggu -->
+  <label>2. Minggu</label>
+  <select name="minggu">
+    <option>Minggu 1</option>
+    <option>Minggu 2</option>
+    <option>Minggu 3</option>
+    <option>Minggu 4</option>
+    <option>Minggu 5</option>
+  </select>
 
   <hr>
 
-  <div>
-    <div class="section-title">3. Tarikh</div>
-    <input type="date" name="tarikh">
-  </div>
+  <!-- 3. Tarikh -->
+  <label>3. Tarikh</label>
+  <input type="date" name="tarikh">
 
   <hr>
 
-  <div>
-    <div class="section-title">4. Hari</div>
-    <select name="hari">
-      <option>Isnin</option>
-      <option>Selasa</option>
-      <option>Rabu</option>
-      <option>Khamis</option>
-      <option>Jumaat</option>
-    </select>
-  </div>
+  <!-- 4. Kehadiran -->
+  <label>4. Laporan Kehadiran Murid</label>
 
-  <hr>
+  <table>
+    <tr>
+      <th>Tingkatan</th>
+      <th>Kelas</th>
+      <th>Hadir / Daftar</th>
+    </tr>
 
-  <div>
-    <div class="section-title">6. Keberadaan Guru</div>
-
-    <div id="guru-container">
-      <div class="guru-row">
-        <select name="status[]">
-          <option>CR</option>
-          <option>CTR</option>
-          <option>CRK</option>
-          <option>MC</option>
-          <option>Kuarantin</option>
-          <option>Bengkel</option>
-          <option>Mesyuarat</option>
-          <option>Taklimat</option>
-          <option>Temujanji</option>
-          <option>Rawatan</option>
-          <option>Lain-lain</option>
+    <tr>
+      <td>
+        <select name="tingkatan_1">
+          <option>1</option><option>2</option><option>3</option>
+          <option>4</option><option>5</option>
         </select>
-        <input name="nama_guru[]" placeholder="Nama Guru">
-        <button type="button" class="remove-btn">−</button>
-      </div>
-    </div>
-
-    <button type="button" class="add-btn">+ Tambah Baris</button>
-  </div>
+      </td>
+      <td>
+        <select name="kelas_1">
+          <option>Seroja</option><option>Mawar</option><option>Melati</option>
+        </select>
+      </td>
+      <td>
+        <input class="small" name="hadir_1" type="number"> /
+        <input class="small" name="daftar_1" type="number">
+      </td>
+    </tr>
+  </table>
 
   <hr>
 
-  <div>
-    <div class="section-title">Komen</div>
-    <textarea name="komen"></textarea>
+  <!-- 5. Keberadaan Guru -->
+  <label>5. Keberadaan Guru</label>
+
+  <div id="guruContainer">
+    <div class="guru-row">
+      <select name="status_1">
+        <option>CR</option>
+        <option>MC</option>
+        <option>Mesyuarat</option>
+        <option>Lain-lain</option>
+      </select>
+      <input name="nama_status_1" placeholder="Nama Guru">
+      <button type="button" class="remove-btn">−</button>
+    </div>
   </div>
 
-  <button type="button" id="btnSubmit" class="save-btn">
-    💾 Simpan Laporan
-  </button>
+  <button type="button" class="add-btn" id="addRow">+ Tambah Baris</button>
 
+  <hr>
+
+  <!-- Komen -->
+  <label>Komen</label>
+  <textarea name="komen"></textarea>
+
+  <button type="button" class="save-btn" id="btnSubmit">💾 Simpan Laporan</button>
+
+</div>
 </form>
 
-<script src="/app.js"></script>
-
+<script src="app.js"></script>
 </body>
 </html>
