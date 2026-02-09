@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Bahagian 1 - Laporan Kehadiran</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f7f7f7;
+      color: #222;
+    }
+
+    .container {
+      padding: 16px;
+      max-width: 100%;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .header h1 {
+      font-size: 18px;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .header h2 {
+      font-size: 15px;
+      margin: 6px 0 0;
+      font-weight: 500;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #ddd;
+      margin: 16px 0;
+    }
+
+    /* ===== SECTION ===== */
+    .section {
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      min-height: 44px;
+      font-size: 16px;
+      padding: 8px 10px;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    /* ===== GRID ===== */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    /* ===== TABLE ===== */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 6px;
+      text-align: center;
+    }
+
+    th {
+      background: #eee;
+      font-weight: 600;
+    }
+
+    .small-input {
+      width: 48%;
+      min-height: 36px;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .slash {
+      width: 4%;
+      display: inline-block;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    /* ===== KEHADIRAN ROW ===== */
+    .attendance-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ===== GURU ROW ===== */
+    .guru-row {
+      display: grid;
+      grid-template-columns: 120px 1fr 40px;
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .remove-btn {
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      height: 40px;
+      font-size: 18px;
+    }
+
+    .add-btn {
+      background: #2ecc71;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      height: 44px;
+      font-size: 16px;
+      width: 100%;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+      <h1>Unit HEM SMK Seri Sendayan</h1>
+      <h2>LAPORAN GURU BERTUGAS MINGGUAN</h2>
+    </div>
+
+    <hr>
+
+    <!-- 1. KUMPULAN GURU -->
+    <div class="section">
+      <div class="section-title">1. Kumpulan Guru Bertugas</div>
+      <input type="text" placeholder="Nama Guru 1">
+      <input type="text" placeholder="Nama Guru 2">
+      <input type="text" placeholder="Nama Guru 3">
+      <input type="text" placeholder="Nama Guru 4">
+      <input type="text" placeholder="Nama Guru 5">
+    </div>
+
+    <hr>
+
+    <!-- 2. MINGGU -->
+    <div class="section">
+      <div class="section-title">2. Minggu</div>
+      <select>
+        <option>Minggu 1</option>
+        <option>Minggu 2</option>
+        <option>Minggu 3</option>
+        <option>Minggu 4</option>
+        <option>Minggu 5</option>
+      </select>
+    </div>
+
+    <hr>
+
+    <!-- 3. TARIKH -->
+    <div class="section">
+      <div class="section-title">3. Tarikh</div>
+      <div class="grid-2">
+        <input type="date">
+        <input type="date">
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- 4. HARI -->
+    <div class="section">
+      <div class="section-title">4. Hari</div>
+      <select>
+        <option>Isnin</option>
+        <option>Selasa</option>
+        <option>Rabu</option>
+        <option>Khamis</option>
+        <option>Jumaat</option>
+      </select>
+    </div>
+
+    <hr>
+
+    <!-- 5. KEHADIRAN MURID -->
+    <div class="section">
+      <div class="section-title">5. Laporan Kehadiran Murid</div>
+
+      <label>Pilih Hari</label>
+      <select>
+        <option>Isnin</option>
+        <option>Selasa</option>
+        <option>Rabu</option>
+        <option>Khamis</option>
+        <option>Jumaat</option>
+      </select>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Tingkatan</th>
+            <th>Kelas</th>
+            <th>Hadir / Daftar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 30 ROW INPUT -->
+          <!-- contoh 1 row, copy statik sampai 30 -->
+          <!-- (aku ringkaskan paparan, kau boleh duplicate) -->
+          <tr>
+            <td>
+              <select>
+                <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+              </select>
+            </td>
+            <td>
+              <select>
+                <option>Seroja</option><option>Mawar</option><option>Melati</option>
+                <option>Teratai</option><option>Kenanga</option>
+                <option>Cempaka</option><option>Anggerik</option>
+                <option>Orkid</option><option>Bakawali</option><option>Ros</option>
+              </select>
+            </td>
+            <td>
+              <div class="attendance-box">
+                <input class="small-input" type="number">
+                <span class="slash">/</span>
+                <input class="small-input" type="number">
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 31 -->
+          <tr>
+            <td colspan="2"><strong>Jumlah Hadir</strong></td>
+            <td>Auto</td>
+          </tr>
+
+          <!-- Row 32 -->
+          <tr>
+            <td colspan="2"><strong>Peratus Kehadiran</strong></td>
+            <td>Auto</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr>
+
+    <!-- 6. KEBERADAAN GURU -->
+    <div class="section">
+      <div class="section-title">6. Keberadaan Guru</div>
+
+      <!-- Default 8 row -->
+      <div class="guru-row">
+        <select>
+          <option>CR</option><option>CTR</option><option>CRK</option><option>MC</option>
+          <option>Kuarantin</option><option>Bengkel</option><option>Mesyuarat</option>
+          <option>Taklimat</option><option>Temujanji</option>
+          <option>Rawatan</option><option>Lain-lain</option>
+        </select>
+        <input type="text" placeholder="Nama Guru">
+        <button class="remove-btn">−</button>
+      </div>
+
+      <!-- (Duplicate row ini sampai 8 kali) -->
+
+      <button class="add-btn">+ Tambah Baris</button>
+    </div>
+
+    <hr>
+
+    <!-- KOMEN -->
+    <div class="section">
+      <div class="section-title">Komen</div>
+      <textarea placeholder="Komen tambahan (jika ada)"></textarea>
+    </div>
+
+  </div>
+</body>
+</html>
