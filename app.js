@@ -1,27 +1,15 @@
 const tg = window.Telegram.WebApp;
-tg.ready();
 tg.expand();
 
-// === SECTION BUTTON ===
-document.querySelectorAll(".section-list button").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const section = btn.dataset.section;
+document.getElementById("reportForm").addEventListener("submit", function (e) {
+  e.preventDefault();
 
-    tg.sendData(JSON.stringify({
-      action: "OPEN_SECTION",
-      section: section
-    }));
-  });
-});
+  const formData = new FormData(e.target);
+  const data = Object.fromEntries(formData.entries());
 
-// === SEMAK LAPORAN PENUH ===
-document.getElementById("btn-full").onclick = () => {
+  // HANTAR KE BOT
   tg.sendData(JSON.stringify({
-    action: "VIEW_FULL_REPORT"
+    section: "tandas",
+    answers: data
   }));
-};
-
-// === TUTUP MINI APP → BALIK BOT ===
-document.getElementById("btn-close").onclick = () => {
-  tg.close();
-};
+});
