@@ -28,11 +28,11 @@
     h1 { font-size: 18px; }
     h2 { font-size: 15px; font-weight: normal; }
 
-    hr { margin: 16px 0; }
+    hr { margin: 20px 0; }
 
     label {
       font-weight: 600;
-      margin-top: 8px;
+      margin-top: 14px;
       display: block;
     }
 
@@ -43,15 +43,17 @@
       border-radius: 6px;
       border: 1px solid #ccc;
       font-size: 15px;
+      background: #fff;
     }
 
     textarea { min-height: 80px; }
 
-    /* ===== KEHADIRAN TABLE ===== */
+    /* TABLE */
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 8px;
+      margin-top: 10px;
+      background: #fff;
     }
 
     th, td {
@@ -60,16 +62,24 @@
       text-align: center;
     }
 
-    .small {
-      width: 48px;
+    th {
+      background: #f0f0f0;
     }
 
-    /* ===== GURU ROW ===== */
+    .small {
+      width: 48px;
+      text-align: center;
+    }
+
+    /* GURU */
     .guru-row {
       display: grid;
       grid-template-columns: 120px 1fr 40px;
       gap: 6px;
       margin-top: 6px;
+      background: #fff;
+      padding: 6px;
+      border-radius: 6px;
     }
 
     .remove-btn {
@@ -83,67 +93,21 @@
     .add-btn, .save-btn {
       width: 100%;
       padding: 12px;
-      margin-top: 12px;
+      margin-top: 16px;
       font-size: 16px;
       border: none;
       border-radius: 6px;
       color: white;
     }
 
-    /* ===== UI POLISH ===== */
+    .add-btn { background: #2ecc71; }
+    .save-btn { background: #27ae60; }
 
-    /* ruang antara section */
-    hr {
-      margin: 20px 0;
-    }
-    
-    /* input kemas */
-    input, select, textarea {
-      background: #fff;
-    }
-    
-    /* jadual responsif */
-    table {
-      margin-top: 10px;
-      background: #fff;
-    }
-    
-    th {
-      background: #f0f0f0;
-    }
-    
-    /* hadapan / daftar kecik cantik */
-    .small {
-      text-align: center;
-    }
-    
-    /* guru row lebih selesa */
-    .guru-row {
-      background: #fff;
-      padding: 6px;
-      border-radius: 6px;
-    }
-    
-    /* button spacing */
-    .add-btn,
-    .save-btn {
-      margin-top: 16px;
-    }
-    
-    /* elak elemen rapat */
-    label {
-      margin-top: 14px;
-    }
-    
-    /* mobile polish */
     @media (max-width: 480px) {
       .guru-row {
         grid-template-columns: 1fr 1fr 40px;
       }
     }
-
-    .add-btn { background: #2ecc71; }
-    .save-btn { background: #27ae60; }
   </style>
 </head>
 
@@ -156,7 +120,7 @@
 
   <hr>
 
-  <!-- 1. Guru -->
+  <!-- 1 -->
   <label>1. Kumpulan Guru Bertugas</label>
   <input name="guru1" placeholder="Nama Guru 1">
   <input name="guru2" placeholder="Nama Guru 2">
@@ -166,7 +130,7 @@
 
   <hr>
 
-  <!-- 2. Minggu -->
+  <!-- 2 -->
   <label>2. Minggu</label>
   <select name="minggu">
     <option>Minggu 1</option>
@@ -178,51 +142,68 @@
 
   <hr>
 
-  <!-- 3. Tarikh -->
+  <!-- 3 -->
   <label>3. Tarikh</label>
   <input type="date" name="tarikh">
 
   <hr>
 
-  <!-- 4. Kehadiran -->
-  <label>4. Laporan Kehadiran Murid</label>
-
-  <table>
-  <thead>
-    <tr>
-      <th>Tingkatan</th>
-      <th>Kelas</th>
-      <th>Hadir / Daftar</th>
-    </tr>
-  </thead>
-
-  <tbody id="attendanceBody">
-    <!-- ROW AKAN DIBUAT OLEH JS -->
-  </tbody>
-
-  <tfoot>
-    <tr>
-      <td colspan="2"><strong>Jumlah Hadir</strong></td>
-      <td id="jumlahHadir">0 / 0</td>
-    </tr>
-    <tr>
-      <td colspan="2"><strong>Peratus Kehadiran</strong></td>
-      <td id="peratusHadir">0%</td>
-    </tr>
-  </tfoot>
-</table>
+  <!-- 4 -->
+  <label>4. Hari</label>
+  <select name="hari">
+    <option>Isnin</option>
+    <option>Selasa</option>
+    <option>Rabu</option>
+    <option>Khamis</option>
+    <option>Jumaat</option>
+  </select>
 
   <hr>
 
-  <!-- 5. Keberadaan Guru -->
-  <label>5. Keberadaan Guru</label>
+  <!-- 5 -->
+  <label>5. Laporan Kehadiran Murid</label>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Tingkatan</th>
+        <th>Kelas</th>
+        <th>Hadir / Daftar</th>
+      </tr>
+    </thead>
+
+    <tbody id="attendanceBody"></tbody>
+
+    <tfoot>
+      <tr>
+        <td colspan="2"><strong>Jumlah Hadir</strong></td>
+        <td id="jumlahHadir">0 / 0</td>
+      </tr>
+      <tr>
+        <td colspan="2"><strong>Peratus Kehadiran</strong></td>
+        <td id="peratusHadir">0%</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <hr>
+
+  <!-- 6 -->
+  <label>6. Keberadaan Guru</label>
 
   <div id="guruContainer">
     <div class="guru-row">
       <select name="status_1">
         <option>CR</option>
+        <option>CTR</option>
+        <option>CRK</option>
         <option>MC</option>
+        <option>Kuarantin</option>
+        <option>Bengkel</option>
         <option>Mesyuarat</option>
+        <option>Taklimat</option>
+        <option>Temujanji</option>
+        <option>Rawatan</option>
         <option>Lain-lain</option>
       </select>
       <input name="nama_status_1" placeholder="Nama Guru">
@@ -234,7 +215,6 @@
 
   <hr>
 
-  <!-- Komen -->
   <label>Komen</label>
   <textarea name="komen"></textarea>
 
@@ -243,7 +223,6 @@
 </div>
 </form>
 
-<script src="presets.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
