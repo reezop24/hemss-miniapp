@@ -8,34 +8,43 @@ tg.ready(); // ❗ JANGAN expand
 const form = document.getElementById("reportForm");
 const btn = document.getElementById("btnSubmit");
 
+
+
 // =============================
-// KEBERADAAN GURU - ADD / REMOVE ROW
+// KEBERADAAN GURU - ADD / REMOVE ROW (FIXED)
 // =============================
 
-document.addEventListener("click", (e) => {
-  // ADD ROW
+document.addEventListener("click", function (e) {
+
+  // TAMBAH BARIS
   if (e.target.classList.contains("add-btn")) {
-    const container = e.target.previousElementSibling;
-    const row = container.cloneNode(true);
+    const container = document.getElementById("guru-container");
+    if (!container) return;
+
+    const firstRow = container.querySelector(".guru-row");
+    if (!firstRow) return;
+
+    const newRow = firstRow.cloneNode(true);
 
     // reset input
-    row.querySelector("input").value = "";
+    const input = newRow.querySelector("input");
+    const select = newRow.querySelector("select");
+    if (input) input.value = "";
+    if (select) select.selectedIndex = 0;
 
-    container.parentNode.insertBefore(row, e.target);
+    container.appendChild(newRow);
   }
 
-  // REMOVE ROW
+  // BUANG BARIS
   if (e.target.classList.contains("remove-btn")) {
-    const row = e.target.closest(".guru-row");
-    const allRows = document.querySelectorAll(".guru-row");
+    const container = document.getElementById("guru-container");
+    const rows = container.querySelectorAll(".guru-row");
 
-    // jangan buang kalau tinggal 1 row
-    if (allRows.length > 1) {
-      row.remove();
+    if (rows.length > 1) {
+      e.target.closest(".guru-row").remove();
     }
   }
 });
-
 btn.addEventListener("click", () => {
   const data = {};
 
