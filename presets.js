@@ -2,6 +2,18 @@
 // HEMSS MINI APP - presets.js
 // ===============================
 
+// ===============================
+// GLOBAL PRESETS
+// ===============================
+
+const MINGGU_LIST = [
+  "Minggu 1",
+  "Minggu 2",
+  "Minggu 3",
+  "Minggu 4",
+  "Minggu 5"
+];
+
 // Tingkatan
 const tingkatanList = ["1", "2", "3", "4", "5"];
 
