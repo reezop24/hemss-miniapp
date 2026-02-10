@@ -4,13 +4,11 @@
 
 // SAFE Telegram guard
 const tg = window.Telegram?.WebApp || null;
-if (tg) {
-  tg.ready();
-}
+if (tg) tg.ready();
 
 // ===============================
-// DATA SEMENTARA (UNTUK TEST)
-// nanti ganti dengan data DB
+// MOCK DATA (UNTUK UI TEST)
+// buang / ganti bila sambung DB
 // ===============================
 const mockData = {
   guru: [
@@ -21,12 +19,12 @@ const mockData = {
     "Nur Syuhada"
   ],
   minggu: "Minggu 1",
-  tarikh: "2026-02-11",
+  tarikh: "11-02-2026",
   hari: "Isnin"
 };
 
 // ===============================
-// RENDER DATA
+// RENDER VIEW
 // ===============================
 function renderView(data) {
   const guruBox = document.getElementById("ans-guru");
@@ -34,10 +32,12 @@ function renderView(data) {
   const tarikhBox = document.getElementById("ans-tarikh");
   const hariBox = document.getElementById("ans-hari");
 
+  // clear dulu
   guruBox.innerHTML = "";
+
   data.guru.forEach(name => {
     const div = document.createElement("div");
-    div.textContent = "- " + name;
+    div.textContent = "• " + name;
     guruBox.appendChild(div);
   });
 
@@ -56,7 +56,7 @@ document.getElementById("btnEdit").addEventListener("click", () => {
     }));
     tg.close();
   } else {
-    alert("Ini simulasi browser. Dalam Telegram, ia akan minta pengesahan.");
+    alert("Simulasi browser: permintaan ubah semula dihantar");
   }
 });
 
