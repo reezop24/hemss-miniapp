@@ -9,7 +9,8 @@
     body {
       margin: 0;
       font-family: system-ui, sans-serif;
-      background: #f7f7f7;
+      background: #f4f6f8;
+      color: #222;
     }
 
     .container {
@@ -22,71 +23,163 @@
     }
 
     h1 { font-size: 18px; }
-    h2 { font-size: 15px; font-weight: normal; }
+    h2 { font-size: 14px; font-weight: normal; }
 
-    .section {
-      margin-top: 20px;
+    /* ===== SOALAN BOX ===== */
+    .question-box {
+      background: #e9eef3;
+      padding: 12px;
+      margin-top: 18px;
+      font-weight: 600;
+      border-radius: 6px;
     }
 
-    .question {
-      font-weight: 600;
+    /* ===== JAWAPAN ===== */
+    .answer {
+      margin-top: 6px;
+      padding-left: 4px;
+      font-family: "Courier New", monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .answer-group {
       margin-bottom: 6px;
     }
 
-    .answer {
-      background: #fff;
-      padding: 10px;
-      border-radius: 6px;
-      font-size: 15px;
-      line-height: 1.4;
-      margin-bottom: 8px;
+    /* ===== SUB SECTION ===== */
+    .sub-answer {
+      margin-left: 10px;
     }
 
-    .answer-muted {
-      color: #666;
-      font-size: 14px;
+    hr {
+      margin: 24px 0;
+      border: none;
+      border-top: 1px solid #ddd;
     }
 
-    .divider {
-      height: 1px;
-      background: #ddd;
-      margin: 20px 0;
+    /* ===== FOOT BUTTON ===== */
+    .action-box {
+      margin-top: 28px;
     }
 
     .btn {
       width: 100%;
       padding: 12px;
-      margin-top: 16px;
       border: none;
       border-radius: 6px;
-      font-size: 16px;
-      color: white;
+      font-size: 15px;
+      margin-top: 10px;
+      color: #fff;
+    }
+
+    .btn-edit {
       background: #e67e22;
+    }
+
+    .btn-back {
+      background: #7f8c8d;
     }
   </style>
 </head>
 
 <body>
-
 <div class="container">
 
   <h1>Unit HEM SMK Seri Sendayan</h1>
   <h2>LAPORAN GURU BERTUGAS MINGGUAN</h2>
 
-  <div class="divider"></div>
+  <!-- ===============================
+       1. KUMPULAN GURU BERTUGAS
+       =============================== -->
+  <div class="question-box">1. Kumpulan Guru Bertugas</div>
+  <div class="answer">
+    • Ahmad Zaki  
+    • Siti Aisyah  
+    • Norhafizah  
+    • Muhammad Aiman  
+    • Nur Syuhada
+  </div>
 
-  <!-- CONTENT AKAN DIISI OLEH JS -->
-  <div id="reportContent"></div>
+  <!-- ===============================
+       2. MINGGU
+       =============================== -->
+  <div class="question-box">2. Minggu</div>
+  <div class="answer">Minggu 2</div>
 
-  <!-- BUTTON UBah Semula -->
-  <button id="btnEdit" class="btn">
-    ✏️ Ubah Semula Bahagian Ini
-  </button>
+  <!-- ===============================
+       3. TARIKH
+       =============================== -->
+  <div class="question-box">3. Tarikh</div>
+  <div class="answer">12/02/2026 – 16/02/2026</div>
+
+  <!-- ===============================
+       4. HARI
+       =============================== -->
+  <div class="question-box">4. Hari</div>
+  <div class="answer">Isnin</div>
+
+  <!-- ===============================
+       5. KEHADIRAN MURID
+       =============================== -->
+  <div class="question-box">5. Laporan Kehadiran Murid</div>
+
+  <div class="answer answer-group">
+    Tingkatan 1  
+    <div class="sub-answer">
+      Seroja : 36 / 38  
+      Mawar : 34 / 36  
+      <strong>Jumlah:</strong> 70 / 74 (95%)
+    </div>
+  </div>
+
+  <div class="answer answer-group">
+    Tingkatan 2  
+    <div class="sub-answer">
+      Melati : 32 / 35  
+      Teratai : 30 / 34  
+      <strong>Jumlah:</strong> 62 / 69 (90%)
+    </div>
+  </div>
+
+  <div class="answer">
+    <strong>Keseluruhan:</strong> 132 / 143 (92%)
+  </div>
+
+  <!-- ===============================
+       6. KEBERADAAN GURU
+       =============================== -->
+  <div class="question-box">6. Keberadaan Guru</div>
+  <div class="answer">
+    • CR – Ahmad Zaki  
+    • MC – Nurul Iman  
+    • Mesyuarat – Hafiz Rahman
+  </div>
+
+  <!-- ===============================
+       KOMEN
+       =============================== -->
+  <div class="question-box">Komen</div>
+  <div class="answer">
+    Perhimpunan berjalan lancar.  
+    Kehadiran murid memuaskan.  
+    Perlu pantau kantin minggu hadapan.
+  </div>
+
+  <!-- ===============================
+       ACTION
+       =============================== -->
+  <div class="action-box">
+    <button class="btn btn-edit">
+      ✏️ Ubah Semula Bahagian Ini
+    </button>
+
+    <button class="btn btn-back">
+      ⬅️ Kembali ke Menu
+    </button>
+  </div>
 
 </div>
-
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<script src="view1.js"></script>
-
 </body>
 </html>
