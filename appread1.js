@@ -2,8 +2,7 @@ const tg = window.Telegram.WebApp;
 tg.ready();
 
 /*
-  DATA INI = DATA PAPARAN
-  Bot akan parse raw message → bentuk DATA ni
+  DATA PAPARAN (bot akan inject)
 */
 const DATA = {
   guru: [],
@@ -38,22 +37,21 @@ function question(title) {
 }
 
 function answer(text, hasData = true) {
-  const cls = hasData ? "view-answer has-data" : "view-answer no-data";
-  report.innerHTML += `<div class="${cls}">${text}</div>`;
+  report.innerHTML += `
+    <div class="view-answer ${hasData ? "has-data" : "no-data"}">
+      ${text}
+    </div>
+  `;
 }
 
 function empty() {
-  report.innerHTML += `<div class="view-answer no-data">~tiada~</div>`;
+  answer("~tiada~", false);
 }
 
 /* ===== 1. GURU BERTUGAS ===== */
 
 question("1. Kumpulan Guru Bertugas");
-if (DATA.guru.length) {
-  DATA.guru.forEach(n => answer(n));
-} else {
-  empty();
-}
+DATA.guru.length ? DATA.guru.forEach(n => answer(n)) : empty();
 
 /* ===== 2. MINGGU ===== */
 
@@ -76,32 +74,23 @@ question("5. Kehadiran Murid");
 
 let totalH = 0;
 let totalD = 0;
+let adaData = false;
 
-Object.entries(DATA.kehadiran).forEach(([tingkatan, list]) => {
-  report.innerHTML += `<div class="view-category">${tingkatan}</div>`;
-
-  if (!list.length) {
-    empty();
-    return;
-  }
-
-  let h = 0;
-  let d = 0;
-
+Object.values(DATA.kehadiran).forEach(list => {
   list.forEach(k => {
-    h += k.hadir;
-    d += k.daftar;
-    answer(`${k.nama}  ${k.hadir} / ${k.daftar}`);
+    adaData = true;
+    totalH += k.hadir;
+    totalD += k.daftar;
+    answer(`${k.nama}   ${k.hadir} / ${k.daftar}`);
   });
-
-  const pct = d ? Math.round((h / d) * 100) : 0;
-  report.innerHTML += `<div class="view-summary">Jumlah: ${h}/${d} · ${pct}%</div>`;
-
-  totalH += h;
-  totalD += d;
 });
 
+if (!adaData) {
+  empty();
+}
+
 const overallPct = totalD ? Math.round((totalH / totalD) * 100) : 0;
+
 report.innerHTML += `
   <div class="overall-summary">
     Jumlah Keseluruhan
@@ -121,13 +110,11 @@ const GROUPS = [
 ];
 
 GROUPS.forEach(([label, key]) => {
-  report.innerHTML += `<div class="view-category">${label}</div>`;
-
   const list = DATA.keberadaan[key];
   if (!list.length) {
-    empty();
+    answer(`${label}: ~tiada~`, false);
   } else {
-    list.forEach(n => answer(`- ${n}`));
+    list.forEach(n => answer(`${label}: ${n}`));
   }
 });
 
