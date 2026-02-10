@@ -13,33 +13,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const attendanceBody = document.getElementById("attendanceBody");
   const jumlahHadirEl = document.getElementById("jumlahHadir");
   const peratusHadirEl = document.getElementById("peratusHadir");
-  const addBtn = document.getElementById("addGuru");
-  const wrapper = document.getElementById("guruWrapper");
+  const guruContainer = document.getElementById("guruContainer");
+  const addGuruBtn = document.getElementById("addGuru");
   
-  addBtn.addEventListener("click", () => {
-    // cek kalau guru tambahan dah ada
-    if (wrapper.querySelector(".guru-extra")) {
-      return; // terus senyap, tak buat apa-apa
-    }
+  let extraGuruCount = 6;
   
-    // buat input baru
-    const row = document.createElement("div");
-    row.className = "guru-extra";
-    row.style.display = "flex";
-    row.style.gap = "6px";
-    row.style.marginTop = "6px";
+  addGuruBtn.addEventListener("click", () => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "guru-extra";
   
-    row.innerHTML = `
-      <input class="name-search" name="guru_extra" placeholder="Nama Guru Tambahan">
+    wrapper.innerHTML = `
+      <input class="name-search" name="guru${extraGuruCount}" placeholder="Nama Guru ${extraGuruCount}">
       <button type="button" class="remove-guru">❌</button>
     `;
   
-    wrapper.appendChild(row);
-  
-    // buang guru tambahan
-    row.querySelector(".remove-guru").addEventListener("click", () => {
-      row.remove();
+    wrapper.querySelector(".remove-guru").addEventListener("click", () => {
+      wrapper.remove();
     });
+  
+    guruContainer.appendChild(wrapper);
+    extraGuruCount++;
   });
   const addRowBtn = document.getElementById("addRow");
   const btnSubmit = document.getElementById("btnSubmit");
