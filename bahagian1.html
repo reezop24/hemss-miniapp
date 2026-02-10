@@ -67,6 +67,35 @@
       text-align: center;
     }
 
+    .tingkatan-box {
+    background: #fff;
+    border-radius: 8px;
+    padding: 10px;
+  }
+  
+  .tingkatan-toggle {
+    width: 100%;
+    background: #2c3e50;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 6px;
+    text-align: left;
+  }
+  
+  .kelas-row {
+    display: grid;
+    grid-template-columns: 1fr 60px 20px 60px;
+    gap: 6px;
+    align-items: center;
+    margin: 6px 0;
+  }
+  
+  .kelas-row input {
+    text-align: center;
+  }
+
     /* ===== GURU ROW ===== */
     .guru-row {
       display: grid;
@@ -149,31 +178,48 @@
   <hr>
 
   <!-- 5. Kehadiran Murid -->
-  <label>5. Laporan Kehadiran Murid</label>
+  <!-- ===== KEHADIRAN MURID (VERSI ACCORDION) ===== -->
+<label>5. Laporan Kehadiran Murid</label>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Tingkatan</th>
-        <th>Kelas</th>
-        <th>Hadir / Daftar</th>
-      </tr>
-    </thead>
-    <tbody id="attendanceBody"></tbody>
-    <tfoot>
-      <tr>
-        <td colspan="2"><strong>Jumlah Hadir</strong></td>
-        <td id="jumlahHadir">0 / 0</td>
-      </tr>
-      <tr>
-        <td colspan="2"><strong>Peratus Kehadiran</strong></td>
-        <td id="peratusHadir">0%</td>
-      </tr>
-    </tfoot>
-  </table>
+<!-- TINGKATAN 1 -->
+<div class="tingkatan-box">
 
-  <hr>
+  <button type="button" class="tingkatan-toggle" data-target="t1-panel">
+    ▶ Tingkatan 1
+  </button>
 
+  <div class="tingkatan-panel" id="t1-panel" style="display:none">
+
+    <!-- 8 KELAS -->
+    <div class="kelas-row">
+      <span>Seroja</span>
+      <input type="number" class="t1-hadir" placeholder="Hadir">
+      /
+      <input type="number" class="t1-daftar" placeholder="Daftar">
+    </div>
+
+    <div class="kelas-row">
+      <span>Mawar</span>
+      <input type="number" class="t1-hadir">
+      /
+      <input type="number" class="t1-daftar">
+    </div>
+
+    <div class="kelas-row"><span>Melati</span><input class="t1-hadir" type="number"> / <input class="t1-daftar" type="number"></div>
+    <div class="kelas-row"><span>Kenanga</span><input class="t1-hadir" type="number"> / <input class="t1-daftar" type="number"></div>
+    <div class="kelas-row"><span>Cempaka</span><input class="t1-hadir" type="number"> / <input class="t1-daftar" type="number"></div>
+    <div class="kelas-row"><span>Teratai</span><input class="t1-hadir" type="number"> / <input class="t1-daftar" type="number"></div>
+    <div class="kelas-row"><span>Anggerik</span><input class="t1-hadir" type="number"> / <input class="t1-daftar" type="number"></div>
+    <div class="kelas-row"><span>Ros</span><input class="t1-hadir" type="number"> / <input class="t1-daftar" type="number"></div>
+
+    <hr>
+
+    <div><strong>Jumlah Tingkatan 1:</strong> <span id="t1-jumlah">0 / 0</span></div>
+    <div><strong>Peratus:</strong> <span id="t1-peratus">0%</span></div>
+
+  </div>
+</div>
+  
   <!-- 6. Keberadaan Guru -->
   <label>6. Keberadaan Guru</label>
 
