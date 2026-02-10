@@ -181,6 +181,50 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".t3-hadir, .t3-daftar").forEach(input => {
     input.addEventListener("input", kiraTingkatan3);
   });
+
+  // ===============================
+  // AUTO KIRA TINGKATAN 4
+  // ===============================
+  function kiraTingkatan4() {
+    const hadir = document.querySelectorAll(".t4-hadir");
+    const daftar = document.querySelectorAll(".t4-daftar");
+  
+    let totalH = 0;
+    let totalD = 0;
+  
+    hadir.forEach(i => totalH += Number(i.value || 0));
+    daftar.forEach(i => totalD += Number(i.value || 0));
+  
+    document.getElementById("t4-jumlah").textContent = `${totalH} / ${totalD}`;
+    document.getElementById("t4-peratus").textContent =
+      totalD > 0 ? Math.round((totalH / totalD) * 100) + "%" : "0%";
+  }
+  
+  document.querySelectorAll(".t4-hadir, .t4-daftar").forEach(input => {
+    input.addEventListener("input", kiraTingkatan4);
+  });
+
+  // ===============================
+  // AUTO KIRA TINGKATAN 5
+  // ===============================
+  function kiraTingkatan5() {
+    const hadir = document.querySelectorAll(".t5-hadir");
+    const daftar = document.querySelectorAll(".t5-daftar");
+  
+    let totalH = 0;
+    let totalD = 0;
+  
+    hadir.forEach(i => totalH += Number(i.value || 0));
+    daftar.forEach(i => totalD += Number(i.value || 0));
+  
+    document.getElementById("t5-jumlah").textContent = `${totalH} / ${totalD}`;
+    document.getElementById("t5-peratus").textContent =
+      totalD > 0 ? Math.round((totalH / totalD) * 100) + "%" : "0%";
+  }
+  
+  document.querySelectorAll(".t5-hadir, .t5-daftar").forEach(input => {
+    input.addEventListener("input", kiraTingkatan5);
+  });
   // ===============================
   // ADD / REMOVE GURU ROW
   // ===============================
