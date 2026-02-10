@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnSaveImage = document.getElementById("btnSaveImage");
 
   // ===============================
-  // GLOBAL NAME SEARCH (NAMESET.JS)
+  // GLOBAL NAME SEARCH (NAME_SET.JS)
   // PALING ATAS - JANGAN ALIHKAN
   // ===============================
   document.querySelectorAll(".name-search").forEach(input => {
