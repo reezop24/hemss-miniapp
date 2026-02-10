@@ -18,7 +18,10 @@ document.addEventListener("DOMContentLoaded", () => {
   
   let extraGuruCount = 6;
   
-  addGuruBtn.addEventListener("click", () => {
+  addBtn.addEventListener("click", () => {
+  
+    // 🔒 LOCK: kalau dah ada guru tambahan, stop
+    if (wrapper.querySelector(".guru-extra")) return;
     const wrapper = document.createElement("div");
     wrapper.className = "guru-extra";
   
