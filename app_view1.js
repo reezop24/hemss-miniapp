@@ -136,7 +136,7 @@ const GROUPS = [
 ];
 
 GROUPS.forEach(([label, key]) => {
-  report.innerHTML += `<div class="view-answer"><strong>${label}</strong></div>`;
+  report.innerHTML += `<div class="view-label">${label}</div>`;
 
   const list = DATA.keberadaan[key];
   if (!list || list.length === 0) {
