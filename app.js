@@ -137,6 +137,28 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".t1-hadir, .t1-daftar").forEach(input => {
     input.addEventListener("input", kiraTingkatan1);
   });
+
+  // ===============================
+  // AUTO KIRA TINGKATAN 2
+  // ===============================
+  function kiraTingkatan2() {
+    const hadir = document.querySelectorAll(".t2-hadir");
+    const daftar = document.querySelectorAll(".t2-daftar");
+  
+    let totalH = 0;
+    let totalD = 0;
+  
+    hadir.forEach(i => totalH += Number(i.value || 0));
+    daftar.forEach(i => totalD += Number(i.value || 0));
+  
+    document.getElementById("t2-jumlah").textContent = `${totalH} / ${totalD}`;
+    document.getElementById("t2-peratus").textContent =
+      totalD > 0 ? Math.round((totalH / totalD) * 100) + "%" : "0%";
+  }
+  
+  document.querySelectorAll(".t1-hadir, .t1-daftar").forEach(input => {
+    input.addEventListener("input", kiraTingkatan2);
+  });
   // ===============================
   // ADD / REMOVE GURU ROW
   // ===============================
