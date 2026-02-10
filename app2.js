@@ -1,5 +1,5 @@
 // ===============================
-// HEMSS MINI APP - app2.js (FIXED)
+// HEMSS MINI APP - app2.js (FINAL)
 // ===============================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -12,66 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnSaveImage = document.getElementById("btnSaveImage");
 
   // ===============================
-  // TAMBAH KOMEN (CLONE TEXTAREA)
-  // ===============================
-  document.querySelectorAll(".add-comment").forEach(addBtn => {
-  addBtn.addEventListener("click", () => {
-    const section = addBtn.closest(".comment-section");
-
-    // clone textarea lengkap (attribute + name)
-    const original = section.querySelector("textarea");
-    const textarea = original.cloneNode(true);
-    textarea.value = "";
-
-    // butang buang
-    const removeBtn = document.createElement("button");
-    removeBtn.type = "button";
-    removeBtn.textContent = "❌ Buang komen ini";
-    removeBtn.style.marginTop = "6px";
-    removeBtn.style.background = "#e74c3c";
-    removeBtn.style.color = "#fff";
-    removeBtn.style.border = "none";
-    removeBtn.style.borderRadius = "6px";
-    removeBtn.style.padding = "6px";
-    removeBtn.style.width = "100%";
-    removeBtn.style.fontSize = "14px";
-
-    removeBtn.addEventListener("click", () => {
-      textarea.remove();
-      removeBtn.remove();
-    });
-
-    // masukkan sebelum butang tambah
-    section.insertBefore(textarea, addBtn);
-    section.insertBefore(removeBtn, addBtn);
-  });
-});
-
-  // ===============================
-  // COLLECT DATA (ARRAY-BASED)
-  // ===============================
-  function collectData() {
-    const data = {};
-
-    form.querySelectorAll("input, textarea").forEach(el => {
-      if (!el.name) return;
-
-      if (!data[el.name]) {
-        data[el.name] = [];
-      }
-
-      if (el.value && el.value.trim() !== "") {
-        data[el.name].push(el.value.trim());
-      }
-    });
-
-    return data;
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-
-  // ===============================
   // GLOBAL NAME SEARCH (NAMESET.JS)
+  // PALING ATAS - JANGAN ALIHKAN
   // ===============================
   document.querySelectorAll(".name-search").forEach(input => {
     const listId = "nameset_" + Math.random().toString(36).slice(2);
@@ -88,8 +30,58 @@ document.addEventListener("DOMContentLoaded", () => {
     input.setAttribute("list", listId);
   });
 
-});
-  
+  // ===============================
+  // TAMBAH / BUANG KOMEN
+  // ===============================
+  document.querySelectorAll(".add-comment").forEach(addBtn => {
+    addBtn.addEventListener("click", () => {
+      const section = addBtn.closest(".comment-section");
+      const original = section.querySelector("textarea");
+
+      const textarea = original.cloneNode(true);
+      textarea.value = "";
+
+      const removeBtn = document.createElement("button");
+      removeBtn.type = "button";
+      removeBtn.textContent = "❌ Buang komen ini";
+      removeBtn.style.marginTop = "6px";
+      removeBtn.style.background = "#e74c3c";
+      removeBtn.style.color = "#fff";
+      removeBtn.style.border = "none";
+      removeBtn.style.borderRadius = "6px";
+      removeBtn.style.padding = "6px";
+      removeBtn.style.width = "100%";
+      removeBtn.style.fontSize = "14px";
+
+      removeBtn.addEventListener("click", () => {
+        textarea.remove();
+        removeBtn.remove();
+      });
+
+      section.insertBefore(textarea, addBtn);
+      section.insertBefore(removeBtn, addBtn);
+    });
+  });
+
+  // ===============================
+  // COLLECT DATA (ARRAY-BASED)
+  // ===============================
+  function collectData() {
+    const data = {};
+
+    form.querySelectorAll("input, textarea").forEach(el => {
+      if (!el.name) return;
+
+      if (!data[el.name]) data[el.name] = [];
+
+      if (el.value && el.value.trim() !== "") {
+        data[el.name].push(el.value.trim());
+      }
+    });
+
+    return data;
+  }
+
   // ===============================
   // SIMPAN SAHAJA
   // ===============================
@@ -100,7 +92,6 @@ document.addEventListener("DOMContentLoaded", () => {
       has_image: false,
       submitted_at: new Date().toISOString()
     }));
-
     tg.close();
   });
 
@@ -114,7 +105,6 @@ document.addEventListener("DOMContentLoaded", () => {
       has_image: true,
       submitted_at: new Date().toISOString()
     }));
-
     tg.close();
   });
 
