@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const attendanceBody = document.getElementById("attendanceBody");
   const jumlahHadirEl = document.getElementById("jumlahHadir");
   const peratusHadirEl = document.getElementById("peratusHadir");
-  const addBtn = document.getElementById("addGuruBtn");
+  const addBtn = document.getElementById("addGuru");
   const wrapper = document.getElementById("guruWrapper");
   
   addBtn.addEventListener("click", () => {
