@@ -12,11 +12,11 @@ const DATA = {
   hari: null,
 
   kehadiran: {
-    Tingkatan 1: [],
-    Tingkatan 2: [],
-    Tingkatan 3: [],
-    Tingkatan 4: [],
-    Tingkatan 5: []
+    T1: [],
+    T2: [],
+    T3: [],
+    T4: [],
+    T5: []
   },
 
   keberadaan: {
