@@ -1,42 +1,76 @@
-// ---------- COLLECT DATA (ARRAY-BASED) ----------
-function collectData() {
-  const data = {};
+// ===============================
+// HEMSS MINI APP - app2.js (FIXED)
+// ===============================
 
-  form.querySelectorAll("input, select, textarea").forEach(el => {
-    if (!el.name) return;
+document.addEventListener("DOMContentLoaded", () => {
 
-    if (!data[el.name]) {
-      data[el.name] = [];
-    }
+  const tg = window.Telegram.WebApp;
+  tg.ready();
 
-    if (el.value && el.value.trim() !== "") {
-      data[el.name].push(el.value.trim());
-    }
+  const form = document.getElementById("reportForm");
+  const btnSave = document.getElementById("btnSave");
+  const btnSaveImage = document.getElementById("btnSaveImage");
+
+  // ===============================
+  // TAMBAH KOMEN (CLONE TEXTAREA)
+  // ===============================
+  document.querySelectorAll(".add-comment").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const section = btn.closest(".comment-section");
+      const textarea = section.querySelector("textarea");
+      const clone = textarea.cloneNode();
+      clone.value = "";
+      section.insertBefore(clone, btn);
+    });
   });
 
-  return data;
-}
+  // ===============================
+  // COLLECT DATA (ARRAY-BASED)
+  // ===============================
+  function collectData() {
+    const data = {};
 
-// ---------- SIMPAN SAHAJA ----------
-document.getElementById("btnSave").addEventListener("click", () => {
-  tg.sendData(JSON.stringify({
-    section: "bahagian2",
-    data: collectData(),
-    has_image: false,
-    submitted_at: new Date().toISOString()
-  }));
+    form.querySelectorAll("input, textarea").forEach(el => {
+      if (!el.name) return;
 
-  tg.close();
-});
+      if (!data[el.name]) {
+        data[el.name] = [];
+      }
 
-// ---------- SIMPAN & MUAT NAIK GAMBAR ----------
-document.getElementById("btnSaveImage").addEventListener("click", () => {
-  tg.sendData(JSON.stringify({
-    section: "bahagian2",
-    data: collectData(),
-    has_image: true,
-    submitted_at: new Date().toISOString()
-  }));
+      if (el.value && el.value.trim() !== "") {
+        data[el.name].push(el.value.trim());
+      }
+    });
 
-  tg.close();
+    return data;
+  }
+
+  // ===============================
+  // SIMPAN SAHAJA
+  // ===============================
+  btnSave.addEventListener("click", () => {
+    tg.sendData(JSON.stringify({
+      section: "bahagian2",
+      data: collectData(),
+      has_image: false,
+      submitted_at: new Date().toISOString()
+    }));
+
+    tg.close();
+  });
+
+  // ===============================
+  // SIMPAN & MUAT NAIK GAMBAR
+  // ===============================
+  btnSaveImage.addEventListener("click", () => {
+    tg.sendData(JSON.stringify({
+      section: "bahagian2",
+      data: collectData(),
+      has_image: true,
+      submitted_at: new Date().toISOString()
+    }));
+
+    tg.close();
+  });
+
 });
