@@ -31,7 +31,7 @@
     margin: 18px 0;
   }
 
-  /* SOALAN */
+  /* ===== SOALAN ===== */
   .view-question {
     background: #1e293b;
     padding: 10px 12px;
@@ -40,7 +40,7 @@
     margin-top: 14px;
   }
 
-  /* JAWAPAN */
+  /* ===== JAWAPAN USER SAHAJA ===== */
   .view-answer {
     padding: 6px 4px 6px 8px;
     margin-left: 6px;
@@ -48,6 +48,7 @@
     font-size: 14px;
   }
 
+  /* ===== TIADA DATA ===== */
   .view-empty {
     font-style: italic;
     opacity: 0.6;
@@ -55,22 +56,31 @@
     font-family: "Courier New", monospace;
   }
 
+  /* ===== RINGKASAN ===== */
   .view-summary {
     margin-left: 8px;
     margin-top: 6px;
     opacity: 0.8;
     font-size: 13px;
+    font-family: system-ui, sans-serif; /* ⬅️ BUKAN typewriter */
   }
 
-  .view-total {
-    background: #020617;
-    border: 1px solid #1e293b;
-    padding: 10px;
-    border-radius: 6px;
+  /* ===== JUMLAH KESELURUHAN ===== */
+  .overall-summary {
     margin-top: 16px;
-    font-size: 14px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    font-weight: 600;
+    font-family: system-ui, sans-serif;
   }
 
+  .overall-summary .answer {
+    font-family: "Courier New", monospace;
+    display: block;
+    margin-top: 4px;
+  }
+
+  /* ===== BUTTON ===== */
   .btn {
     width: 100%;
     margin-top: 20px;
@@ -93,6 +103,7 @@
 
   <hr>
 
+  <!-- JS akan isi semua kandungan di sini -->
   <div id="report"></div>
 
   <button id="btnEdit" class="btn">
