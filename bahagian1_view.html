@@ -9,7 +9,7 @@
     body {
       margin: 0;
       font-family: system-ui, sans-serif;
-      background: #f4f6f9;
+      background: #f5f6f8;
       color: #222;
     }
 
@@ -19,139 +19,92 @@
       margin: auto;
     }
 
-    /* ===== HEADER ===== */
-    .header {
+    h1, h2 {
       text-align: center;
-      margin-bottom: 16px;
+      margin: 4px 0;
     }
 
-    .header h1 {
-      font-size: 18px;
-      margin: 0;
-      font-weight: 600;
-    }
+    h1 { font-size: 18px; }
+    h2 { font-size: 15px; font-weight: normal; }
 
-    .header h2 {
-      font-size: 15px;
-      margin: 6px 0 0;
-      font-weight: 500;
-    }
-
-    /* ===== QUESTION BOX ===== */
+    /* ===== SOALAN ===== */
     .question-box {
-      background: #e6ecf3;
+      background: #e3e8f0;
       padding: 10px 12px;
-      margin-top: 18px;
+      margin-top: 16px;
       font-weight: 600;
       border-radius: 6px;
     }
 
-    /* ===== ANSWER ===== */
-    .answer-text {
+    /* ===== JAWAPAN ===== */
+    .answer {
+      margin-top: 6px;
+      padding-left: 6px;
       font-family: "Courier New", monospace;
-      padding: 8px 4px;
       font-size: 14px;
       color: #333;
-      white-space: pre-wrap;
     }
 
-    .answer-group {
-      font-family: "Courier New", monospace;
-      padding: 8px 4px;
-      font-size: 14px;
-      line-height: 1.6;
-      color: #333;
+    .answer div {
+      margin-bottom: 4px;
     }
 
-    /* subtle divider */
-    .divider {
-      height: 1px;
-      background: #ddd;
-      margin: 12px 0;
+    hr {
+      margin: 20px 0;
+      border: none;
+      border-top: 1px solid #ccc;
     }
 
+    .btn {
+      width: 100%;
+      padding: 12px;
+      margin-top: 18px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .btn-edit {
+      background: #e67e22;
+    }
   </style>
 </head>
 
 <body>
+<div class="container">
 
-  <div class="container">
+  <h1>Unit HEM SMK Seri Sendayan</h1>
+  <h2>LAPORAN GURU BERTUGAS MINGGUAN</h2>
 
-    <!-- HEADER -->
-    <div class="header">
-      <h1>Unit HEM SMK Seri Sendayan</h1>
-      <h2>LAPORAN GURU BERTUGAS MINGGUAN</h2>
-    </div>
+  <!-- 1 -->
+  <div class="question-box">1. Kumpulan Guru Bertugas</div>
+  <div class="answer" id="ans-guru"></div>
 
-    <!-- 1. KUMPULAN GURU -->
-    <div class="question-box">
-      1. Kumpulan Guru Bertugas
-    </div>
-    <div class="answer-group" id="q_guru">
-      Ahmad Zaki  
-      Siti Aisyah  
-      Norhafizah  
-      Muhammad Aiman  
-      Nur Syuhada
-    </div>
+  <!-- 2 -->
+  <div class="question-box">2. Minggu</div>
+  <div class="answer" id="ans-minggu"></div>
 
-    <!-- 2. MINGGU -->
-    <div class="question-box">
-      2. Minggu
-    </div>
-    <div class="answer-text" id="q_minggu">
-      Minggu 3
-    </div>
+  <!-- 3 -->
+  <div class="question-box">3. Tarikh</div>
+  <div class="answer" id="ans-tarikh"></div>
 
-    <!-- 3. TARIKH -->
-    <div class="question-box">
-      3. Tarikh
-    </div>
-    <div class="answer-text" id="q_tarikh">
-      12/02/2026
-    </div>
+  <!-- 4 -->
+  <div class="question-box">4. Hari</div>
+  <div class="answer" id="ans-hari"></div>
 
-    <!-- 4. HARI -->
-    <div class="question-box">
-      4. Hari
-    </div>
-    <div class="answer-text" id="q_hari">
-      Isnin
-    </div>
+  <hr>
 
-    <!-- 5. KEHADIRAN MURID -->
-    <div class="question-box">
-      5. Laporan Kehadiran Murid
-    </div>
-    <div class="answer-group" id="q_kehadiran">
-      Tingkatan 1 : 230 / 240 (96%)  
-      Tingkatan 2 : 215 / 230 (93%)  
-      Tingkatan 3 : 198 / 210 (94%)  
-      Tingkatan 4 : 176 / 185 (95%)  
-      Tingkatan 5 : 162 / 170 (95%)
+  <button class="btn btn-edit" id="btnEdit">
+    Bahagian ini telah disimpan — Ubah Semula?
+  </button>
 
-      <div class="divider"></div>
+</div>
 
-      Jumlah Keseluruhan : 981 / 1035 (95%)
-    </div>
-
-    <!-- 6. KEBERADAAN GURU -->
-    <div class="question-box">
-      6. Keberadaan Guru
-    </div>
-    <div class="answer-group" id="q_keberadaan">
-      MC – Faizal Hakim  
-      Mesyuarat – Hafiz Rahman  
-      Bengkel – Daniel Akmal
-    </div>
-
-  </div>
-
-  <!-- JS RENDER (NANTI AMBIL DATA DB) -->
-  <script>
-    // sementara ni kosong
-    // nanti: ambil payload lama → inject ke #q_xxx
-  </script>
+<!-- Telegram WebApp (SAFE) -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="bahagian1_view.js"></script>
 
 </body>
 </html>
