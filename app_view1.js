@@ -12,11 +12,11 @@ const DATA = {
   hari: "Isnin",
 
   kehadiran: {
-    T1: { kelas: [{ nama: "Seroja", hadir: 30, daftar: 32 }] },
-    T2: { kelas: [] },
-    T3: { kelas: [{ nama: "Melati", hadir: 28, daftar: 30 }] },
-    T4: { kelas: [] },
-    T5: { kelas: [] }
+    Tingkatan 1: { kelas: [{ nama: "Seroja", hadir: 30, daftar: 32 }] },
+    TIngkatan 2: { kelas: [] },
+    Tingkatan 3: { kelas: [{ nama: "Melati", hadir: 28, daftar: 30 }] },
+    Tingkatan 4: { kelas: [] },
+    Tingkatan 5: { kelas: [] }
   },
 
   keberadaan: {
