@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const datalist = document.createElement("datalist");
     datalist.id = listId;
 
-    NAMESET.forEach(name => {
+    NAME_SET.forEach(name => {
       const option = document.createElement("option");
       option.value = name;
       datalist.appendChild(option);
