@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bahagian 2 – Perhimpunan & Kantin</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: #f7f7f7;
+    }
+
+    .container {
+      padding: 16px;
+    }
+
+    h1, h2 {
+      text-align: center;
+      margin: 4px 0;
+    }
+
+    h1 { font-size: 18px; }
+    h2 { font-size: 15px; font-weight: normal; }
+
+    hr { margin: 18px 0; }
+
+    label {
+      font-weight: 600;
+      margin-top: 12px;
+      display: block;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      min-height: 70px;
+      resize: vertical;
+    }
+
+    .comment-section {
+      margin-top: 8px;
+    }
+
+    .add-comment {
+      margin-top: 8px;
+      background: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px;
+      width: 100%;
+      font-size: 14px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      margin-top: 14px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      color: white;
+    }
+
+    .btn-save { background: #2ecc71; }
+    .btn-image { background: #e67e22; }
+  </style>
+</head>
+
+<body>
+<div class="container">
+
+  <h1>Unit HEM SMK Seri Sendayan</h1>
+  <h2>LAPORAN GURU BERTUGAS MINGGUAN</h2>
+
+  <hr>
+
+  <!-- LAPORAN PERHIMPUNAN -->
+  <label>Nama Guru Pelapor</label>
+  <input class="name-search" name="perhimpunan_pelapor">
+
+  <label>Ucapan Pentadbir – Nama</label>
+  <input class="name-search" name="ucapan_pentadbir_nama">
+
+  <label>Ucapan Pentadbir – Isi</label>
+  <div class="comment-section">
+    <textarea name="ucapan_pentadbir_isi" class="comment-box"></textarea>
+    <button type="button" class="add-comment">➕ Tambah Komen</button>
+  </div>
+
+  <label>Guru Bertugas Perhimpunan – Nama</label>
+  <input class="name-search" name="guru_bertugas_nama">
+
+  <label>Guru Bertugas Perhimpunan – Catatan</label>
+  <div class="comment-section">
+    <textarea name="guru_bertugas_catatan" class="comment-box"></textarea>
+    <button type="button" class="add-comment">➕ Tambah Komen</button>
+  </div>
+
+  <hr>
+
+  <!-- LAPORAN KANTIN -->
+  <label>Nama Guru Pelapor (Kantin)</label>
+  <input class="name-search" name="kantin_pelapor">
+
+  <label>Pemerhatian Kantin</label>
+  <div class="comment-section">
+    <textarea name="kantin_catatan" class="comment-box"></textarea>
+    <button type="button" class="add-comment">➕ Tambah Komen</button>
+  </div>
+
+  <hr>
+
+  <!-- BUTTON -->
+  <button id="btnSave" class="btn btn-save">
+    💾 Simpan Sahaja
+  </button>
+
+  <button id="btnSaveImage" class="btn btn-image">
+    📷 Simpan & Muat Naik Gambar
+  </button>
+
+</div>
+
+<!-- GLOBAL -->
+<script src="nameset.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
