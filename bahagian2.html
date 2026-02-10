@@ -78,59 +78,64 @@
 </head>
 
 <body>
-<div class="container">
 
-  <h1>Unit HEM SMK Seri Sendayan</h1>
-  <h2>LAPORAN GURU BERTUGAS MINGGUAN</h2>
+<form id="reportForm">
 
-  <hr>
+  <div class="container">
 
-  <!-- LAPORAN PERHIMPUNAN -->
-  <label>Nama Guru Pelapor</label>
-  <input class="name-search" name="perhimpunan_pelapor">
+    <h1>Unit HEM SMK Seri Sendayan</h1>
+    <h2>LAPORAN GURU BERTUGAS MINGGUAN</h2>
 
-  <label>Ucapan Pentadbir – Nama</label>
-  <input class="name-search" name="ucapan_pentadbir_nama">
+    <hr>
 
-  <label>Ucapan Pentadbir – Isi</label>
-  <div class="comment-section">
-    <textarea name="ucapan_pentadbir_isi" class="comment-box"></textarea>
-    <button type="button" class="add-comment">➕ Tambah Komen</button>
+    <!-- LAPORAN PERHIMPUNAN -->
+    <label>Nama Guru Pelapor</label>
+    <input class="name-search" name="perhimpunan_pelapor">
+
+    <label>Ucapan Pentadbir – Nama</label>
+    <input class="name-search" name="ucapan_pentadbir_nama">
+
+    <label>Ucapan Pentadbir – Isi</label>
+    <div class="comment-section">
+      <textarea name="ucapan_pentadbir_isi" class="comment-box"></textarea>
+      <button type="button" class="add-comment">➕ Tambah Komen</button>
+    </div>
+
+    <label>Guru Bertugas Perhimpunan – Nama</label>
+    <input class="name-search" name="guru_bertugas_nama">
+
+    <label>Guru Bertugas Perhimpunan – Catatan</label>
+    <div class="comment-section">
+      <textarea name="guru_bertugas_catatan" class="comment-box"></textarea>
+      <button type="button" class="add-comment">➕ Tambah Komen</button>
+    </div>
+
+    <hr>
+
+    <!-- LAPORAN KANTIN -->
+    <label>Nama Guru Pelapor (Kantin)</label>
+    <input class="name-search" name="kantin_pelapor">
+
+    <label>Pemerhatian Kantin</label>
+    <div class="comment-section">
+      <textarea name="kantin_catatan" class="comment-box"></textarea>
+      <button type="button" class="add-comment">➕ Tambah Komen</button>
+    </div>
+
+    <hr>
+
+    <!-- BUTTON -->
+    <button type="button" id="btnSave" class="btn btn-save">
+      💾 Simpan Sahaja
+    </button>
+
+    <button type="button" id="btnSaveImage" class="btn btn-image">
+      📷 Simpan & Muat Naik Gambar
+    </button>
+
   </div>
 
-  <label>Guru Bertugas Perhimpunan – Nama</label>
-  <input class="name-search" name="guru_bertugas_nama">
-
-  <label>Guru Bertugas Perhimpunan – Catatan</label>
-  <div class="comment-section">
-    <textarea name="guru_bertugas_catatan" class="comment-box"></textarea>
-    <button type="button" class="add-comment">➕ Tambah Komen</button>
-  </div>
-
-  <hr>
-
-  <!-- LAPORAN KANTIN -->
-  <label>Nama Guru Pelapor (Kantin)</label>
-  <input class="name-search" name="kantin_pelapor">
-
-  <label>Pemerhatian Kantin</label>
-  <div class="comment-section">
-    <textarea name="kantin_catatan" class="comment-box"></textarea>
-    <button type="button" class="add-comment">➕ Tambah Komen</button>
-  </div>
-
-  <hr>
-
-  <!-- BUTTON -->
-  <button id="btnSave" class="btn btn-save">
-    💾 Simpan Sahaja
-  </button>
-
-  <button id="btnSaveImage" class="btn btn-image">
-    📷 Simpan & Muat Naik Gambar
-  </button>
-
-</div>
+</form>
 
 <!-- GLOBAL -->
 <script src="nameset.js"></script>
