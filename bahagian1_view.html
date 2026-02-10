@@ -1,185 +1,157 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bahagian 1 – Paparan Laporan</title>
 
   <style>
     body {
       margin: 0;
       font-family: system-ui, sans-serif;
-      background: #f4f6f8;
+      background: #f4f6f9;
       color: #222;
     }
 
     .container {
       padding: 16px;
+      max-width: 720px;
+      margin: auto;
     }
 
-    h1, h2 {
+    /* ===== HEADER ===== */
+    .header {
       text-align: center;
-      margin: 4px 0;
+      margin-bottom: 16px;
     }
 
-    h1 { font-size: 18px; }
-    h2 { font-size: 14px; font-weight: normal; }
+    .header h1 {
+      font-size: 18px;
+      margin: 0;
+      font-weight: 600;
+    }
 
-    /* ===== SOALAN BOX ===== */
+    .header h2 {
+      font-size: 15px;
+      margin: 6px 0 0;
+      font-weight: 500;
+    }
+
+    /* ===== QUESTION BOX ===== */
     .question-box {
-      background: #e9eef3;
-      padding: 12px;
+      background: #e6ecf3;
+      padding: 10px 12px;
       margin-top: 18px;
       font-weight: 600;
       border-radius: 6px;
     }
 
-    /* ===== JAWAPAN ===== */
-    .answer {
-      margin-top: 6px;
-      padding-left: 4px;
+    /* ===== ANSWER ===== */
+    .answer-text {
       font-family: "Courier New", monospace;
+      padding: 8px 4px;
       font-size: 14px;
-      line-height: 1.5;
+      color: #333;
       white-space: pre-wrap;
     }
 
     .answer-group {
-      margin-bottom: 6px;
+      font-family: "Courier New", monospace;
+      padding: 8px 4px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #333;
     }
 
-    /* ===== SUB SECTION ===== */
-    .sub-answer {
-      margin-left: 10px;
+    /* subtle divider */
+    .divider {
+      height: 1px;
+      background: #ddd;
+      margin: 12px 0;
     }
 
-    hr {
-      margin: 24px 0;
-      border: none;
-      border-top: 1px solid #ddd;
-    }
-
-    /* ===== FOOT BUTTON ===== */
-    .action-box {
-      margin-top: 28px;
-    }
-
-    .btn {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 6px;
-      font-size: 15px;
-      margin-top: 10px;
-      color: #fff;
-    }
-
-    .btn-edit {
-      background: #e67e22;
-    }
-
-    .btn-back {
-      background: #7f8c8d;
-    }
   </style>
 </head>
 
 <body>
-<div class="container">
 
-  <h1>Unit HEM SMK Seri Sendayan</h1>
-  <h2>LAPORAN GURU BERTUGAS MINGGUAN</h2>
+  <div class="container">
 
-  <!-- ===============================
-       1. KUMPULAN GURU BERTUGAS
-       =============================== -->
-  <div class="question-box">1. Kumpulan Guru Bertugas</div>
-  <div class="answer">
-    • Ahmad Zaki  
-    • Siti Aisyah  
-    • Norhafizah  
-    • Muhammad Aiman  
-    • Nur Syuhada
-  </div>
-
-  <!-- ===============================
-       2. MINGGU
-       =============================== -->
-  <div class="question-box">2. Minggu</div>
-  <div class="answer">Minggu 2</div>
-
-  <!-- ===============================
-       3. TARIKH
-       =============================== -->
-  <div class="question-box">3. Tarikh</div>
-  <div class="answer">12/02/2026 – 16/02/2026</div>
-
-  <!-- ===============================
-       4. HARI
-       =============================== -->
-  <div class="question-box">4. Hari</div>
-  <div class="answer">Isnin</div>
-
-  <!-- ===============================
-       5. KEHADIRAN MURID
-       =============================== -->
-  <div class="question-box">5. Laporan Kehadiran Murid</div>
-
-  <div class="answer answer-group">
-    Tingkatan 1  
-    <div class="sub-answer">
-      Seroja : 36 / 38  
-      Mawar : 34 / 36  
-      <strong>Jumlah:</strong> 70 / 74 (95%)
+    <!-- HEADER -->
+    <div class="header">
+      <h1>Unit HEM SMK Seri Sendayan</h1>
+      <h2>LAPORAN GURU BERTUGAS MINGGUAN</h2>
     </div>
-  </div>
 
-  <div class="answer answer-group">
-    Tingkatan 2  
-    <div class="sub-answer">
-      Melati : 32 / 35  
-      Teratai : 30 / 34  
-      <strong>Jumlah:</strong> 62 / 69 (90%)
+    <!-- 1. KUMPULAN GURU -->
+    <div class="question-box">
+      1. Kumpulan Guru Bertugas
     </div>
+    <div class="answer-group" id="q_guru">
+      Ahmad Zaki  
+      Siti Aisyah  
+      Norhafizah  
+      Muhammad Aiman  
+      Nur Syuhada
+    </div>
+
+    <!-- 2. MINGGU -->
+    <div class="question-box">
+      2. Minggu
+    </div>
+    <div class="answer-text" id="q_minggu">
+      Minggu 3
+    </div>
+
+    <!-- 3. TARIKH -->
+    <div class="question-box">
+      3. Tarikh
+    </div>
+    <div class="answer-text" id="q_tarikh">
+      12/02/2026
+    </div>
+
+    <!-- 4. HARI -->
+    <div class="question-box">
+      4. Hari
+    </div>
+    <div class="answer-text" id="q_hari">
+      Isnin
+    </div>
+
+    <!-- 5. KEHADIRAN MURID -->
+    <div class="question-box">
+      5. Laporan Kehadiran Murid
+    </div>
+    <div class="answer-group" id="q_kehadiran">
+      Tingkatan 1 : 230 / 240 (96%)  
+      Tingkatan 2 : 215 / 230 (93%)  
+      Tingkatan 3 : 198 / 210 (94%)  
+      Tingkatan 4 : 176 / 185 (95%)  
+      Tingkatan 5 : 162 / 170 (95%)
+
+      <div class="divider"></div>
+
+      Jumlah Keseluruhan : 981 / 1035 (95%)
+    </div>
+
+    <!-- 6. KEBERADAAN GURU -->
+    <div class="question-box">
+      6. Keberadaan Guru
+    </div>
+    <div class="answer-group" id="q_keberadaan">
+      MC – Faizal Hakim  
+      Mesyuarat – Hafiz Rahman  
+      Bengkel – Daniel Akmal
+    </div>
+
   </div>
 
-  <div class="answer">
-    <strong>Keseluruhan:</strong> 132 / 143 (92%)
-  </div>
+  <!-- JS RENDER (NANTI AMBIL DATA DB) -->
+  <script>
+    // sementara ni kosong
+    // nanti: ambil payload lama → inject ke #q_xxx
+  </script>
 
-  <!-- ===============================
-       6. KEBERADAAN GURU
-       =============================== -->
-  <div class="question-box">6. Keberadaan Guru</div>
-  <div class="answer">
-    • CR – Ahmad Zaki  
-    • MC – Nurul Iman  
-    • Mesyuarat – Hafiz Rahman
-  </div>
-
-  <!-- ===============================
-       KOMEN
-       =============================== -->
-  <div class="question-box">Komen</div>
-  <div class="answer">
-    Perhimpunan berjalan lancar.  
-    Kehadiran murid memuaskan.  
-    Perlu pantau kantin minggu hadapan.
-  </div>
-
-  <!-- ===============================
-       ACTION
-       =============================== -->
-  <div class="action-box">
-    <button class="btn btn-edit">
-      ✏️ Ubah Semula Bahagian Ini
-    </button>
-
-    <button class="btn btn-back">
-      ⬅️ Kembali ke Menu
-    </button>
-  </div>
-
-</div>
 </body>
 </html>
