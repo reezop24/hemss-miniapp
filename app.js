@@ -48,61 +48,39 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ===============================
-  // CREATE 30 ROW MURID (STATIK)
+  // ACCORDION TOGGLE
   // ===============================
-  function createAttendanceRows() {
-    attendanceBody.innerHTML = "";
-
-    for (let i = 0; i < 30; i++) {
-      const tr = document.createElement("tr");
-
-      tr.innerHTML = `
-        <td>
-          <select name="tingkatan_${i}">
-            ${buildOptions(tingkatanList)}
-          </select>
-        </td>
-
-        <td>
-          <select name="kelas_${i}">
-            ${buildOptions(kelasList)}
-          </select>
-        </td>
-
-        <td>
-          <div class="attendance-box">
-            <input class="small" type="number" name="hadir_${i}">
-            /
-            <input class="small" type="number" name="daftar_${i}">
-          </div>
-        </td>
-      `;
-
-      attendanceBody.appendChild(tr);
-    }
-  }
-
-  // ===============================
-  // AUTO KIRA HADIR
-  // ===============================
-  attendanceBody.addEventListener("input", () => {
-    let totalHadir = 0;
-    let totalDaftar = 0;
-
-    for (let i = 0; i < 30; i++) {
-      const h = Number(form[`hadir_${i}`]?.value || 0);
-      const d = Number(form[`daftar_${i}`]?.value || 0);
-      totalHadir += h;
-      totalDaftar += d;
-    }
-
-    jumlahHadirEl.textContent = `${totalHadir} / ${totalDaftar}`;
-    peratusHadirEl.textContent =
-      totalDaftar > 0
-        ? `${Math.round((totalHadir / totalDaftar) * 100)}%`
-        : "0%";
+  document.querySelectorAll(".tingkatan-toggle").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const panel = document.getElementById(btn.dataset.target);
+      const open = panel.style.display === "block";
+  
+      panel.style.display = open ? "none" : "block";
+      btn.textContent = (open ? "▶ " : "▼ ") + btn.textContent.replace("▶ ", "").replace("▼ ", "");
+    });
   });
-
+  
+  // ===============================
+  // AUTO KIRA TINGKATAN 1
+  // ===============================
+  function kiraTingkatan1() {
+    const hadir = document.querySelectorAll(".t1-hadir");
+    const daftar = document.querySelectorAll(".t1-daftar");
+  
+    let totalH = 0;
+    let totalD = 0;
+  
+    hadir.forEach(i => totalH += Number(i.value || 0));
+    daftar.forEach(i => totalD += Number(i.value || 0));
+  
+    document.getElementById("t1-jumlah").textContent = `${totalH} / ${totalD}`;
+    document.getElementById("t1-peratus").textContent =
+      totalD > 0 ? Math.round((totalH / totalD) * 100) + "%" : "0%";
+  }
+  
+  document.querySelectorAll(".t1-hadir, .t1-daftar").forEach(input => {
+    input.addEventListener("input", kiraTingkatan1);
+  });
   // ===============================
   // ADD / REMOVE GURU ROW
   // ===============================
