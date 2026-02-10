@@ -17,6 +17,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const addRowBtn = document.getElementById("addRow");
   const btnSubmit = document.getElementById("btnSubmit");
   const hariSelect = document.getElementById("hariSelect");
+  // ===============================
+  // INIT MINGGU (GLOBAL PRESET)
+  // ===============================
+  const mingguSelect = document.getElementById("mingguSelect");
+  
+  if (mingguSelect && typeof MINGGU_LIST !== "undefined") {
+    mingguSelect.innerHTML = MINGGU_LIST
+      .map(m => `<option value="${m}">${m}</option>`)
+      .join("");
+  }
 
   // ===============================
   // GLOBAL NAME SEARCH (NAMESET.JS)
