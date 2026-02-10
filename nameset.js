@@ -3,7 +3,7 @@
    GLOBAL NAME SET
    ========================= */
 
-const NAMESET = [
+const NAME_SET = [
   "Ahmad Zaki",
   "Siti Aisyah",
   "Norhafizah",
