@@ -2,7 +2,8 @@ const tg = window.Telegram.WebApp;
 tg.ready();
 
 /*
-  DATA PAPARAN (bot akan inject)
+  DATA PAPARAN
+  (bot akan inject data sebenar)
 */
 const DATA = {
   guru: [],
@@ -11,11 +12,11 @@ const DATA = {
   hari: null,
 
   kehadiran: {
-    T1: [],
-    T2: [],
-    T3: [],
-    T4: [],
-    T5: []
+    TINGKATAN1: [],
+    TINGKATAN2: [],
+    TINGKATAN3: [],
+    TINGKATAN4: [],
+    TINGKATAN5: []
   },
 
   keberadaan: {
@@ -32,75 +33,92 @@ const report = document.getElementById("report");
 
 /* ===== HELPER ===== */
 
-function question(title) {
-  report.innerHTML += `<div class="view-question">${title}</div>`;
+function q(text) {
+  report.innerHTML += `<div class="question">${text}</div>`;
 }
 
-function answer(text, hasData = true) {
+function cat(text) {
+  report.innerHTML += `<div class="category">${text}</div>`;
+}
+
+function ans(text, ok = true) {
   report.innerHTML += `
-    <div class="view-answer ${hasData ? "has-data" : "no-data"}">
-      ${text}
-    </div>
+    <div class="answer ${ok ? "has-data" : "no-data"}">${text}</div>
   `;
 }
 
 function empty() {
-  answer("~tiada~", false);
+  ans("~tiada~", false);
 }
 
 /* ===== 1. GURU BERTUGAS ===== */
 
-question("1. Kumpulan Guru Bertugas");
-DATA.guru.length ? DATA.guru.forEach(n => answer(n)) : empty();
+q("1. Kumpulan Guru Bertugas");
+DATA.guru.length ? DATA.guru.forEach(n => ans(n)) : empty();
 
 /* ===== 2. MINGGU ===== */
 
-question("2. Minggu");
-DATA.minggu ? answer(DATA.minggu) : empty();
+q("2. Minggu");
+DATA.minggu ? ans(DATA.minggu) : empty();
 
 /* ===== 3. TARIKH ===== */
 
-question("3. Tarikh");
-DATA.tarikh ? answer(DATA.tarikh) : empty();
+q("3. Tarikh");
+DATA.tarikh ? ans(DATA.tarikh) : empty();
 
 /* ===== 4. HARI ===== */
 
-question("4. Hari");
-DATA.hari ? answer(DATA.hari) : empty();
+q("4. Hari");
+DATA.hari ? ans(DATA.hari) : empty();
 
 /* ===== 5. KEHADIRAN MURID ===== */
 
-question("5. Kehadiran Murid");
+q("5. Kehadiran Murid");
 
 let totalH = 0;
 let totalD = 0;
-let adaData = false;
 
-Object.values(DATA.kehadiran).forEach(list => {
+Object.entries(DATA.kehadiran).forEach(([key, list], i) => {
+  cat(`TINGKATAN ${i + 1}`);
+
+  if (!list.length) {
+    empty();
+    return;
+  }
+
+  let h = 0;
+  let d = 0;
+
   list.forEach(k => {
-    adaData = true;
-    totalH += k.hadir;
-    totalD += k.daftar;
-    answer(`${k.nama}   ${k.hadir} / ${k.daftar}`);
+    h += k.hadir;
+    d += k.daftar;
+    ans(`${k.nama}   ${k.hadir} / ${k.daftar}`);
   });
-});
 
-if (!adaData) {
-  empty();
-}
+  const pct = d ? Math.round((h / d) * 100) : 0;
+
+  report.innerHTML += `
+    <div class="summary">Jumlah: ${h}/${d}</div>
+    <div class="summary">Peratusan: ${pct}%</div>
+  `;
+
+  totalH += h;
+  totalD += d;
+});
 
 const overallPct = totalD ? Math.round((totalH / totalD) * 100) : 0;
 
 report.innerHTML += `
-  <div class="overall-summary">
-    Jumlah Keseluruhan
-    <span>${totalH} / ${totalD} (${overallPct}%)</span>
+  <div class="overall">
+    JUMLAH KESELURUHAN
+    <span>${totalH} / ${totalD}</span>
+    <span>Peratusan: ${overallPct}%</span>
   </div>
 `;
 
 /* ===== 6. KEBERADAAN GURU ===== */
 
-question("6. Keberadaan Guru");
+q("6. Keberadaan Guru");
 
 const GROUPS = [
   ["CR / CTR / CRK / MC / Kuarantin", "A"],
@@ -110,18 +128,16 @@ const GROUPS = [
 ];
 
 GROUPS.forEach(([label, key]) => {
+  cat(label);
+
   const list = DATA.keberadaan[key];
-  if (!list.length) {
-    answer(`${label}: ~tiada~`, false);
-  } else {
-    list.forEach(n => answer(`${label}: ${n}`));
-  }
+  list.length ? list.forEach(n => ans(n)) : empty();
 });
 
 /* ===== 7. KOMEN ===== */
 
-question("7. Komen");
-DATA.komen ? answer(DATA.komen) : empty();
+q("7. Komen");
+DATA.komen ? ans(DATA.komen) : empty();
 
 /* ===== UBAH SEMULA ===== */
 
