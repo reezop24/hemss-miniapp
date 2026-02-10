@@ -18,37 +18,32 @@ document.addEventListener("DOMContentLoaded", () => {
   addBtn.addEventListener("click", () => {
     const section = addBtn.closest(".comment-section");
 
-    // create wrapper
-    const wrapper = document.createElement("div");
-    wrapper.style.position = "relative";
-    wrapper.style.marginTop = "6px";
-
-    // clone textarea
-    const textarea = section.querySelector("textarea").cloneNode();
+    // clone textarea lengkap (attribute + name)
+    const original = section.querySelector("textarea");
+    const textarea = original.cloneNode(true);
     textarea.value = "";
 
-    // remove button
+    // butang buang
     const removeBtn = document.createElement("button");
     removeBtn.type = "button";
-    removeBtn.textContent = "❌ Buang";
-    removeBtn.style.position = "absolute";
-    removeBtn.style.right = "0";
-    removeBtn.style.top = "0";
+    removeBtn.textContent = "❌ Buang komen ini";
+    removeBtn.style.marginTop = "6px";
     removeBtn.style.background = "#e74c3c";
     removeBtn.style.color = "#fff";
     removeBtn.style.border = "none";
-    removeBtn.style.borderRadius = "4px";
-    removeBtn.style.padding = "4px 8px";
-    removeBtn.style.fontSize = "12px";
+    removeBtn.style.borderRadius = "6px";
+    removeBtn.style.padding = "6px";
+    removeBtn.style.width = "100%";
+    removeBtn.style.fontSize = "14px";
 
     removeBtn.addEventListener("click", () => {
-      wrapper.remove();
+      textarea.remove();
+      removeBtn.remove();
     });
 
-    wrapper.appendChild(textarea);
-    wrapper.appendChild(removeBtn);
-
-    section.insertBefore(wrapper, addBtn);
+    // masukkan sebelum butang tambah
+    section.insertBefore(textarea, addBtn);
+    section.insertBefore(removeBtn, addBtn);
   });
 });
 
