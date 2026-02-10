@@ -13,26 +13,52 @@ document.addEventListener("DOMContentLoaded", () => {
   const attendanceBody = document.getElementById("attendanceBody");
   const jumlahHadirEl = document.getElementById("jumlahHadir");
   const peratusHadirEl = document.getElementById("peratusHadir");
-  const guruContainer = document.getElementById("guruContainer");
-  const addGuruBtn = document.getElementById("addGuru");
+  // ===============================
+  // GURU BERTUGAS (MAX 6)
+  // ===============================
   
-  let extraGuruCount = 6;
+  const guruWrapper = document.getElementById("guruWrapper");
+  const addGuruBtn = document.getElementById("addGuruBtn");
+  const MAX_GURU = 6;
+  
+  function renumberGuru() {
+    const inputs = guruWrapper.querySelectorAll(".guru-input");
+    inputs.forEach((input, index) => {
+      input.placeholder = `Nama Guru ${index + 1}`;
+      input.name = `guru${index + 1}`;
+    });
+  }
   
   addGuruBtn.addEventListener("click", () => {
-    const wrapper = document.createElement("div");
-    wrapper.className = "guru-extra";
+    const currentCount = guruWrapper.querySelectorAll(".guru-input").length;
   
-    wrapper.innerHTML = `
-      <input class="name-search" name="guru${extraGuruCount}" placeholder="Nama Guru ${extraGuruCount}">
+    // 🔒 LIMIT
+    if (currentCount >= MAX_GURU) return;
+  
+    const row = document.createElement("div");
+    row.className = "guru-extra-row";
+  
+    row.innerHTML = `
+      <input class="name-search guru-input" placeholder="Nama Guru">
       <button type="button" class="remove-guru">❌</button>
     `;
   
-    wrapper.querySelector(".remove-guru").addEventListener("click", () => {
-      wrapper.remove();
-    });
+    guruWrapper.appendChild(row);
   
-    guruContainer.appendChild(wrapper);
-    extraGuruCount++;
+    // init search untuk input baru
+    if (typeof initNameSearch === "function") {
+      initNameSearch(row.querySelector(".name-search"));
+    }
+  
+    renumberGuru();
+  });
+  
+  // BUANG GURU
+  guruWrapper.addEventListener("click", (e) => {
+    if (e.target.classList.contains("remove-guru")) {
+      e.target.parentElement.remove();
+      renumberGuru();
+    }
   });
   const addRowBtn = document.getElementById("addRow");
   const btnSubmit = document.getElementById("btnSubmit");
