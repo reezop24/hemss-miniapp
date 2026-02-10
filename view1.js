@@ -1,96 +1,85 @@
 // ===============================
-// HEMSS MINI APP - view1.js
-// READ ONLY MODE
+// HEMSS MINI APP - READ ONLY VIEW
 // ===============================
 
 const tg = window.Telegram.WebApp;
 tg.ready();
 
-// ⛔ DATA DATANG DARI CHAT (sendData sebelum ni)
-const payload = tg.initDataUnsafe?.query?.data
-  ? JSON.parse(tg.initDataUnsafe.query.data)
-  : null;
-
-const container = document.getElementById("reportContent");
-const btnEdit = document.getElementById("btnEdit");
-
-if (!payload || !payload.data) {
-  container.innerHTML = `<div class="answer-muted">Tiada data untuk dipaparkan.</div>`;
-} else {
-  renderReport(payload.data);
-}
-
-function renderReport(data) {
-  container.innerHTML = "";
-
-  addSection("Kumpulan Guru Bertugas", [
-    data.guru1,
-    data.guru2,
-    data.guru3,
-    data.guru4,
-    data.guru5
-  ]);
-
-  addDivider();
-
-  addSimple("Minggu", data.minggu);
-  addSimple("Tarikh", data.tarikh);
-  addSimple("Hari", data.hari);
-
-  addDivider();
-
-  addSection("Kehadiran Murid", data.kehadiran_summary || []);
-
-  addDivider();
-
-  addSection("Keberadaan Guru", data.keberadaan || []);
-
-  if (data.komen) {
-    addDivider();
-    addSimple("Komen", data.komen);
+/*
+Expected payload:
+{
+  mode: "readonly",
+  data: {
+    guru: [...],
+    minggu: "...",
+    tarikh: "...",
+    hari: "...",
+    kehadiran: {...},
+    keberadaan: [...],
+    komen: "..."
   }
 }
+*/
 
-function addSimple(title, value) {
-  if (!value) return;
+const payload = tg.initDataUnsafe?.query?.payload
+  ? JSON.parse(tg.initDataUnsafe.query.payload)
+  : null;
 
-  container.innerHTML += `
-    <div class="section">
-      <div class="question">${title}</div>
-      <div class="answer">${value}</div>
-    </div>
-  `;
+if (!payload || payload.mode !== "readonly") {
+  document.body.innerHTML = "<p>Data tidak sah.</p>";
+  throw new Error("Invalid payload");
 }
 
-function addSection(title, list) {
-  if (!list || list.length === 0) return;
+const data = payload.data;
 
-  let html = `
-    <div class="section">
-      <div class="question">${title}</div>
-  `;
+// ---------- UTIL ----------
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.innerText = value || "-";
+}
 
+function setList(id, list = []) {
+  const el = document.getElementById(id);
+  if (!el) return;
+
+  el.innerText = "";
   list.forEach(item => {
-    if (item) {
-      html += `<div class="answer">${item}</div>`;
-    }
+    el.innerText += `• ${item}\n`;
   });
-
-  html += `</div>`;
-  container.innerHTML += html;
 }
 
-function addDivider() {
-  container.innerHTML += `<div class="divider"></div>`;
+// ---------- RENDER ----------
+setList("ans_guru", data.guru);
+setText("ans_minggu", data.minggu);
+setText("ans_tarikh", data.tarikh);
+setText("ans_hari", data.hari);
+setText("ans_komen", data.komen);
+
+// Kehadiran (ringkas dulu)
+const hadirBox = document.getElementById("ans_kehadiran");
+hadirBox.innerText = "";
+
+Object.keys(data.kehadiran || {}).forEach(ting => {
+  hadirBox.innerText += emphasized(ting) + "\n";
+  data.kehadiran[ting].forEach(k => {
+    hadirBox.innerText += `  ${k.kelas} : ${k.hadir}/${k.daftar}\n`;
+  });
+  hadirBox.innerText += "\n";
+});
+
+function emphasized(text) {
+  return text.toUpperCase();
 }
 
-// ===============================
-// BUTANG UBah Semula
-// ===============================
-btnEdit.addEventListener("click", () => {
+// ---------- BUTTON ----------
+document.getElementById("btnEdit").addEventListener("click", () => {
   tg.sendData(JSON.stringify({
-    action: "request_edit",
+    action: "REQUEST_EDIT",
     section: "bahagian1"
   }));
+  tg.close();
+});
+
+document.getElementById("btnBack").addEventListener("click", () => {
   tg.close();
 });
