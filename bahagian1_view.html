@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bahagian 1 – Paparan Laporan</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: #f7f7f7;
+    }
+
+    .container {
+      padding: 16px;
+    }
+
+    h1, h2 {
+      text-align: center;
+      margin: 4px 0;
+    }
+
+    h1 { font-size: 18px; }
+    h2 { font-size: 15px; font-weight: normal; }
+
+    .section {
+      margin-top: 20px;
+    }
+
+    .question {
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .answer {
+      background: #fff;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 15px;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .answer-muted {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .divider {
+      height: 1px;
+      background: #ddd;
+      margin: 20px 0;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      margin-top: 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      color: white;
+      background: #e67e22;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>Unit HEM SMK Seri Sendayan</h1>
+  <h2>LAPORAN GURU BERTUGAS MINGGUAN</h2>
+
+  <div class="divider"></div>
+
+  <!-- CONTENT AKAN DIISI OLEH JS -->
+  <div id="reportContent"></div>
+
+  <!-- BUTTON UBah Semula -->
+  <button id="btnEdit" class="btn">
+    ✏️ Ubah Semula Bahagian Ini
+  </button>
+
+</div>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="view1.js"></script>
+
+</body>
+</html>
