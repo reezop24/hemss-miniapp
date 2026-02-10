@@ -2,26 +2,26 @@ const tg = window.Telegram.WebApp;
 tg.ready();
 
 /*
-  MOCK DATA
-  — nanti kau ganti terus dengan data dari DB (message lama)
+  DATA AKAN DATANG DARI DB / MESSAGE LAMA
+  — buat masa ni biar kosong untuk test "~tiada~"
 */
 const DATA = {
-  guru: ["Ahmad Zaki", "Siti Aisyah"],
-  minggu: "Minggu 2",
-  tarikh: "10/02/2026",
-  hari: "Isnin",
+  guru: [],
+  minggu: null,
+  tarikh: null,
+  hari: null,
 
   kehadiran: {
-    Tingkatan 1: { kelas: [{ nama: "Seroja", hadir: 30, daftar: 32 }] },
-    TIngkatan 2: { kelas: [] },
-    Tingkatan 3: { kelas: [{ nama: "Melati", hadir: 28, daftar: 30 }] },
-    Tingkatan 4: { kelas: [] },
-    Tingkatan 5: { kelas: [] }
+    Tingkatan 1: [],
+    Tingkatan 2: [],
+    Tingkatan 3: [],
+    Tingkatan 4: [],
+    Tingkatan 5: []
   },
 
   keberadaan: {
     A: [],
-    B: ["Faizal Hakim"],
+    B: [],
     C: [],
     D: []
   }
@@ -29,66 +29,104 @@ const DATA = {
 
 const report = document.getElementById("report");
 
-/* =====================
-   SOALAN 1–4
-===================== */
+/* =========================
+   HELPER
+========================= */
 
-function q(title, answers) {
+function renderQuestion(title) {
   report.innerHTML += `<div class="view-question">${title}</div>`;
-  if (!answers || answers.length === 0) {
-    report.innerHTML += `<div class="view-empty">~tiada~</div>`;
-  } else {
-    answers.forEach(a => {
-      report.innerHTML += `<div class="view-answer">${a}</div>`;
-    });
-  }
 }
 
-q("1. Kumpulan Guru Bertugas", DATA.guru);
-q("2. Minggu", [DATA.minggu]);
-q("3. Tarikh", [DATA.tarikh]);
-q("4. Hari", [DATA.hari]);
-
-/* =====================
-   SOALAN 5 – KEHADIRAN
-===================== */
-
-report.innerHTML += `<div class="view-question">5. Kehadiran Murid</div>`;
-
-let totalH = 0, totalD = 0;
-
-["T1","T2","T3","T4","T5"].forEach(t => {
-  const info = DATA.kehadiran[t];
-  report.innerHTML += `<div class="view-answer"><strong>${t}</strong></div>`;
-
-  if (info.kelas.length === 0) {
+function renderAnswers(list) {
+  if (!list || list.length === 0) {
     report.innerHTML += `<div class="view-empty">~tiada~</div>`;
-  } else {
-    let h = 0, d = 0;
-    info.kelas.forEach(k => {
-      h += k.hadir;
-      d += k.daftar;
-      report.innerHTML += `
-        <div class="view-answer">
-          ${k.nama} — ${k.hadir} / ${k.daftar}
-        </div>`;
-    });
-    const p = d ? Math.round(h/d*100) : 0;
-    report.innerHTML += `<div class="view-summary">Jumlah: ${h}/${d} · ${p}%</div>`;
-    totalH += h;
-    totalD += d;
+    return;
   }
+
+  list.forEach(item => {
+    report.innerHTML += `<div class="view-answer">${item}</div>`;
+  });
+}
+
+/* =========================
+   1–4: MAKLUMAT ASAS
+========================= */
+
+renderQuestion("1. Kumpulan Guru Bertugas");
+renderAnswers(DATA.guru);
+
+renderQuestion("2. Minggu");
+renderAnswers(DATA.minggu ? [DATA.minggu] : []);
+
+renderQuestion("3. Tarikh");
+renderAnswers(DATA.tarikh ? [DATA.tarikh] : []);
+
+renderQuestion("4. Hari");
+renderAnswers(DATA.hari ? [DATA.hari] : []);
+
+/* =========================
+   5. KEHADIRAN MURID
+========================= */
+
+renderQuestion("5. Kehadiran Murid");
+
+let totalHadir = 0;
+let totalDaftar = 0;
+
+Object.entries(DATA.kehadiran).forEach(([tingkatan, kelasList]) => {
+  report.innerHTML += `<div class="view-answer"><strong>${tingkatan}</strong></div>`;
+
+  if (!kelasList || kelasList.length === 0) {
+    report.innerHTML += `<div class="view-empty">~tiada~</div>`;
+    return;
+  }
+
+  let h = 0;
+  let d = 0;
+
+  kelasList.forEach(k => {
+    h += k.hadir;
+    d += k.daftar;
+
+    report.innerHTML += `
+      <div class="view-answer">
+        ${k.nama} — ${k.hadir} / ${k.daftar}
+      </div>
+    `;
+  });
+
+  const peratus = d ? Math.round((h / d) * 100) : 0;
+
+  report.innerHTML += `
+    <div class="view-summary">
+      Jumlah: ${h}/${d} · ${peratus}%
+    </div>
+  `;
+
+  totalHadir += h;
+  totalDaftar += d;
 });
 
-report.innerHTML += `
-  <div class="view-total">
-    <strong>Jumlah Keseluruhan</strong><br>
-    ${totalH} / ${totalD} (${totalD ? Math.round(totalH/totalD*100) : 0}%)
-  </div>`;
+/* ===== JUMLAH KESELURUHAN ===== */
 
-/* =====================
-   SOALAN 6 – KEBERADAAN
-===================== */
+const overallPercent = totalDaftar
+  ? Math.round((totalHadir / totalDaftar) * 100)
+  : 0;
+
+report.innerHTML += `
+  <div class="overall-summary">
+    Jumlah Keseluruhan
+    <span class="answer">
+      ${totalHadir} / ${totalDaftar} (${overallPercent}%)
+    </span>
+  </div>
+`;
+
+/* =========================
+   6. KEBERADAAN GURU
+========================= */
+
+renderQuestion("6. Keberadaan Guru");
 
 const GROUPS = [
   ["CR / CTR / CRK / MC / Kuarantin", "A"],
@@ -97,23 +135,22 @@ const GROUPS = [
   ["Lain-lain", "D"]
 ];
 
-report.innerHTML += `<div class="view-question">6. Keberadaan Guru</div>`;
-
 GROUPS.forEach(([label, key]) => {
   report.innerHTML += `<div class="view-answer"><strong>${label}</strong></div>`;
+
   const list = DATA.keberadaan[key];
   if (!list || list.length === 0) {
     report.innerHTML += `<div class="view-empty">~tiada~</div>`;
   } else {
-    list.forEach(n => {
-      report.innerHTML += `<div class="view-answer">- ${n}</div>`;
+    list.forEach(name => {
+      report.innerHTML += `<div class="view-answer">- ${name}</div>`;
     });
   }
 });
 
-/* =====================
+/* =========================
    BUTANG UBAH SEMULA
-===================== */
+========================= */
 
 document.getElementById("btnEdit").addEventListener("click", () => {
   tg.sendData(JSON.stringify({
