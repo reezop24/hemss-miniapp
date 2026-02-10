@@ -23,7 +23,7 @@ function initNameSearch(input) {
   if (!document.getElementById(listId)) {
     const datalist = document.createElement("datalist");
     datalist.id = listId;
-    NAMESET.forEach(name => {
+    NAME_SET.forEach(name => {
       const opt = document.createElement("option");
       opt.value = name;
       datalist.appendChild(opt);
