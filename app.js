@@ -18,22 +18,22 @@ document.addEventListener("DOMContentLoaded", () => {
   
   let extraGuruCount = 6;
   
-  addBtn.addEventListener("click", () => {
-
-  if (!wrapper) return; // 🔒 safety net
-
-  if (wrapper.querySelector(".guru-extra")) return;
-
-  const row = document.createElement("div");
-  row.className = "guru-row guru-extra";
-
-  row.innerHTML = `
-    <input class="name-search" placeholder="Nama Guru Tambahan">
-    <button type="button" class="remove-btn">❌</button>
-  `;
-
-  wrapper.appendChild(row);
-});
+  addGuruBtn.addEventListener("click", () => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "guru-extra";
+  
+    wrapper.innerHTML = `
+      <input class="name-search" name="guru${extraGuruCount}" placeholder="Nama Guru ${extraGuruCount}">
+      <button type="button" class="remove-guru">❌</button>
+    `;
+  
+    wrapper.querySelector(".remove-guru").addEventListener("click", () => {
+      wrapper.remove();
+    });
+  
+    guruContainer.appendChild(wrapper);
+    extraGuruCount++;
+  });
   const addRowBtn = document.getElementById("addRow");
   const btnSubmit = document.getElementById("btnSubmit");
   const hariSelect = document.getElementById("hariSelect");
