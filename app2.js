@@ -14,15 +14,43 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===============================
   // TAMBAH KOMEN (CLONE TEXTAREA)
   // ===============================
-  document.querySelectorAll(".add-comment").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const section = btn.closest(".comment-section");
-      const textarea = section.querySelector("textarea");
-      const clone = textarea.cloneNode();
-      clone.value = "";
-      section.insertBefore(clone, btn);
+  document.querySelectorAll(".add-comment").forEach(addBtn => {
+  addBtn.addEventListener("click", () => {
+    const section = addBtn.closest(".comment-section");
+
+    // create wrapper
+    const wrapper = document.createElement("div");
+    wrapper.style.position = "relative";
+    wrapper.style.marginTop = "6px";
+
+    // clone textarea
+    const textarea = section.querySelector("textarea").cloneNode();
+    textarea.value = "";
+
+    // remove button
+    const removeBtn = document.createElement("button");
+    removeBtn.type = "button";
+    removeBtn.textContent = "❌ Buang";
+    removeBtn.style.position = "absolute";
+    removeBtn.style.right = "0";
+    removeBtn.style.top = "0";
+    removeBtn.style.background = "#e74c3c";
+    removeBtn.style.color = "#fff";
+    removeBtn.style.border = "none";
+    removeBtn.style.borderRadius = "4px";
+    removeBtn.style.padding = "4px 8px";
+    removeBtn.style.fontSize = "12px";
+
+    removeBtn.addEventListener("click", () => {
+      wrapper.remove();
     });
+
+    wrapper.appendChild(textarea);
+    wrapper.appendChild(removeBtn);
+
+    section.insertBefore(wrapper, addBtn);
   });
+});
 
   // ===============================
   // COLLECT DATA (ARRAY-BASED)
