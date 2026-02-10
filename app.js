@@ -5,24 +5,6 @@
 const tg = window.Telegram.WebApp;
 tg.ready();
 
-// ===============================
-// GLOBAL NAME SEARCH (ALL PAGES)
-// ===============================
-document.querySelectorAll(".name-search").forEach(input => {
-  const listId = "nameset_" + Math.random().toString(36).slice(2);
-  const datalist = document.createElement("datalist");
-  datalist.id = listId;
-
-  NAME_SET.forEach(name => {
-    const option = document.createElement("option");
-    option.value = name;
-    datalist.appendChild(option);
-  });
-
-  document.body.appendChild(datalist);
-  input.setAttribute("list", listId);
-});
-
 // ELEMENT
 const form = document.getElementById("reportForm");
 const attendanceBody = document.getElementById("attendanceBody");
