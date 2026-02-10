@@ -1,8 +1,6 @@
-<script>
-/* =========================
-   GLOBAL NAME SET
-   ========================= */
-
+// =========================
+// GLOBAL NAME SET (DATA ONLY)
+// =========================
 const NAME_SET = [
   "Ahmad Zaki",
   "Siti Aisyah",
@@ -15,22 +13,3 @@ const NAME_SET = [
   "Aina Sofia",
   "Daniel Akmal"
 ];
-
-// init search box
-function initNameSearch(input) {
-  const listId = "nameset-list";
-
-  if (!document.getElementById(listId)) {
-    const datalist = document.createElement("datalist");
-    datalist.id = listId;
-    NAME_SET.forEach(name => {
-      const opt = document.createElement("option");
-      opt.value = name;
-      datalist.appendChild(opt);
-    });
-    document.body.appendChild(datalist);
-  }
-
-  input.setAttribute("list", listId);
-}
-</script>
