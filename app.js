@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // 🔒 LOCK: kalau dah ada guru tambahan, stop
     if (wrapper.querySelector(".guru-extra")) return;
     const wrapper = document.createElement("div");
-    wrapper.className = "guru-extra";
+    wrapper.className = "guru-row guru-extra";
   
     wrapper.innerHTML = `
       <input class="name-search" name="guru${extraGuruCount}" placeholder="Nama Guru ${extraGuruCount}">
