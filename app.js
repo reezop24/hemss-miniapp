@@ -14,6 +14,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const jumlahHadirEl = document.getElementById("jumlahHadir");
   const peratusHadirEl = document.getElementById("peratusHadir");
   const guruContainer = document.getElementById("guruContainer");
+  const addGuruBtn = document.getElementById("addGuru");
+  
+  let extraGuruCount = 6;
+  
+  addGuruBtn.addEventListener("click", () => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "guru-extra";
+  
+    wrapper.innerHTML = `
+      <input class="name-search" name="guru${extraGuruCount}" placeholder="Nama Guru ${extraGuruCount}">
+      <button type="button" class="remove-guru">❌</button>
+    `;
+  
+    wrapper.querySelector(".remove-guru").addEventListener("click", () => {
+      wrapper.remove();
+    });
+  
+    guruContainer.appendChild(wrapper);
+    extraGuruCount++;
+  });
   const addRowBtn = document.getElementById("addRow");
   const btnSubmit = document.getElementById("btnSubmit");
   const hariSelect = document.getElementById("hariSelect");
