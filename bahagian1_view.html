@@ -1,75 +1,12 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bahagian 1 – Paparan Laporan</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bahagian 1 (Paparan)</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: system-ui, sans-serif;
-      background: #f5f6f8;
-      color: #222;
-    }
-
-    .container {
-      padding: 16px;
-      max-width: 720px;
-      margin: auto;
-    }
-
-    h1, h2 {
-      text-align: center;
-      margin: 4px 0;
-    }
-
-    h1 { font-size: 18px; }
-    h2 { font-size: 15px; font-weight: normal; }
-
-    /* ===== SOALAN ===== */
-    .question-box {
-      background: #e3e8f0;
-      padding: 10px 12px;
-      margin-top: 16px;
-      font-weight: 600;
-      border-radius: 6px;
-    }
-
-    /* ===== JAWAPAN ===== */
-    .answer {
-      margin-top: 6px;
-      padding-left: 6px;
-      font-family: "Courier New", monospace;
-      font-size: 14px;
-      color: #333;
-    }
-
-    .answer div {
-      margin-bottom: 4px;
-    }
-
-    hr {
-      margin: 20px 0;
-      border: none;
-      border-top: 1px solid #ccc;
-    }
-
-    .btn {
-      width: 100%;
-      padding: 12px;
-      margin-top: 18px;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      color: white;
-      cursor: pointer;
-    }
-
-    .btn-edit {
-      background: #e67e22;
-    }
-  </style>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="stylesheet" href="theme.css">
 </head>
 
 <body>
@@ -78,33 +15,48 @@
   <h1>Unit HEM SMK Seri Sendayan</h1>
   <h2>LAPORAN GURU BERTUGAS MINGGUAN</h2>
 
-  <!-- 1 -->
-  <div class="question-box">1. Kumpulan Guru Bertugas</div>
-  <div class="answer" id="ans-guru"></div>
+  <!-- SECTION 1 -->
+  <div class="section">
+    <div class="question-box">1. Kumpulan Guru Bertugas</div>
+    <div class="answer-box" id="ans-guru">
+      Ahmad Zaki, Siti Aisyah, Hafiz Rahman
+    </div>
+  </div>
 
-  <!-- 2 -->
-  <div class="question-box">2. Minggu</div>
-  <div class="answer" id="ans-minggu"></div>
+  <!-- SECTION 2 -->
+  <div class="section">
+    <div class="question-box">2. Minggu</div>
+    <div class="answer-box" id="ans-minggu">
+      Minggu 3
+    </div>
+  </div>
 
-  <!-- 3 -->
-  <div class="question-box">3. Tarikh</div>
-  <div class="answer" id="ans-tarikh"></div>
+  <!-- SECTION 3 -->
+  <div class="section">
+    <div class="question-box">3. Tarikh</div>
+    <div class="answer-box" id="ans-tarikh">
+      12/02/2026 – 16/02/2026
+    </div>
+  </div>
 
-  <!-- 4 -->
-  <div class="question-box">4. Hari</div>
-  <div class="answer" id="ans-hari"></div>
+  <!-- SECTION 4 -->
+  <div class="section">
+    <div class="question-box">4. Hari</div>
+    <div class="answer-box" id="ans-hari">
+      Isnin – Jumaat
+    </div>
+  </div>
 
-  <hr>
+  <div class="info-text">
+    Bahagian ini telah disimpan dan tidak boleh diubah.
+  </div>
 
-  <button class="btn btn-edit" id="btnEdit">
-    Bahagian ini telah disimpan — Ubah Semula?
+  <button class="btn btn-warning" id="btnEdit">
+    🔁 Ubah Semula
   </button>
 
 </div>
 
-<!-- Telegram WebApp (SAFE) -->
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<script src="bahagian1_view.js"></script>
-
+<script src="app_view.js"></script>
 </body>
 </html>
