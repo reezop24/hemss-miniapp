@@ -1,119 +1,87 @@
 <!DOCTYPE html>
-<html lang="ms">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bahagian 1 (View)</title>
+  <meta charset="UTF-8">
+  <title>Pilih Tarikh Laporan</title>
 
-<style>
-  body {
-    margin: 0;
-    font-family: system-ui, sans-serif;
-    background: #0f172a;
-    color: #e5e7eb;
-  }
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="menu.js" defer></script>
 
-  .container {
-    padding: 16px;
-  }
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #1e3a5f; /* Biru gelap lembut */
+      color: white;
+      padding: 20px;
+    }
 
-  h1, h2 {
-    text-align: center;
-    margin: 4px 0;
-  }
+    h2 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
 
-  h1 { font-size: 18px; }
-  h2 { font-size: 14px; opacity: .8; }
+    .warning-box {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 25px;
+    }
 
-  hr {
-    border: none;
-    border-top: 1px solid #1f2933;
-    margin: 18px 0;
-  }
+    .warning-box strong {
+      color: #ffd966;
+    }
 
-  /* ===== SOALAN ===== */
-  .view-question {
-    background: #1e293b;
-    padding: 10px 12px;
-    font-weight: 600;
-    border-radius: 6px;
-    margin-top: 14px;
-  }
+    .container {
+      margin-top: 10px;
+    }
 
-  /* ===== JAWAPAN USER SAHAJA ===== */
-  .view-answer {
-    padding: 6px 4px 6px 8px;
-    margin-left: 6px;
-    font-family: "Courier New", monospace;
-    font-size: 14px;
-  }
+    input[type="date"] {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: none;
+      box-sizing: border-box;
+    }
 
-  /* ===== TIADA DATA ===== */
-  .view-empty {
-    font-style: italic;
-    opacity: 0.6;
-    margin: 6px 8px;
-    font-family: "Courier New", monospace;
-  }
+    button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: none;
+      background-color: #4da3ff;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
 
-  /* ===== RINGKASAN ===== */
-  .view-summary {
-    margin-left: 8px;
-    margin-top: 6px;
-    opacity: 0.8;
-    font-size: 13px;
-    font-family: system-ui, sans-serif; /* ⬅️ BUKAN typewriter */
-  }
-
-  /* ===== JUMLAH KESELURUHAN ===== */
-  .overall-summary {
-    margin-top: 16px;
-    padding-top: 12px;
-    border-top: 1px solid rgba(255,255,255,0.15);
-    font-weight: 600;
-    font-family: system-ui, sans-serif;
-  }
-
-  .overall-summary .answer {
-    font-family: "Courier New", monospace;
-    display: block;
-    margin-top: 4px;
-  }
-
-  /* ===== BUTTON ===== */
-  .btn {
-    width: 100%;
-    margin-top: 20px;
-    padding: 12px;
-    border: none;
-    border-radius: 6px;
-    background: #7c2d12;
-    color: #fff;
-    font-size: 15px;
-  }
-</style>
+    button:hover {
+      background-color: #66b3ff;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="container">
+  <h2>📅 Pemilihan Tarikh Laporan</h2>
 
-  <h1>Unit HEM SMK Seri Sendayan</h1>
-  <h2>LAPORAN GURU BERTUGAS MINGGUAN</h2>
+  <div class="warning-box">
+    ⚠️ <strong>Perhatian:</strong><br><br>
+    Sila pastikan tarikh yang dipilih adalah tepat mengikut jadual guru bertugas.
+    <br><br>
+    Pemilihan tarikh yang salah boleh menyebabkan laporan dikunci dan
+    menyukarkan guru lain untuk mengemaskini laporan sebenar.
+  </div>
 
-  <hr>
-
-  <!-- JS akan isi semua kandungan di sini -->
-  <div id="report"></div>
-
-  <button id="btnEdit" class="btn">
-    ✏️ Ubah Semula Bahagian Ini
-  </button>
-
-</div>
-
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<script src="app_view1.js"></script>
+  <div class="container">
+    <input type="date" id="tarikhInput" />
+    <button onclick="hantarTarikh()">Sahkan Tarikh</button>
+  </div>
 
 </body>
 </html>
