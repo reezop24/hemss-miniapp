@@ -1,5 +1,5 @@
 // ===============================
-// HEMSS MINI APP - app.js (FINAL STABLE v2)
+// HEMSS MINI APP - app.js (FINAL STABLE v3)
 // ===============================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -18,16 +18,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const MAX_GURU = 6;
 
-  // ===============================
-  // SOALAN 1 – GURUA (UID: GURUA_n)
-  // ===============================
+  // =====================================================
+  // HELPER – INIT DATALIST SEARCH
+  // =====================================================
+  function initNameSearch(input) {
+    const listId = "nameset_" + Math.random().toString(36).slice(2);
+    const datalist = document.createElement("datalist");
+    datalist.id = listId;
+
+    NAME_SET.forEach(name => {
+      const option = document.createElement("option");
+      option.value = name;
+      datalist.appendChild(option);
+    });
+
+    document.body.appendChild(datalist);
+    input.setAttribute("list", listId);
+  }
+
+  // =====================================================
+  // SOALAN 1 – GURU BERTUGAS
+  // UID: GURUA_n
+  // =====================================================
   function renumberGuru() {
     const inputs = guruWrapper.querySelectorAll(".guru-input");
     inputs.forEach((input, index) => {
       input.placeholder = `Nama Guru ${index + 1}`;
-      input.name = `GURUA_${index + 1}`; // LABEL UID
+      input.name = `GURUA_${index + 1}`;
     });
   }
+
+  // INIT SEARCH UNTUK INPUT ASAL
+  document.querySelectorAll(".name-search").forEach(input => {
+    initNameSearch(input);
+  });
+
+  renumberGuru();
 
   addGuruBtn.addEventListener("click", () => {
     const currentCount = guruWrapper.querySelectorAll(".guru-input").length;
@@ -39,7 +65,12 @@ document.addEventListener("DOMContentLoaded", () => {
       <input class="name-search guru-input" placeholder="Nama Guru">
       <button type="button" class="remove-guru">❌</button>
     `;
+
     guruWrapper.appendChild(row);
+
+    const newInput = row.querySelector(".name-search");
+    initNameSearch(newInput);
+
     renumberGuru();
   });
 
@@ -50,11 +81,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  renumberGuru();
-
-  // ===============================
+  // =====================================================
   // PRESETS (SOALAN 2–4)
-  // ===============================
+  // =====================================================
   if (mingguSelect) {
     mingguSelect.innerHTML = buildOptions(MINGGU_LIST);
   }
@@ -63,9 +92,9 @@ document.addEventListener("DOMContentLoaded", () => {
     hariSelect.innerHTML = buildOptions(hariList);
   }
 
-  // ===============================
-  // ACCORDION TINGKATAN (HELPER UI)
-  // ===============================
+  // =====================================================
+  // ACCORDION
+  // =====================================================
   document.querySelectorAll(".tingkatan-toggle").forEach(btn => {
     btn.addEventListener("click", () => {
       const panel = document.getElementById(btn.dataset.target);
@@ -77,14 +106,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // ===============================
+  // =====================================================
   // SOALAN 5 – KEHADIRAN
-  // INPUT USER:
-  //   KELAS (implicit helper)
-  //   HADIR_n
-  //   DAFTAR_n
-  // ===============================
-
+  // =====================================================
   function kiraTingkatan(prefix) {
     const hadir = document.querySelectorAll(`.${prefix}-hadir`);
     const daftar = document.querySelectorAll(`.${prefix}-daftar`);
@@ -97,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById(`${prefix}-peratus`).textContent =
       d > 0 ? Math.round((h / d) * 100) + "%" : "0%";
 
-    kiraKeseluruhan(); // update global setiap kali
+    kiraKeseluruhan();
   }
 
   ["t1","t2","t3","t4","t5"].forEach(t => {
@@ -105,13 +129,9 @@ document.addEventListener("DOMContentLoaded", () => {
       .forEach(i => i.addEventListener("input", () => kiraTingkatan(t)));
   });
 
-  // ===============================
-  // JUMLAH KESELURUHAN (AUTO / DERIVED)
-  // LABEL SISTEM:
-  //   SOALAN5_JUMLAH_ALL
-  //   SOALAN5_PERATUS_ALL
-  // ===============================
-
+  // =====================================================
+  // JUMLAH KESELURUHAN (AUTO)
+  // =====================================================
   function kiraKeseluruhan() {
     let totalH = 0;
     let totalD = 0;
@@ -129,13 +149,9 @@ document.addEventListener("DOMContentLoaded", () => {
       totalD > 0 ? Math.round((totalH / totalD) * 100) + "%" : "0%";
   }
 
-  // ===============================
+  // =====================================================
   // SOALAN 6 – KEBERADAAN GURU
-  // UID:
-  //   STATUS_n
-  //   GURUB_n
-  // ===============================
-
+  // =====================================================
   addRowBtn.addEventListener("click", () => {
     const count = guruContainer.querySelectorAll(".guru-row").length + 1;
 
@@ -157,9 +173,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // ===============================
-  // SAVE – KONTRAK DATA
-  // ===============================
+  // =====================================================
+  // SAVE
+  // =====================================================
   btnSubmit.addEventListener("click", () => {
 
     const payload = {
