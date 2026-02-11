@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Pilih Tarikh Laporan</title>
+
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="menu.js" defer></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #1e3a5f; /* Biru gelap lembut */
+      color: white;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .warning-box {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 25px;
+    }
+
+    .warning-box strong {
+      color: #ffd966;
+    }
+
+    .container {
+      margin-top: 10px;
+    }
+
+    input[type="date"] {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: none;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: none;
+      background-color: #4da3ff;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #66b3ff;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>📅 Pemilihan Tarikh Laporan</h2>
+
+  <div class="warning-box">
+    ⚠️ <strong>Perhatian:</strong><br><br>
+    Sila pastikan tarikh yang dipilih adalah tepat mengikut jadual guru bertugas.
+    <br><br>
+    Pemilihan tarikh yang salah boleh menyebabkan laporan dikunci dan
+    menyukarkan guru lain untuk mengemaskini laporan sebenar.
+  </div>
+
+  <div class="container">
+    <input type="date" id="tarikhInput" />
+    <button onclick="hantarTarikh()">Sahkan Tarikh</button>
+  </div>
+
+</body>
+</html>
