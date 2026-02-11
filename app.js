@@ -1,14 +1,12 @@
 // ===============================
-// HEMSS MINI APP - app.js (SAFE FIX)
+// HEMSS MINI APP - app.js (FINAL STABLE v2)
 // ===============================
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  // ---------- TELEGRAM ----------
   const tg = window.Telegram.WebApp;
   tg.ready();
 
-  // ---------- ELEMENT ----------
   const form = document.getElementById("reportForm");
   const guruWrapper = document.getElementById("guruWrapper");
   const addGuruBtn = document.getElementById("addGuruBtn");
@@ -16,17 +14,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnSubmit = document.getElementById("btnSubmit");
   const hariSelect = document.getElementById("hariSelect");
   const mingguSelect = document.getElementById("mingguSelect");
+  const guruContainer = document.getElementById("guruContainer");
 
   const MAX_GURU = 6;
 
   // ===============================
-  // GURU BERTUGAS
+  // SOALAN 1 – GURUA (UID: GURUA_n)
   // ===============================
   function renumberGuru() {
     const inputs = guruWrapper.querySelectorAll(".guru-input");
     inputs.forEach((input, index) => {
       input.placeholder = `Nama Guru ${index + 1}`;
-      input.name = `guru`;
+      input.name = `GURUA_${index + 1}`; // LABEL UID
     });
   }
 
@@ -51,13 +50,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  renumberGuru();
+
   // ===============================
-  // PRESETS
+  // PRESETS (SOALAN 2–4)
   // ===============================
-  if (mingguSelect && typeof MINGGU_LIST !== "undefined") {
-    mingguSelect.innerHTML = MINGGU_LIST
-      .map(m => `<option value="${m}">${m}</option>`)
-      .join("");
+  if (mingguSelect) {
+    mingguSelect.innerHTML = buildOptions(MINGGU_LIST);
   }
 
   if (hariSelect) {
@@ -65,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ===============================
-  // ACCORDION
+  // ACCORDION TINGKATAN (HELPER UI)
   // ===============================
   document.querySelectorAll(".tingkatan-toggle").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -79,33 +78,72 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ===============================
-  // AUTO KIRA (KEKAL)
+  // SOALAN 5 – KEHADIRAN
+  // INPUT USER:
+  //   KELAS (implicit helper)
+  //   HADIR_n
+  //   DAFTAR_n
   // ===============================
-  function autoKira(prefix) {
+
+  function kiraTingkatan(prefix) {
     const hadir = document.querySelectorAll(`.${prefix}-hadir`);
     const daftar = document.querySelectorAll(`.${prefix}-daftar`);
     let h = 0, d = 0;
+
     hadir.forEach(i => h += Number(i.value || 0));
     daftar.forEach(i => d += Number(i.value || 0));
+
     document.getElementById(`${prefix}-jumlah`).textContent = `${h} / ${d}`;
     document.getElementById(`${prefix}-peratus`).textContent =
       d > 0 ? Math.round((h / d) * 100) + "%" : "0%";
+
+    kiraKeseluruhan(); // update global setiap kali
   }
 
   ["t1","t2","t3","t4","t5"].forEach(t => {
     document.querySelectorAll(`.${t}-hadir, .${t}-daftar`)
-      .forEach(i => i.addEventListener("input", () => autoKira(t)));
+      .forEach(i => i.addEventListener("input", () => kiraTingkatan(t)));
   });
 
   // ===============================
-  // ADD / REMOVE STATUS GURU
+  // JUMLAH KESELURUHAN (AUTO / DERIVED)
+  // LABEL SISTEM:
+  //   SOALAN5_JUMLAH_ALL
+  //   SOALAN5_PERATUS_ALL
   // ===============================
+
+  function kiraKeseluruhan() {
+    let totalH = 0;
+    let totalD = 0;
+
+    document.querySelectorAll(".t1-hadir,.t2-hadir,.t3-hadir,.t4-hadir,.t5-hadir")
+      .forEach(i => totalH += Number(i.value || 0));
+
+    document.querySelectorAll(".t1-daftar,.t2-daftar,.t3-daftar,.t4-daftar,.t5-daftar")
+      .forEach(i => totalD += Number(i.value || 0));
+
+    document.getElementById("overall-jumlah").textContent =
+      `${totalH} / ${totalD}`;
+
+    document.getElementById("overall-peratus").textContent =
+      totalD > 0 ? Math.round((totalH / totalD) * 100) + "%" : "0%";
+  }
+
+  // ===============================
+  // SOALAN 6 – KEBERADAAN GURU
+  // UID:
+  //   STATUS_n
+  //   GURUB_n
+  // ===============================
+
   addRowBtn.addEventListener("click", () => {
+    const count = guruContainer.querySelectorAll(".guru-row").length + 1;
+
     const row = document.createElement("div");
     row.className = "guru-row";
     row.innerHTML = `
-      <select name="status">${buildOptions(statusGuruList)}</select>
-      <input name="nama_status" placeholder="Nama Guru">
+      <select name="STATUS_${count}">${buildOptions(statusGuruList)}</select>
+      <input name="GURUB_${count}" placeholder="Nama Guru">
       <button type="button" class="remove-btn">−</button>
     `;
     guruContainer.appendChild(row);
@@ -120,7 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ===============================
-  // SAVE (INI PALING PENTING)
+  // SAVE – KONTRAK DATA
   // ===============================
   btnSubmit.addEventListener("click", () => {
 
@@ -130,13 +168,12 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     form.querySelectorAll("input, select, textarea").forEach((el, index) => {
-      const value = el.value;
-      if (value !== null && value !== "") {
+      if (el.value !== null && el.value !== "") {
         payload.inputs.push({
           index,
           tag: el.tagName,
           name: el.name || null,
-          value
+          value: el.value
         });
       }
     });
