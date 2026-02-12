@@ -85,11 +85,11 @@ const KE_LAS2 = [
 ];
 
 const KELAS_BY_TINGKATAN = {
-  1: ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih","Harmoni","Inovatif","Jujur"],
-  2: ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih","Harmoni","Inovatif"],
-  3: ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih","Harmoni"],
-  4: ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih","Harmoni"],
-  5: ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih"],
+  "1": ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih","Harmoni","Inovatif","Jujur"],
+  "2": ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih","Harmoni","Inovatif"],
+  "3": ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih","Harmoni"],
+  "4": ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih","Harmoni"],
+  "5": ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih"],
 };
 
 
