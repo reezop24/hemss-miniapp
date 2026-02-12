@@ -4,26 +4,26 @@ document.addEventListener("DOMContentLoaded", function () {
     tg.expand();
 
     const params = new URLSearchParams(window.location.search);
-    let tingkatan = params.get("tingkatan");
+    const tingkatan = params.get("tingkatan");
 
-    if (!tingkatan) {
-        alert("Tingkatan tidak diterima.");
-        return;
-    }
+    console.log("TINGKATAN:", tingkatan);
 
     document.getElementById("tajuk").innerText =
         "TINGKATAN " + tingkatan;
 
     if (typeof KELAS_BY_TINGKATAN === "undefined") {
-        alert("KELAS_BY_TINGKATAN tidak load.");
+        alert("KELAS_BY_TINGKATAN tidak load");
         return;
     }
 
-    const kelasList = KELAS_BY_TINGKATAN[tingkatan] || [];
-    const kelasContainer = document.getElementById("kelasContainer");
+    const kelasList = KELAS_BY_TINGKATAN[tingkatan];
 
-    let totalHadir = 0;
-    let totalDaftar = 0;
+    if (!kelasList) {
+        alert("kelasList kosong untuk tingkatan: " + tingkatan);
+        return;
+    }
+
+    const kelasContainer = document.getElementById("kelasContainer");
 
     kelasList.forEach((kelasNama, index) => {
 
@@ -45,16 +45,11 @@ document.addEventListener("DOMContentLoaded", function () {
     window.submitData = function () {
 
         const data = {};
-        totalHadir = 0;
-        totalDaftar = 0;
 
         kelasList.forEach((kelasNama, index) => {
 
             const hadir = parseInt(document.getElementById(`hadir_${index}`).value) || 0;
             const daftar = parseInt(document.getElementById(`daftar_${index}`).value) || 0;
-
-            totalHadir += hadir;
-            totalDaftar += daftar;
 
             data[kelasNama] = {
                 hadir: hadir,
@@ -62,18 +57,10 @@ document.addEventListener("DOMContentLoaded", function () {
             };
         });
 
-        const peratus =
-            totalDaftar > 0
-                ? ((totalHadir / totalDaftar) * 100).toFixed(2)
-                : 0;
-
         tg.sendData(JSON.stringify({
             type: "section_kehadiran",
             tingkatan: tingkatan,
-            data: data,
-            total_hadir: totalHadir,
-            total_daftar: totalDaftar,
-            peratus: peratus
+            data: data
         }));
     };
 
