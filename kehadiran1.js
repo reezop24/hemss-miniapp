@@ -7,14 +7,19 @@ document.addEventListener("DOMContentLoaded", function () {
     const tingkatan = params.get("tingkatan");
 
     document.getElementById("tajuk").innerText =
-        "📊 Kehadiran Pelajar - Tingkatan " + tingkatan;
+        "Tingkatan " + tingkatan;
 
     const kelasContainer = document.getElementById("kelasContainer");
 
     let totalHadir = 0;
     let totalDaftar = 0;
 
-    // Guna KE_LAS dari nameset.js
+    // Debug kalau KE_LAS tak load
+    if (typeof KE_LAS === "undefined") {
+        alert("KE_LAS tidak load dari nameset.js");
+        return;
+    }
+
     KE_LAS.forEach(kelas => {
 
         const row = document.createElement("div");
