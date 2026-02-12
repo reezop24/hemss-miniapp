@@ -4,6 +4,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kumpulan Guru Bertugas</title>
 
+<link rel="stylesheet" href="style.css">
+
 <style>
 body {
   margin: 0;
@@ -19,7 +21,7 @@ h2 {
   margin-bottom: 20px;
 }
 
-select, input {
+input, select {
   width: 100%;
   padding: 14px;
   font-size: 18px;
@@ -55,82 +57,11 @@ button {
 
 <button onclick="submitData()">💾 Simpan</button>
 
+<datalist id="guru_list"></datalist>
+
 <script src="nameset.js"></script>
 <script src="preset.js"></script>
-
-<script>
-const tg = window.Telegram.WebApp;
-tg.expand();
-
-let maxGuru = 6;
-let currentGuru = 5;
-
-// ===== Generate 5 default search box =====
-function createGuruBox(index) {
-    const input = document.createElement("input");
-    input.setAttribute("list", "guru_list");
-    input.id = "guru_" + index;
-    input.placeholder = "Nama Guru " + index;
-    return input;
-}
-
-function initGuru() {
-    const container = document.getElementById("guru-container");
-    for (let i = 1; i <= 5; i++) {
-        container.appendChild(createGuruBox(i));
-    }
-}
-
-function addBox() {
-    if (currentGuru >= maxGuru) return;
-    currentGuru++;
-    const container = document.getElementById("guru-container");
-    container.appendChild(createGuruBox(currentGuru));
-}
-
-// ===== Datelist Guru =====
-const datalist = document.createElement("datalist");
-datalist.id = "guru_list";
-NAME_SET.forEach(name => {
-    const option = document.createElement("option");
-    option.value = name;
-    datalist.appendChild(option);
-});
-document.body.appendChild(datalist);
-
-// ===== Minggu Dropdown =====
-const mingguSelect = document.getElementById("minggu");
-MINGGU_LIST.forEach(m => {
-    const option = document.createElement("option");
-    option.value = m;
-    option.text = m;
-    mingguSelect.appendChild(option);
-});
-
-// ===== Submit =====
-function submitData() {
-
-    const guruData = {};
-    for (let i = 1; i <= currentGuru; i++) {
-        const val = document.getElementById("guru_" + i).value;
-        if (val) {
-            guruData["guru_" + i] = val;
-        }
-    }
-
-    const data = {
-        type: "section_guru_bertugas",
-        data: {
-            minggu: mingguSelect.value,
-            guru: guruData
-        }
-    };
-
-    tg.sendData(JSON.stringify(data));
-}
-
-initGuru();
-</script>
+<script src="guru.js"></script>
 
 </body>
 </html>
