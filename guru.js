@@ -12,51 +12,61 @@ document.addEventListener("DOMContentLoaded", function () {
     let maxGuru = 6;
     let currentGuru = 5;
 
+    const container = document.getElementById("guru-container");
+
+    /* =========================
+       CREATE INPUT BOX
+    ========================== */
     function createGuruBox(index) {
+        const wrapper = document.createElement("div");
+        wrapper.style.marginBottom = "10px";
+
         const input = document.createElement("input");
         input.setAttribute("list", "guru_list");
         input.id = "guru_" + index;
         input.placeholder = "Nama Guru " + index;
-        return input;
+
+        wrapper.appendChild(input);
+
+        if (index > 5) {
+            const removeBtn = document.createElement("button");
+            removeBtn.innerText = "Buang";
+            removeBtn.className = "secondary";
+            removeBtn.style.marginTop = "5px";
+
+            removeBtn.onclick = function () {
+                container.removeChild(wrapper);
+                currentGuru--;
+            };
+
+            wrapper.appendChild(removeBtn);
+        }
+
+        return wrapper;
     }
 
+    /* =========================
+       INIT 5 DEFAULT BOX
+    ========================== */
     function initGuru() {
-        const container = document.getElementById("guru-container");
-
         for (let i = 1; i <= 5; i++) {
             container.appendChild(createGuruBox(i));
         }
     }
 
+    /* =========================
+       ADD BOX
+    ========================== */
     window.addBox = function () {
         if (currentGuru >= maxGuru) return;
-    
+
         currentGuru++;
-    
-        const container = document.getElementById("guru-container");
-    
-        const wrapper = document.createElement("div");
-        wrapper.style.marginBottom = "10px";
-    
-        const input = createGuruBox(currentGuru);
-        wrapper.appendChild(input);
-    
-        const removeBtn = document.createElement("button");
-        removeBtn.innerText = "Buang";
-        removeBtn.className = "secondary";
-        removeBtn.style.marginTop = "5px";
-    
-        removeBtn.onclick = function () {
-            container.removeChild(wrapper);
-            currentGuru--;
-        };
-    
-        wrapper.appendChild(removeBtn);
-    
-        container.appendChild(wrapper);
+        container.appendChild(createGuruBox(currentGuru));
     };
 
-
+    /* =========================
+       LOAD NAME LIST
+    ========================== */
     function loadNames() {
         const datalist = document.getElementById("guru_list");
 
@@ -72,6 +82,9 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    /* =========================
+       LOAD MINGGU
+    ========================== */
     function loadMinggu() {
         const mingguSelect = document.getElementById("minggu");
 
@@ -88,14 +101,36 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    /* =========================
+       LOAD TARIKH & HARI
+    ========================== */
+    function setTarikhHari() {
+
+        const savedDate = localStorage.getItem("laporan_tarikh");
+
+        if (!savedDate) return;
+
+        const dateObj = new Date(savedDate);
+
+        const hari = dateObj.toLocaleDateString("ms-MY", {
+            weekday: "long"
+        });
+
+        document.getElementById("tarikh").value = savedDate;
+        document.getElementById("hari").value = hari;
+    }
+
+    /* =========================
+       SUBMIT
+    ========================== */
     window.submitData = function () {
 
-        const guruData = {};
+        const guruData = [];
 
         for (let i = 1; i <= currentGuru; i++) {
             const el = document.getElementById("guru_" + i);
-            if (el && el.value) {
-                guruData["guru_" + i] = el.value;
+            if (el && el.value.trim() !== "") {
+                guruData.push(el.value.trim());
             }
         }
 
@@ -103,24 +138,18 @@ document.addEventListener("DOMContentLoaded", function () {
             type: "section_guru_bertugas",
             data: {
                 minggu: document.getElementById("minggu").value,
+                tarikh: document.getElementById("tarikh").value,
+                hari: document.getElementById("hari").value,
                 guru: guruData
             }
         };
 
-    function setTarikhHari() {
-        const params = new URLSearchParams(window.location.search);
-        const date = params.get("date");
-        const hari = params.get("hari");
-    
-        if (date) document.getElementById("tarikh_display").value = date;
-        if (hari) document.getElementById("hari_display").value = hari;
-    }
-
-
         tg.sendData(JSON.stringify(data));
     };
-    
 
+    /* =========================
+       INIT ALL
+    ========================== */
     initGuru();
     loadNames();
     loadMinggu();
