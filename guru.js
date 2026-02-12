@@ -30,11 +30,32 @@ document.addEventListener("DOMContentLoaded", function () {
 
     window.addBox = function () {
         if (currentGuru >= maxGuru) return;
-
+    
         currentGuru++;
+    
         const container = document.getElementById("guru-container");
-        container.appendChild(createGuruBox(currentGuru));
+    
+        const wrapper = document.createElement("div");
+        wrapper.style.marginBottom = "10px";
+    
+        const input = createGuruBox(currentGuru);
+        wrapper.appendChild(input);
+    
+        const removeBtn = document.createElement("button");
+        removeBtn.innerText = "Buang";
+        removeBtn.className = "secondary";
+        removeBtn.style.marginTop = "5px";
+    
+        removeBtn.onclick = function () {
+            container.removeChild(wrapper);
+            currentGuru--;
+        };
+    
+        wrapper.appendChild(removeBtn);
+    
+        container.appendChild(wrapper);
     };
+
 
     function loadNames() {
         const datalist = document.getElementById("guru_list");
@@ -86,11 +107,23 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         };
 
+    function setTarikhHari() {
+        const params = new URLSearchParams(window.location.search);
+        const date = params.get("date");
+        const hari = params.get("hari");
+    
+        if (date) document.getElementById("tarikh_display").value = date;
+        if (hari) document.getElementById("hari_display").value = hari;
+    }
+
+
         tg.sendData(JSON.stringify(data));
     };
+    
 
     initGuru();
     loadNames();
     loadMinggu();
+    setTarikhHari();
 
 });
