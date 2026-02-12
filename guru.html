@@ -29,14 +29,14 @@ h2 {
 
 .section-title {
   font-weight: 600;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   font-size: 16px;
   opacity: 0.9;
 }
 
 input, select {
   width: 100%;
-  padding: 12px;
+  padding: 13px;
   font-size: 16px;
   margin-bottom: 12px;
   border-radius: 6px;
@@ -44,14 +44,8 @@ input, select {
   box-sizing: border-box;
 }
 
-button.primary {
-  width: 100%;
-  padding: 14px;
-  font-size: 17px;
-  border-radius: 6px;
-  border: none;
-  background-color: #4da3ff;
-  color: white;
+input[readonly] {
+  background: #e5e5e5;
   font-weight: 600;
 }
 
@@ -63,14 +57,32 @@ button.secondary {
   border: none;
   background-color: rgba(255,255,255,0.15);
   color: white;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
-h3 {
-  margin-top: 25px;
-  margin-bottom: 8px;
-  font-size: 17px;
-  font-weight: 600;
+button.primary {
+  width: 100%;
+  padding: 18px;
+  font-size: 19px;
+  border-radius: 8px;
+  border: none;
+  background-color: #28a745;
+  color: white;
+  font-weight: 700;
+}
+
+button.primary:hover {
+  background-color: #218838;
+}
+
+.remove-btn {
+  background: #b02a37;
+  padding: 6px 10px;
+  font-size: 13px;
+  border-radius: 5px;
+  border: none;
+  color: white;
+  margin-bottom: 10px;
 }
 
 hr {
@@ -78,15 +90,6 @@ hr {
   border-top: 1px solid rgba(255,255,255,0.15);
   margin: 25px 0;
 }
-
-input[readonly] {
-  background: #e5e5e5;
-  font-weight: 600;
-}
-
-
-  
-
 </style>
 </head>
 
@@ -94,35 +97,156 @@ input[readonly] {
 
 <h2>👥 Kumpulan Guru Bertugas</h2>
 
-<div id="guru-container"></div>
-
-<button type="button" onclick="addBox()">+ Tambah Guru (Max 6)</button>
-
-<hr>
-
-<h3>Minggu Bertugas</h3>
-<select id="minggu"></select>
+<div class="section">
+  <div class="section-title">Senarai Guru</div>
+  <div id="guru-container"></div>
+  <button class="secondary" type="button" onclick="addBox()">+ Tambah Guru (Max 6)</button>
+</div>
 
 <hr>
 
-<h3>Tarikh Laporan</h3>
-<input type="text" id="tarikh" readonly>
-
-<h3>Hari</h3>
-<input type="text" id="hari" readonly>
+<div class="section">
+  <div class="section-title">Minggu Bertugas</div>
+  <select id="minggu"></select>
+</div>
 
 <hr>
 
-<button onclick="submitData()">💾 Simpan</button>
+<div class="section">
+  <div class="section-title">Tarikh Laporan</div>
+  <input type="text" id="tarikh" readonly>
+</div>
 
+<div class="section">
+  <div class="section-title">Hari</div>
+  <input type="text" id="hari" readonly>
+</div>
 
+<hr>
+
+<button class="primary" onclick="submitData()">💾 Simpan</button>
 
 <datalist id="guru_list"></datalist>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script> 
 <script src="nameset.js"></script>
 <script src="preset.js"></script>
-<script src="guru.js"></script>
+
+<script>
+const tg = window.Telegram.WebApp;
+tg.expand();
+
+let maxBox = 6;
+let currentBox = 0;
+
+const container = document.getElementById("guru-container");
+
+/* ===============================
+   LOAD NAMA DARI nameset.js
+================================ */
+if (typeof NAME_SET !== "undefined") {
+  const list = document.getElementById("guru_list");
+  NAME_SET.forEach(name => {
+    const option = document.createElement("option");
+    option.value = name;
+    list.appendChild(option);
+  });
+}
+
+/* ===============================
+   LOAD MINGGU DARI preset.js
+================================ */
+if (typeof MINGGU_LIST !== "undefined") {
+  const mingguSelect = document.getElementById("minggu");
+  MINGGU_LIST.forEach(m => {
+    const opt = document.createElement("option");
+    opt.value = m;
+    opt.textContent = m;
+    mingguSelect.appendChild(opt);
+  });
+}
+
+/* ===============================
+   ADD BOX GURU
+================================ */
+function addBox() {
+
+  if (currentBox >= maxBox) return;
+
+  currentBox++;
+
+  const wrapper = document.createElement("div");
+  wrapper.id = "box_" + currentBox;
+
+  const input = document.createElement("input");
+  input.setAttribute("list", "guru_list");
+  input.placeholder = "Nama Guru " + currentBox;
+
+  wrapper.appendChild(input);
+
+  if (currentBox > 1) {
+    const removeBtn = document.createElement("button");
+    removeBtn.textContent = "Buang";
+    removeBtn.className = "remove-btn";
+    removeBtn.onclick = function () {
+      container.removeChild(wrapper);
+      currentBox--;
+    };
+    wrapper.appendChild(removeBtn);
+  }
+
+  container.appendChild(wrapper);
+}
+
+/* AUTO CREATE 5 BOX */
+for (let i = 0; i < 5; i++) addBox();
+
+/* ===============================
+   LOAD TARIKH & HARI
+================================ */
+document.addEventListener("DOMContentLoaded", function () {
+
+  const savedDate = localStorage.getItem("laporan_tarikh");
+
+  if (savedDate) {
+
+    const dateObj = new Date(savedDate);
+
+    const hari = dateObj.toLocaleDateString("ms-MY", {
+      weekday: "long"
+    });
+
+    document.getElementById("tarikh").value = savedDate;
+    document.getElementById("hari").value = hari;
+  }
+
+});
+
+/* ===============================
+   SUBMIT DATA
+================================ */
+function submitData() {
+
+  let guruList = [];
+  const inputs = container.querySelectorAll("input");
+
+  inputs.forEach(inp => {
+    if (inp.value.trim() !== "") {
+      guruList.push(inp.value.trim());
+    }
+  });
+
+  const data = {
+    type: "bahagian1_guru",
+    guru: guruList,
+    minggu: document.getElementById("minggu").value,
+    tarikh: document.getElementById("tarikh").value,
+    hari: document.getElementById("hari").value
+  };
+
+  tg.sendData(JSON.stringify(data));
+}
+</script>
 
 </body>
 </html>
