@@ -21,9 +21,12 @@ function hantarTarikh() {
         return;
     }
 
+    // ✅ SIMPAN UNTUK MINIAPP SETERUSNYA (guru.html)
+    localStorage.setItem("laporan_tarikh", selectedDate);
+
     const payload = {
         type: "laporan_tarikh",
-        date: selectedDate  // ISO format
+        date: selectedDate
     };
 
     tg.sendData(JSON.stringify(payload));
