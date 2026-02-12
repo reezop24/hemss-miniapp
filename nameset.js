@@ -71,7 +71,7 @@ const NAME_SET = [
   "Zuriatihza Binti Othman"
   ];
 
-const KE_LAS = [
+const KE_LAS2 = [
     "Amanah",
     "Bestari",
     "Cekal",
@@ -84,12 +84,12 @@ const KE_LAS = [
     "Jujur"
 ];
 
-const KE_LAS2 = {
-  t1: ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih","Harmoni","Inovatif","Jujur"],
-  t2: ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih","Harmoni","Inovatif"],
-  t3: ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih","Harmoni"],
-  t4: ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih","Harmoni"],
-  t5: ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih"],
+const KE_LAS = {
+  1: ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih","Harmoni","Inovatif","Jujur"],
+  2: ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih","Harmoni","Inovatif"],
+  3: ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih","Harmoni"],
+  4: ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih","Harmoni"],
+  5: ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih"],
 };
 
 
