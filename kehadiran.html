@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kehadiran Pelajar</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #1f3554;
+  color: #f1f1f1;
+  padding: 20px;
+  font-size: 17px;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.kelas {
+  flex: 2;
+  font-size: 15px;
+}
+
+.input-box {
+  width: 60px;
+  padding: 8px;
+  font-size: 15px;
+  text-align: center;
+  border-radius: 6px;
+  border: none;
+}
+
+.separator {
+  margin: 0 8px;
+  font-weight: bold;
+}
+
+.summary {
+  margin-top: 25px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  font-weight: 600;
+}
+
+button {
+  width: 100%;
+  margin-top: 25px;
+  padding: 14px;
+  font-size: 17px;
+  border-radius: 6px;
+  border: none;
+  background-color: #27ae60;
+  color: white;
+  font-weight: 600;
+}
+</style>
+</head>
+
+<body>
+
+<h2 id="tajuk"></h2>
+
+<div id="kelasContainer"></div>
+
+<div class="summary">
+  <div id="jumlah"></div>
+  <div id="peratus"></div>
+</div>
+
+<button onclick="submitData()">💾 Simpan</button>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="nameset.js"></script>
+
+<script>
+
+const tg = window.Telegram.WebApp;
+tg.expand();
+
+const params = new URLSearchParams(window.location.search);
+const tingkatan = params.get("tingkatan");
+
+document.getElementById("tajuk").innerText =
+  "📊 Kehadiran Tingkatan " + tingkatan.replace("t","");
+
+const container = document.getElementById("kelasContainer");
+
+let totalHadir = 0;
+let totalDaftar = 0;
+
+function createRow(nama) {
+
+  const row = document.createElement("div");
+  row.className = "row";
+
+  const kelas = document.createElement("div");
+  kelas.className = "kelas";
+  kelas.innerText = nama;
+
+  const hadir = document.createElement("input");
+  hadir.type = "number";
+  hadir.className = "input-box";
+  hadir.min = 0;
+
+  const slash = document.createElement("div");
+  slash.className = "separator";
+  slash.innerText = "/";
+
+  const daftar = document.createElement("input");
+  daftar.type = "number";
+  daftar.className = "input-box";
+  daftar.min = 0;
+
+  hadir.oninput = kira;
+  daftar.oninput = kira;
+
+  row.appendChild(kelas);
+  row.appendChild(hadir);
+  row.appendChild(slash);
+  row.appendChild(daftar);
+
+  container.appendChild(row);
+}
+
+function kira() {
+
+  totalHadir = 0;
+  totalDaftar = 0;
+
+  const inputs = document.querySelectorAll(".row");
+
+  inputs.forEach(row => {
+    const hadir = row.children[1].value;
+    const daftar = row.children[3].value;
+
+    totalHadir += parseInt(hadir) || 0;
+    totalDaftar += parseInt(daftar) || 0;
+  });
+
+  document.getElementById("jumlah").innerText =
+    "Jumlah Kehadiran : " + totalHadir + " / " + totalDaftar;
+
+  let peratus = 0;
+  if (totalDaftar > 0) {
+    peratus = ((totalHadir / totalDaftar) * 100).toFixed(1);
+  }
+
+  document.getElementById("peratus").innerText =
+    "Peratusan : " + peratus + "%";
+}
+
+function submitData() {
+
+  const classes = {};
+
+  const rows = document.querySelectorAll(".row");
+
+  rows.forEach(row => {
+    const nama = row.children[0].innerText;
+    const hadir = parseInt(row.children[1].value) || 0;
+    const daftar = parseInt(row.children[3].value) || 0;
+
+    classes[nama] = { hadir, daftar };
+  });
+
+  const payload = {
+    type: "section_kehadiran",
+    tingkatan: tingkatan,
+    classes: classes
+  };
+
+  tg.sendData(JSON.stringify(payload));
+  tg.close();
+}
+
+/* Load kelas dari nameset.js */
+if (typeof KE_LAS !== "undefined") {
+
+  KE_LAS.forEach(nama => {
+    createRow(nama);
+  });
+
+}
+
+</script>
+
+</body>
+</html>
