@@ -10,52 +10,88 @@
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #1e3a5f;
-  color: white;
-  padding: 24px;
-  font-size: 18px;
+  background: #1f3554;
+  color: #f1f1f1;
+  padding: 20px;
+  font-size: 17px;
 }
 
 h2 {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+}
+
+.section {
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.section-title {
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 16px;
+  opacity: 0.9;
 }
 
 input, select {
   width: 100%;
-  padding: 14px;
-  font-size: 18px;
-  margin-bottom: 15px;
-  border-radius: 8px;
+  padding: 12px;
+  font-size: 16px;
+  margin-bottom: 12px;
+  border-radius: 6px;
   border: none;
   box-sizing: border-box;
 }
 
-button {
+button.primary {
   width: 100%;
-  padding: 16px;
-  font-size: 20px;
-  border-radius: 10px;
+  padding: 14px;
+  font-size: 17px;
+  border-radius: 6px;
   border: none;
   background-color: #4da3ff;
   color: white;
   font-weight: 600;
-  margin-top: 10px;
 }
+
+button.secondary {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: none;
+  background-color: rgba(255,255,255,0.15);
+  color: white;
+  margin-bottom: 10px;
+}
+
 </style>
 </head>
 
 <body>
 
-<h2>👥 Kumpulan Guru Bertugas</h2>
+<h2>Kumpulan Guru Bertugas</h2>
 
-<div id="guru-container"></div>
+<div class="section">
+  <div class="section-title">Soalan 1: Senarai Guru Bertugas</div>
+  <div id="guru-container"></div>
+  <button class="secondary" onclick="addBox()">+ Tambah Guru (Max 6)</button>
+</div>
 
-<button onclick="addBox()">➕ Tambah Guru (Max 6)</button>
+<div class="section">
+  <div class="section-title">Soalan 2: Minggu Bertugas</div>
+  <select id="minggu"></select>
+</div>
 
-<select id="minggu"></select>
+<div class="section">
+  <div class="section-title">Soalan 3 & 4: Tarikh & Hari</div>
+  <input type="text" id="tarikh_display" readonly>
+  <input type="text" id="hari_display" readonly>
+</div>
 
-<button onclick="submitData()">💾 Simpan</button>
+<button class="primary" onclick="submitData()">Simpan</button>
+
 
 <datalist id="guru_list"></datalist>
 
