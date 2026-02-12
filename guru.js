@@ -1,67 +1,111 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kumpulan Guru Bertugas</title>
+const tg = window.Telegram.WebApp;
+tg.expand();
 
-<link rel="stylesheet" href="style.css">
+let maxGuru = 6;
+let currentGuru = 5;
 
-<style>
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #1e3a5f;
-  color: white;
-  padding: 24px;
-  font-size: 18px;
+// =======================
+// INIT GURU BOX
+// =======================
+
+function createGuruBox(index) {
+    const input = document.createElement("input");
+    input.setAttribute("list", "guru_list");
+    input.id = "guru_" + index;
+    input.placeholder = "Nama Guru " + index;
+    return input;
 }
 
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
+function initGuru() {
+    const container = document.getElementById("guru-container");
+
+    for (let i = 1; i <= 5; i++) {
+        container.appendChild(createGuruBox(i));
+    }
 }
 
-input, select {
-  width: 100%;
-  padding: 14px;
-  font-size: 18px;
-  margin-bottom: 15px;
-  border-radius: 8px;
-  border: none;
-  box-sizing: border-box;
+// =======================
+// ADD BOX (MAX 6)
+// =======================
+
+function addBox() {
+    if (currentGuru >= maxGuru) return;
+
+    currentGuru++;
+
+    const container = document.getElementById("guru-container");
+    container.appendChild(createGuruBox(currentGuru));
 }
 
-button {
-  width: 100%;
-  padding: 16px;
-  font-size: 20px;
-  border-radius: 10px;
-  border: none;
-  background-color: #4da3ff;
-  color: white;
-  font-weight: 600;
-  margin-top: 10px;
+// =======================
+// LOAD NAMESET
+// =======================
+
+function loadNames() {
+    const datalist = document.getElementById("guru_list");
+
+    if (typeof NAME_SET === "undefined") {
+        console.log("NAME_SET not loaded");
+        return;
+    }
+
+    NAME_SET.forEach(name => {
+        const option = document.createElement("option");
+        option.value = name;
+        datalist.appendChild(option);
+    });
 }
-</style>
-</head>
 
-<body>
+// =======================
+// LOAD MINGGU
+// =======================
 
-<h2>👥 Kumpulan Guru Bertugas</h2>
+function loadMinggu() {
+    const mingguSelect = document.getElementById("minggu");
 
-<div id="guru-container"></div>
+    if (typeof MINGGU_LIST === "undefined") {
+        console.log("MINGGU_LIST not loaded");
+        return;
+    }
 
-<button onclick="addBox()">➕ Tambah Guru (Max 6)</button>
+    MINGGU_LIST.forEach(m => {
+        const option = document.createElement("option");
+        option.value = m;
+        option.text = m;
+        mingguSelect.appendChild(option);
+    });
+}
 
-<select id="minggu"></select>
+// =======================
+// SUBMIT
+// =======================
 
-<button onclick="submitData()">💾 Simpan</button>
+function submitData() {
 
-<datalist id="guru_list"></datalist>
+    const guruData = {};
 
-<script src="nameset.js"></script>
-<script src="preset.js"></script>
-<script src="guru.js"></script>
+    for (let i = 1; i <= currentGuru; i++) {
+        const el = document.getElementById("guru_" + i);
+        if (el && el.value) {
+            guruData["guru_" + i] = el.value;
+        }
+    }
 
-</body>
-</html>
+    const data = {
+        type: "section_guru_bertugas",
+        data: {
+            minggu: document.getElementById("minggu").value,
+            guru: guruData
+        }
+    };
+
+    tg.sendData(JSON.stringify(data));
+}
+
+// =======================
+// INIT ALL
+// =======================
+
+initGuru();
+loadNames();
+loadMinggu();
