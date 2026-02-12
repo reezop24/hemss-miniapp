@@ -1,142 +1,93 @@
-console.log("JS load");
-console.log(KE_LAS);
-
 document.addEventListener("DOMContentLoaded", function () {
 
-    const tg = window.Telegram?.WebApp;
-    if (!tg) {
-        alert("Telegram WebApp tidak dikesan.");
-        return;
-    }
-
+    const tg = window.Telegram.WebApp;
     tg.expand();
 
-    // ===============================
-    // Ambil tingkatan dari URL
-    // ===============================
     const params = new URLSearchParams(window.location.search);
-    const tingkatan = params.get("tingkatan"); // t1, t2, t3...
+    const tingkatan = params.get("tingkatan");
 
-    if (!tingkatan) {
-        alert("Tingkatan tidak dijumpai.");
-        return;
-    }
-
-    // Pastikan KE_LAS wujud
-    if (typeof KE_LAS === "undefined") {
-        alert("KE_LAS tidak load dari nameset.js");
-        return;
-    }
-
-    const kelasList = KE_LAS[tingkatan];
-
-    if (!kelasList) {
-        alert("Senarai kelas untuk tingkatan ini tiada.");
-        return;
-    }
-
-    // ===============================
-    // Set Tajuk
-    // ===============================
     document.getElementById("tajuk").innerText =
-        "📊 Kehadiran Pelajar - " + tingkatan.toUpperCase();
+        "📊 Kehadiran Pelajar - Tingkatan " + tingkatan;
 
-    const container = document.getElementById("kelasContainer");
+    const kelasContainer = document.getElementById("kelasContainer");
 
-    // ===============================
-    // Generate Row Kelas
-    // ===============================
-    kelasList.forEach((namaKelas, index) => {
+    let totalHadir = 0;
+    let totalDaftar = 0;
+
+    // Guna KE_LAS dari nameset.js
+    KE_LAS.forEach(kelas => {
 
         const row = document.createElement("div");
         row.className = "row";
+        row.dataset.kelas = kelas;
 
-        const kelas = document.createElement("div");
-        kelas.className = "kelas";
-        kelas.innerText = namaKelas;
+        row.innerHTML = `
+            <div class="kelas">${kelas}</div>
+            <input type="number" class="input-box hadir" min="0">
+            <div class="separator">/</div>
+            <input type="number" class="input-box daftar" min="0">
+        `;
 
-        const hadir = document.createElement("input");
-        hadir.type = "number";
-        hadir.className = "input-box";
-        hadir.id = "hadir_" + index;
-        hadir.min = 0;
-
-        const sep = document.createElement("div");
-        sep.className = "separator";
-        sep.innerText = "/";
-
-        const daftar = document.createElement("input");
-        daftar.type = "number";
-        daftar.className = "input-box";
-        daftar.id = "daftar_" + index;
-        daftar.min = 0;
-
-        hadir.addEventListener("input", kiraJumlah);
-        daftar.addEventListener("input", kiraJumlah);
-
-        row.appendChild(kelas);
-        row.appendChild(hadir);
-        row.appendChild(sep);
-        row.appendChild(daftar);
-
-        container.appendChild(row);
+        kelasContainer.appendChild(row);
     });
 
-    // ===============================
-    // Kira Jumlah & Peratus
-    // ===============================
-    function kiraJumlah() {
+    function kiraAuto() {
 
-        let totalHadir = 0;
-        let totalDaftar = 0;
+        totalHadir = 0;
+        totalDaftar = 0;
 
-        kelasList.forEach((_, index) => {
+        document.querySelectorAll(".row").forEach(row => {
 
-            const h = parseInt(document.getElementById("hadir_" + index).value) || 0;
-            const d = parseInt(document.getElementById("daftar_" + index).value) || 0;
+            const hadir = parseInt(row.querySelector(".hadir").value) || 0;
+            const daftar = parseInt(row.querySelector(".daftar").value) || 0;
 
-            totalHadir += h;
-            totalDaftar += d;
+            totalHadir += hadir;
+            totalDaftar += daftar;
         });
 
         document.getElementById("jumlah").innerText =
-            "Jumlah Kehadiran: " + totalHadir + " / " + totalDaftar;
+            `Jumlah Kehadiran: ${totalHadir} / ${totalDaftar}`;
 
         let peratus = 0;
         if (totalDaftar > 0) {
-            peratus = ((totalHadir / totalDaftar) * 100).toFixed(2);
+            peratus = ((totalHadir / totalDaftar) * 100).toFixed(1);
         }
 
         document.getElementById("peratus").innerText =
-            "Peratusan: " + peratus + "%";
+            `Peratusan: ${peratus}%`;
     }
 
-    // ===============================
-    // Submit Data
-    // ===============================
+    document.addEventListener("input", kiraAuto);
+
     window.submitData = function () {
 
-        let dataKelas = {};
+        const kelasData = {};
 
-        kelasList.forEach((namaKelas, index) => {
+        document.querySelectorAll(".row").forEach(row => {
 
-            const hadir = parseInt(document.getElementById("hadir_" + index).value) || 0;
-            const daftar = parseInt(document.getElementById("daftar_" + index).value) || 0;
+            const kelas = row.dataset.kelas;
+            const hadir = parseInt(row.querySelector(".hadir").value) || 0;
+            const daftar = parseInt(row.querySelector(".daftar").value) || 0;
 
-            dataKelas[namaKelas] = {
+            kelasData[kelas] = {
                 hadir: hadir,
                 daftar: daftar
             };
         });
 
-        const payload = {
+        const data = {
             type: "section_kehadiran",
-            tingkatan: tingkatan,
-            data: dataKelas
+            data: {
+                tingkatan: tingkatan,
+                classes: kelasData,
+                total_hadir: totalHadir,
+                total_daftar: totalDaftar,
+                peratus: totalDaftar > 0
+                    ? ((totalHadir / totalDaftar) * 100).toFixed(1)
+                    : 0
+            }
         };
 
-        tg.sendData(JSON.stringify(payload));
-        tg.close();
+        tg.sendData(JSON.stringify(data));
     };
-
 });
