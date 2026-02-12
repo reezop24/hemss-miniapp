@@ -1,3 +1,6 @@
+console.log("JS load");
+console.log(KE_LAS);
+
 <!DOCTYPE html>
 <html>
 <head>
