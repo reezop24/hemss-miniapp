@@ -72,13 +72,13 @@ const NAME_SET = [
   ];
 
 
-const KE_LAS = [
+const KE_LAS = {
   t1: ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih","Harmoni","Inovatif","Jujur"],
   t2: ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih","Harmoni","Inovatif"],
   t3: ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih","Harmoni"],
   t4: ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih","Harmoni"],
   t5: ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih"],
-  ];
+};
 
 
 
