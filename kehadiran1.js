@@ -20,20 +20,22 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
-    KE_LAS.forEach(kelas => {
+    const kelasList = KELAS_BY_TINGKATAN[tingkatan] || [];
 
+    kelasList.forEach((kelasNama, index) => {
+    
         const row = document.createElement("div");
         row.className = "row";
-        row.dataset.kelas = kelas;
-
+    
         row.innerHTML = `
-            <div class="kelas">${kelas}</div>
-            <input type="number" class="input-box hadir" min="0">
-            <div class="separator">/</div>
-            <input type="number" class="input-box daftar" min="0">
+            <div class="kelas">${kelasNama}</div>
+            <input type="number" class="input-box hadir" id="hadir_${index}">
+            <span class="separator">/</span>
+            <input type="number" class="input-box daftar" id="daftar_${index}">
         `;
-
-        kelasContainer.appendChild(row);
+    
+        container.appendChild(row);
+    });
     });
 
     function kiraAuto() {
