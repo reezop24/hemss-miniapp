@@ -71,8 +71,20 @@ const NAME_SET = [
   "Zuriatihza Binti Othman"
   ];
 
+const KE_LAS = [
+    "Amanah",
+    "Bestari",
+    "Cekal",
+    "Dedikasi",
+    "Efektif",
+    "Fokus",
+    "Gigih",
+    "Harmoni",
+    "Inovatif",
+    "Jujur"
+];
 
-const KE_LAS = {
+const KE_LAS2 = {
   t1: ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih","Harmoni","Inovatif","Jujur"],
   t2: ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih","Harmoni","Inovatif"],
   t3: ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih","Harmoni"],
