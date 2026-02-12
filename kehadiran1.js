@@ -5,7 +5,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const params = new URLSearchParams(window.location.search);
     const tingkatan = params.get("tingkatan");   // contoh: "1"
-    
+
+    // Tajuk betul-betul ikut nombor
     document.getElementById("tajuk").innerText =
         "TINGKATAN " + tingkatan;
 
@@ -14,87 +15,72 @@ document.addEventListener("DOMContentLoaded", function () {
     let totalHadir = 0;
     let totalDaftar = 0;
 
-    // Debug kalau KE_LAS tak load
-    if (typeof KE_LAS === "undefined") {
-        alert("KE_LAS tidak load dari nameset.js");
+    // Pastikan data kelas load
+    if (typeof KELAS_BY_TINGKATAN === "undefined") {
+        alert("KELAS_BY_TINGKATAN tidak load dari nameset.js");
         return;
     }
 
     const kelasList = KELAS_BY_TINGKATAN[tingkatan] || [];
 
+    // ===============================
+    // BINA ROW KELAS
+    // ===============================
     kelasList.forEach((kelasNama, index) => {
-    
+
         const row = document.createElement("div");
         row.className = "row";
-    
+
         row.innerHTML = `
             <div class="kelas">${kelasNama}</div>
-            <input type="number" class="input-box hadir" id="hadir_${index}">
+            <input type="number" class="input-box hadir" id="hadir_${index}" min="0">
             <span class="separator">/</span>
-            <input type="number" class="input-box daftar" id="daftar_${index}">
+            <input type="number" class="input-box daftar" id="daftar_${index}" min="0">
         `;
-    
-        container.appendChild(row);
-    });
+
+        kelasContainer.appendChild(row);
     });
 
-    function kiraAuto() {
+    // ===============================
+    // SUBMIT DATA
+    // ===============================
+    window.submitData = function () {
 
+        const data = {};
         totalHadir = 0;
         totalDaftar = 0;
 
-        document.querySelectorAll(".row").forEach(row => {
+        kelasList.forEach((kelasNama, index) => {
 
-            const hadir = parseInt(row.querySelector(".hadir").value) || 0;
-            const daftar = parseInt(row.querySelector(".daftar").value) || 0;
+            const hadirValue = document.getElementById(`hadir_${index}`).value || 0;
+            const daftarValue = document.getElementById(`daftar_${index}`).value || 0;
+
+            const hadir = parseInt(hadirValue);
+            const daftar = parseInt(daftarValue);
 
             totalHadir += hadir;
             totalDaftar += daftar;
-        });
 
-        document.getElementById("jumlah").innerText =
-            `Jumlah Kehadiran: ${totalHadir} / ${totalDaftar}`;
-
-        let peratus = 0;
-        if (totalDaftar > 0) {
-            peratus = ((totalHadir / totalDaftar) * 100).toFixed(1);
-        }
-
-        document.getElementById("peratus").innerText =
-            `Peratusan: ${peratus}%`;
-    }
-
-    document.addEventListener("input", kiraAuto);
-
-    window.submitData = function () {
-
-        const kelasData = {};
-
-        document.querySelectorAll(".row").forEach(row => {
-
-            const kelas = row.dataset.kelas;
-            const hadir = parseInt(row.querySelector(".hadir").value) || 0;
-            const daftar = parseInt(row.querySelector(".daftar").value) || 0;
-
-            kelasData[kelas] = {
+            data[kelasNama] = {
                 hadir: hadir,
                 daftar: daftar
             };
         });
 
-        const data = {
-            type: "section_kehadiran",
-            data: {
-                tingkatan: tingkatan,
-                classes: kelasData,
-                total_hadir: totalHadir,
-                total_daftar: totalDaftar,
-                peratus: totalDaftar > 0
-                    ? ((totalHadir / totalDaftar) * 100).toFixed(1)
-                    : 0
-            }
-        };
+        const peratus =
+            totalDaftar > 0
+                ? ((totalHadir / totalDaftar) * 100).toFixed(2)
+                : 0;
 
-        tg.sendData(JSON.stringify(data));
+        // Hantar ke bot
+        tg.sendData(JSON.stringify({
+            type: "section_kehadiran",
+            tingkatan: tingkatan,
+            data: data,
+            total_hadir: totalHadir,
+            total_daftar: totalDaftar,
+            peratus: peratus
+        }));
     };
+
 });
