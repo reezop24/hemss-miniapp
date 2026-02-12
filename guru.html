@@ -71,26 +71,29 @@ button.secondary {
 
 <body>
 
-<h2>Kumpulan Guru Bertugas</h2>
+<h2>👥 Kumpulan Guru Bertugas</h2>
 
-<div class="section">
-  <div class="section-title">Soalan 1: Senarai Guru Bertugas</div>
-  <div id="guru-container"></div>
-  <button class="secondary" onclick="addBox()">+ Tambah Guru (Max 6)</button>
-</div>
+<div id="guru-container"></div>
 
-<div class="section">
-  <div class="section-title">Soalan 2: Minggu Bertugas</div>
-  <select id="minggu"></select>
-</div>
+<button type="button" onclick="addBox()">+ Tambah Guru (Max 6)</button>
 
-<div class="section">
-  <div class="section-title">Soalan 3 & 4: Tarikh & Hari</div>
-  <input type="text" id="tarikh_display" readonly>
-  <input type="text" id="hari_display" readonly>
-</div>
+<hr>
 
-<button class="primary" onclick="submitData()">Simpan</button>
+<h3>Minggu Bertugas</h3>
+<select id="minggu"></select>
+
+<hr>
+
+<h3>Tarikh Laporan</h3>
+<input type="text" id="tarikh" readonly>
+
+<h3>Hari</h3>
+<input type="text" id="hari" readonly>
+
+<hr>
+
+<button onclick="submitData()">💾 Simpan</button>
+
 
 
 <datalist id="guru_list"></datalist>
