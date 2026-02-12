@@ -4,10 +4,10 @@ document.addEventListener("DOMContentLoaded", function () {
     tg.expand();
 
     const params = new URLSearchParams(window.location.search);
-    const tingkatan = params.get("tingkatan");
-
+    const tingkatan = params.get("tingkatan");   // contoh: "1"
+    
     document.getElementById("tajuk").innerText =
-        "Tingkatan " + tingkatan;
+        "TINGKATAN " + tingkatan;
 
     const kelasContainer = document.getElementById("kelasContainer");
 
