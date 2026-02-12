@@ -72,4 +72,19 @@ const NAME_SET = [
   ];
 
 
+const KE_LAS = [
+  "Amanah",
+  "Bestari",
+  "Cekal",
+  "Dedikasi",
+  "Efektif",
+  "Fokus",
+  "Gigih",
+  "Harmoni",
+  "Inovatif",
+  "Jujur"
+  ];
+
+
+
 
