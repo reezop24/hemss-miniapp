@@ -9,15 +9,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
     tg.expand();
 
-    let maxGuru = 6;
+    const maxGuru = 6;
     let currentGuru = 5;
 
     const container = document.getElementById("guru-container");
 
-    /* =========================
-       CREATE INPUT BOX
-    ========================== */
-    function createGuruBox(index) {
+    // ===============================
+    // LOAD TARIKH & HARI
+    // ===============================
+    const selectedDate = localStorage.getItem("laporan_tarikh");
+
+    if (selectedDate) {
+
+        // Papar tarikh
+        document.getElementById("tarikh").value = selectedDate;
+
+        // Kira hari automatik
+        const dateObj = new Date(selectedDate);
+        const hari = dateObj.toLocaleDateString("ms-MY", { weekday: "long" });
+
+        document.getElementById("hari").value = hari;
+    }
+
+    // ===============================
+    // CREATE INPUT BOX
+    // ===============================
+    function createGuruBox(index, removable = false) {
+
         const wrapper = document.createElement("div");
         wrapper.style.marginBottom = "10px";
 
@@ -28,11 +46,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
         wrapper.appendChild(input);
 
-        if (index > 5) {
+        if (removable) {
             const removeBtn = document.createElement("button");
             removeBtn.innerText = "Buang";
-            removeBtn.className = "secondary";
+            removeBtn.style.background = "#c0392b";
+            removeBtn.style.color = "white";
             removeBtn.style.marginTop = "5px";
+            removeBtn.style.padding = "8px";
+            removeBtn.style.border = "none";
+            removeBtn.style.borderRadius = "6px";
 
             removeBtn.onclick = function () {
                 container.removeChild(wrapper);
@@ -45,36 +67,31 @@ document.addEventListener("DOMContentLoaded", function () {
         return wrapper;
     }
 
-    /* =========================
-       INIT 5 DEFAULT BOX
-    ========================== */
-    function initGuru() {
-        for (let i = 1; i <= 5; i++) {
-            container.appendChild(createGuruBox(i));
-        }
+    // ===============================
+    // INIT 5 DEFAULT (NO BUANG)
+    // ===============================
+    for (let i = 1; i <= 5; i++) {
+        container.appendChild(createGuruBox(i, false));
     }
 
-    /* =========================
-       ADD BOX
-    ========================== */
+    // ===============================
+    // ADD BOX (HANYA BOX KE-6 BOLEH BUANG)
+    // ===============================
     window.addBox = function () {
+
         if (currentGuru >= maxGuru) return;
 
         currentGuru++;
-        container.appendChild(createGuruBox(currentGuru));
+
+        container.appendChild(createGuruBox(currentGuru, true));
     };
 
-    /* =========================
-       LOAD NAME LIST
-    ========================== */
-    function loadNames() {
-        const datalist = document.getElementById("guru_list");
+    // ===============================
+    // LOAD NAME SET
+    // ===============================
+    const datalist = document.getElementById("guru_list");
 
-        if (typeof NAME_SET === "undefined") {
-            console.log("NAME_SET tak load");
-            return;
-        }
-
+    if (typeof NAME_SET !== "undefined") {
         NAME_SET.forEach(name => {
             const option = document.createElement("option");
             option.value = name;
@@ -82,17 +99,12 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    /* =========================
-       LOAD MINGGU
-    ========================== */
-    function loadMinggu() {
-        const mingguSelect = document.getElementById("minggu");
+    // ===============================
+    // LOAD MINGGU LIST
+    // ===============================
+    const mingguSelect = document.getElementById("minggu");
 
-        if (typeof MINGGU_LIST === "undefined") {
-            console.log("MINGGU_LIST tak load");
-            return;
-        }
-
+    if (typeof MINGGU_LIST !== "undefined") {
         MINGGU_LIST.forEach(m => {
             const option = document.createElement("option");
             option.value = m;
@@ -101,58 +113,32 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    /* =========================
-       LOAD TARIKH & HARI
-    ========================== */
-    function setTarikhHari() {
-
-        const savedDate = localStorage.getItem("laporan_tarikh");
-
-        if (!savedDate) return;
-
-        const dateObj = new Date(savedDate);
-
-        const hari = dateObj.toLocaleDateString("ms-MY", {
-            weekday: "long"
-        });
-
-        document.getElementById("tarikh").value = savedDate;
-        document.getElementById("hari").value = hari;
-    }
-
-    /* =========================
-       SUBMIT
-    ========================== */
+    // ===============================
+    // SUBMIT
+    // ===============================
     window.submitData = function () {
 
-        const guruData = [];
+        const guruData = {};
 
         for (let i = 1; i <= currentGuru; i++) {
             const el = document.getElementById("guru_" + i);
-            if (el && el.value.trim() !== "") {
-                guruData.push(el.value.trim());
+            if (el && el.value) {
+                guruData["guru_" + i] = el.value;
             }
         }
 
         const data = {
             type: "section_guru_bertugas",
             data: {
-                minggu: document.getElementById("minggu").value,
-                tarikh: document.getElementById("tarikh").value,
+                minggu: mingguSelect.value,
+                tarikh: selectedDate,
                 hari: document.getElementById("hari").value,
                 guru: guruData
             }
         };
 
         tg.sendData(JSON.stringify(data));
+        tg.close();
     };
-
-    /* =========================
-       INIT ALL
-    ========================== */
-    initGuru();
-    loadNames();
-    loadMinggu();
-    setTarikhHari();
 
 });
