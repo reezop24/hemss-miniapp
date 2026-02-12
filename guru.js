@@ -1,111 +1,96 @@
-const tg = window.Telegram.WebApp;
-tg.expand();
+document.addEventListener("DOMContentLoaded", function () {
 
-let maxGuru = 6;
-let currentGuru = 5;
+    const tg = window.Telegram?.WebApp;
 
-// =======================
-// INIT GURU BOX
-// =======================
-
-function createGuruBox(index) {
-    const input = document.createElement("input");
-    input.setAttribute("list", "guru_list");
-    input.id = "guru_" + index;
-    input.placeholder = "Nama Guru " + index;
-    return input;
-}
-
-function initGuru() {
-    const container = document.getElementById("guru-container");
-
-    for (let i = 1; i <= 5; i++) {
-        container.appendChild(createGuruBox(i));
-    }
-}
-
-// =======================
-// ADD BOX (MAX 6)
-// =======================
-
-function addBox() {
-    if (currentGuru >= maxGuru) return;
-
-    currentGuru++;
-
-    const container = document.getElementById("guru-container");
-    container.appendChild(createGuruBox(currentGuru));
-}
-
-// =======================
-// LOAD NAMESET
-// =======================
-
-function loadNames() {
-    const datalist = document.getElementById("guru_list");
-
-    if (typeof NAME_SET === "undefined") {
-        console.log("NAME_SET not loaded");
+    if (!tg) {
+        alert("Telegram WebApp tidak dikesan.");
         return;
     }
 
-    NAME_SET.forEach(name => {
-        const option = document.createElement("option");
-        option.value = name;
-        datalist.appendChild(option);
-    });
-}
+    tg.expand();
 
-// =======================
-// LOAD MINGGU
-// =======================
+    let maxGuru = 6;
+    let currentGuru = 5;
 
-function loadMinggu() {
-    const mingguSelect = document.getElementById("minggu");
-
-    if (typeof MINGGU_LIST === "undefined") {
-        console.log("MINGGU_LIST not loaded");
-        return;
+    function createGuruBox(index) {
+        const input = document.createElement("input");
+        input.setAttribute("list", "guru_list");
+        input.id = "guru_" + index;
+        input.placeholder = "Nama Guru " + index;
+        return input;
     }
 
-    MINGGU_LIST.forEach(m => {
-        const option = document.createElement("option");
-        option.value = m;
-        option.text = m;
-        mingguSelect.appendChild(option);
-    });
-}
+    function initGuru() {
+        const container = document.getElementById("guru-container");
 
-// =======================
-// SUBMIT
-// =======================
-
-function submitData() {
-
-    const guruData = {};
-
-    for (let i = 1; i <= currentGuru; i++) {
-        const el = document.getElementById("guru_" + i);
-        if (el && el.value) {
-            guruData["guru_" + i] = el.value;
+        for (let i = 1; i <= 5; i++) {
+            container.appendChild(createGuruBox(i));
         }
     }
 
-    const data = {
-        type: "section_guru_bertugas",
-        data: {
-            minggu: document.getElementById("minggu").value,
-            guru: guruData
-        }
+    window.addBox = function () {
+        if (currentGuru >= maxGuru) return;
+
+        currentGuru++;
+        const container = document.getElementById("guru-container");
+        container.appendChild(createGuruBox(currentGuru));
     };
 
-    tg.sendData(JSON.stringify(data));
-}
+    function loadNames() {
+        const datalist = document.getElementById("guru_list");
 
-// =======================
-// INIT ALL
-// =======================
+        if (typeof NAME_SET === "undefined") {
+            console.log("NAME_SET tak load");
+            return;
+        }
 
-initGuru();
-loadNames();
-loadMinggu();
+        NAME_SET.forEach(name => {
+            const option = document.createElement("option");
+            option.value = name;
+            datalist.appendChild(option);
+        });
+    }
+
+    function loadMinggu() {
+        const mingguSelect = document.getElementById("minggu");
+
+        if (typeof MINGGU_LIST === "undefined") {
+            console.log("MINGGU_LIST tak load");
+            return;
+        }
+
+        MINGGU_LIST.forEach(m => {
+            const option = document.createElement("option");
+            option.value = m;
+            option.text = m;
+            mingguSelect.appendChild(option);
+        });
+    }
+
+    window.submitData = function () {
+
+        const guruData = {};
+
+        for (let i = 1; i <= currentGuru; i++) {
+            const el = document.getElementById("guru_" + i);
+            if (el && el.value) {
+                guruData["guru_" + i] = el.value;
+            }
+        }
+
+        const data = {
+            type: "section_guru_bertugas",
+            data: {
+                minggu: document.getElementById("minggu").value,
+                guru: guruData
+            }
+        };
+
+        tg.sendData(JSON.stringify(data));
+    };
+
+    initGuru();
+    loadNames();
+    loadMinggu();
+
+});
