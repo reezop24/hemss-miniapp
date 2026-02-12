@@ -84,7 +84,7 @@ const KE_LAS2 = [
     "Jujur"
 ];
 
-const KE_LAS = {
+const KELAS_BY_TINGKATAN = {
   1: ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih","Harmoni","Inovatif","Jujur"],
   2: ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih","Harmoni","Inovatif"],
   3: ["Amanah","Bestari","Cekal","Dedikasi","Efektif","Fokus","Gigih","Harmoni"],
