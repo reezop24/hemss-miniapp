@@ -1,89 +1,142 @@
 console.log("JS load");
 console.log(KE_LAS);
 
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kehadiran Pelajar</title>
+document.addEventListener("DOMContentLoaded", function () {
 
-<style>
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #1f3554;
-  color: #f1f1f1;
-  padding: 20px;
-  font-size: 17px;
-}
+    const tg = window.Telegram?.WebApp;
+    if (!tg) {
+        alert("Telegram WebApp tidak dikesan.");
+        return;
+    }
 
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
-}
+    tg.expand();
 
-.row {
-  display: flex;
-  align-items: center;
-  margin-bottom: 12px;
-}
+    // ===============================
+    // Ambil tingkatan dari URL
+    // ===============================
+    const params = new URLSearchParams(window.location.search);
+    const tingkatan = params.get("tingkatan"); // t1, t2, t3...
 
-.kelas {
-  flex: 2;
-  font-size: 15px;
-}
+    if (!tingkatan) {
+        alert("Tingkatan tidak dijumpai.");
+        return;
+    }
 
-.input-box {
-  width: 65px;
-  padding: 8px;
-  font-size: 15px;
-  text-align: center;
-  border-radius: 6px;
-  border: none;
-}
+    // Pastikan KE_LAS wujud
+    if (typeof KE_LAS === "undefined") {
+        alert("KE_LAS tidak load dari nameset.js");
+        return;
+    }
 
-.separator {
-  margin: 0 10px;
-  font-weight: bold;
-}
+    const kelasList = KE_LAS[tingkatan];
 
-.summary {
-  margin-top: 25px;
-  padding-top: 15px;
-  border-top: 1px solid rgba(255,255,255,0.2);
-  font-weight: 600;
-}
+    if (!kelasList) {
+        alert("Senarai kelas untuk tingkatan ini tiada.");
+        return;
+    }
 
-button {
-  width: 100%;
-  margin-top: 25px;
-  padding: 14px;
-  font-size: 17px;
-  border-radius: 6px;
-  border: none;
-  background-color: #27ae60;
-  color: white;
-  font-weight: 600;
-}
-</style>
-</head>
+    // ===============================
+    // Set Tajuk
+    // ===============================
+    document.getElementById("tajuk").innerText =
+        "📊 Kehadiran Pelajar - " + tingkatan.toUpperCase();
 
-<body>
+    const container = document.getElementById("kelasContainer");
 
-<h2 id="tajuk"></h2>
+    // ===============================
+    // Generate Row Kelas
+    // ===============================
+    kelasList.forEach((namaKelas, index) => {
 
-<div id="kelasContainer"></div>
+        const row = document.createElement("div");
+        row.className = "row";
 
-<div class="summary">
-  <div id="jumlah"></div>
-  <div id="peratus"></div>
-</div>
+        const kelas = document.createElement("div");
+        kelas.className = "kelas";
+        kelas.innerText = namaKelas;
 
-<button onclick="submitData()">💾 Simpan</button>
+        const hadir = document.createElement("input");
+        hadir.type = "number";
+        hadir.className = "input-box";
+        hadir.id = "hadir_" + index;
+        hadir.min = 0;
 
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<script src="nameset.js"></script>
-<script src="kehadiran1.js"></script>
+        const sep = document.createElement("div");
+        sep.className = "separator";
+        sep.innerText = "/";
 
-</body>
-</html>
+        const daftar = document.createElement("input");
+        daftar.type = "number";
+        daftar.className = "input-box";
+        daftar.id = "daftar_" + index;
+        daftar.min = 0;
+
+        hadir.addEventListener("input", kiraJumlah);
+        daftar.addEventListener("input", kiraJumlah);
+
+        row.appendChild(kelas);
+        row.appendChild(hadir);
+        row.appendChild(sep);
+        row.appendChild(daftar);
+
+        container.appendChild(row);
+    });
+
+    // ===============================
+    // Kira Jumlah & Peratus
+    // ===============================
+    function kiraJumlah() {
+
+        let totalHadir = 0;
+        let totalDaftar = 0;
+
+        kelasList.forEach((_, index) => {
+
+            const h = parseInt(document.getElementById("hadir_" + index).value) || 0;
+            const d = parseInt(document.getElementById("daftar_" + index).value) || 0;
+
+            totalHadir += h;
+            totalDaftar += d;
+        });
+
+        document.getElementById("jumlah").innerText =
+            "Jumlah Kehadiran: " + totalHadir + " / " + totalDaftar;
+
+        let peratus = 0;
+        if (totalDaftar > 0) {
+            peratus = ((totalHadir / totalDaftar) * 100).toFixed(2);
+        }
+
+        document.getElementById("peratus").innerText =
+            "Peratusan: " + peratus + "%";
+    }
+
+    // ===============================
+    // Submit Data
+    // ===============================
+    window.submitData = function () {
+
+        let dataKelas = {};
+
+        kelasList.forEach((namaKelas, index) => {
+
+            const hadir = parseInt(document.getElementById("hadir_" + index).value) || 0;
+            const daftar = parseInt(document.getElementById("daftar_" + index).value) || 0;
+
+            dataKelas[namaKelas] = {
+                hadir: hadir,
+                daftar: daftar
+            };
+        });
+
+        const payload = {
+            type: "section_kehadiran",
+            tingkatan: tingkatan,
+            data: dataKelas
+        };
+
+        tg.sendData(JSON.stringify(payload));
+        tg.close();
+    };
+
+});
