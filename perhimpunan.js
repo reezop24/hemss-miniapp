@@ -1,62 +1,55 @@
-document.addEventListener("DOMContentLoaded", function () {
+const tg = window.Telegram.WebApp;
+tg.expand();
 
-    const tg = window.Telegram.WebApp;
-    tg.expand();
-
-    // default 1 komen setiap section
-    addKomen("pentadbir");
-    addKomen("guru");
-
-});
-
-
-// ==========================
-// SEARCH NAMA (NAME_SET)
-// ==========================
+/* =========================
+   SEARCH NAMA GLOBAL
+========================= */
 function searchNama(inputElement) {
 
-    const value = inputElement.value.toLowerCase();
-    removeSuggestion();
+    const keyword = inputElement.value.toLowerCase();
 
-    if (!value) return;
+    // buang dropdown lama kalau ada
+    const oldList = inputElement.parentNode.querySelector(".suggestion-box");
+    if (oldList) oldList.remove();
 
-    const suggestionBox = document.createElement("div");
-    suggestionBox.className = "suggestion-box";
-    suggestionBox.style.background = "#fff";
-    suggestionBox.style.color = "#000";
-    suggestionBox.style.borderRadius = "8px";
-    suggestionBox.style.padding = "5px";
+    if (!keyword) return;
 
-    const matches = NAME_SET.filter(nama =>
-        nama.toLowerCase().includes(value)
+    const list = document.createElement("div");
+    list.className = "suggestion-box";
+    list.style.background = "white";
+    list.style.color = "black";
+    list.style.borderRadius = "8px";
+    list.style.padding = "5px";
+    list.style.maxHeight = "150px";
+    list.style.overflowY = "auto";
+    list.style.marginTop = "-8px";
+    list.style.marginBottom = "8px";
+
+    const filtered = NAME_SET.filter(nama =>
+        nama.toLowerCase().includes(keyword)
     );
 
-    matches.slice(0, 5).forEach(nama => {
+    filtered.slice(0, 10).forEach(nama => {
         const item = document.createElement("div");
-        item.innerText = nama;
         item.style.padding = "6px";
         item.style.cursor = "pointer";
+        item.innerText = nama;
 
-        item.onclick = () => {
+        item.onclick = function () {
             inputElement.value = nama;
-            suggestionBox.remove();
+            list.remove();
         };
 
-        suggestionBox.appendChild(item);
+        list.appendChild(item);
     });
 
-    inputElement.parentNode.appendChild(suggestionBox);
-}
-
-function removeSuggestion() {
-    const old = document.querySelector(".suggestion-box");
-    if (old) old.remove();
+    inputElement.parentNode.appendChild(list);
 }
 
 
-// ==========================
-// TAMBAH / BUANG KOMEN
-// ==========================
+/* =========================
+   TAMBAH / BUANG KOMEN
+========================= */
 function addKomen(type) {
 
     const container = document.getElementById(
@@ -65,49 +58,63 @@ function addKomen(type) {
 
     const wrapper = document.createElement("div");
 
-    wrapper.innerHTML = `
-        <textarea placeholder="Pengumuman / Ucapan"></textarea>
-        <button class="btn btn-remove" onclick="this.parentElement.remove()">Buang</button>
-    `;
+    const textarea = document.createElement("textarea");
+    textarea.placeholder = "Pengumuman / Ucapan";
+
+    const removeBtn = document.createElement("button");
+    removeBtn.innerText = "Buang";
+    removeBtn.className = "btn btn-remove";
+    removeBtn.onclick = function () {
+        wrapper.remove();
+    };
+
+    wrapper.appendChild(textarea);
+    wrapper.appendChild(removeBtn);
 
     container.appendChild(wrapper);
 }
 
 
-// ==========================
-// SUBMIT
-// ==========================
+/* =========================
+   SUBMIT DATA
+========================= */
 function submitPerhimpunan() {
 
-    const tg = window.Telegram.WebApp;
+    const namaPentadbir =
+        document.querySelectorAll(".nama-search")[0].value;
 
-    const namaPentadbir = document.querySelectorAll(".nama-search")[0].value;
-    const namaGuru = document.querySelectorAll(".nama-search")[1].value;
-    const namaPelapor = document.querySelectorAll(".nama-search")[2].value;
+    const namaGuru =
+        document.querySelectorAll(".nama-search")[1].value;
+
+    const namaPelapor =
+        document.querySelectorAll(".nama-search")[2].value;
 
     const komenPentadbir = [];
-    document.querySelectorAll("#komen_pentadbir textarea").forEach(t => {
-        if (t.value.trim()) komenPentadbir.push(t.value.trim());
-    });
+    document.querySelectorAll("#komen_pentadbir textarea")
+        .forEach(t => {
+            if (t.value.trim())
+                komenPentadbir.push(t.value.trim());
+        });
 
     const komenGuru = [];
-    document.querySelectorAll("#komen_guru textarea").forEach(t => {
-        if (t.value.trim()) komenGuru.push(t.value.trim());
-    });
+    document.querySelectorAll("#komen_guru textarea")
+        .forEach(t => {
+            if (t.value.trim())
+                komenGuru.push(t.value.trim());
+        });
 
     tg.sendData(JSON.stringify({
-        type: "section_laporan_perhimpunan",
+        type: "section_perhimpunan",
         data: {
             pentadbir: {
                 nama: namaPentadbir,
-                ucapan: komenPentadbir
+                komen: komenPentadbir
             },
             guru_bertugas: {
                 nama: namaGuru,
-                ucapan: komenGuru
+                komen: komenGuru
             },
             pelapor: namaPelapor
         }
     }));
-
 }
