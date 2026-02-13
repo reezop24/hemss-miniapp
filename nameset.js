@@ -94,4 +94,11 @@ const KELAS_BY_TINGKATAN = {
 
 
 
+const NAME_PENTADBIR = [
+  "Pengetua",
+  "PK Pentadbiran",
+  "PK HEM",
+  "PK Kokurikulum"
+];
+
 
