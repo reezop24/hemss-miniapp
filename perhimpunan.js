@@ -1,67 +1,20 @@
-console.log("NAME_SET =", typeof NAME_SET);
-
 const tg = window.Telegram.WebApp;
 tg.expand();
 
-/* =========================
-   SEARCH NAMA DROPDOWN
-========================= */
-function searchNama(inputElement) {
+document.addEventListener("DOMContentLoaded", function () {
 
-    if (!window.NAME_SET) return;
+    // Load NAME_SET ke datalist
+    const datalist = document.getElementById("guru_list");
 
-    const keyword = inputElement.value.toLowerCase().trim();
-
-    // buang dropdown lama
-    const oldBox = document.querySelector(".suggestion-box");
-    if (oldBox) oldBox.remove();
-
-    if (!keyword) return;
-
-    const filtered = window.NAME_SET.filter(nama =>
-        nama.toLowerCase().includes(keyword)
-    );
-
-    if (filtered.length === 0) return;
-
-    const list = document.createElement("div");
-    list.className = "suggestion-box";
-    list.style.width = inputElement.offsetWidth + "px";
-
-    const rect = inputElement.getBoundingClientRect();
-    list.style.left = rect.left + window.scrollX + "px";
-    list.style.top = rect.bottom + window.scrollY + "px";
-
-    filtered.slice(0, 10).forEach(nama => {
-
-        const item = document.createElement("div");
-        item.style.padding = "10px";
-        item.style.cursor = "pointer";
-        item.innerText = nama;
-
-        item.onmouseover = () => item.style.background = "#eeeeee";
-        item.onmouseout = () => item.style.background = "white";
-
-        item.onclick = function () {
-            inputElement.value = nama;
-            list.remove();
-        };
-
-        list.appendChild(item);
-    });
-
-    document.body.appendChild(list);
-}
-
-/* =========================
-   CLOSE DROPDOWN
-========================= */
-document.addEventListener("click", function(e) {
-    if (!e.target.classList.contains("nama-search")) {
-        const box = document.querySelector(".suggestion-box");
-        if (box) box.remove();
+    if (typeof NAME_SET !== "undefined") {
+        NAME_SET.forEach(name => {
+            const option = document.createElement("option");
+            option.value = name;
+            datalist.appendChild(option);
+        });
     }
 });
+
 
 /* =========================
    TAMBAH / BUANG KOMEN
@@ -90,16 +43,17 @@ function addKomen(type) {
     container.appendChild(wrapper);
 }
 
+
 /* =========================
    SUBMIT DATA
 ========================= */
 function submitPerhimpunan() {
 
-    const inputs = document.querySelectorAll(".nama-search");
+    const inputs = document.querySelectorAll(".input-box");
 
-    const namaPentadbir = inputs[0]?.value || "";
-    const namaGuru = inputs[1]?.value || "";
-    const namaPelapor = inputs[2]?.value || "";
+    const namaPentadbir = inputs[0].value;
+    const namaGuru = inputs[1].value;
+    const namaPelapor = inputs[2].value;
 
     const komenPentadbir = [];
     document.querySelectorAll("#komen_pentadbir textarea")
