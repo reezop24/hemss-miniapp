@@ -94,9 +94,9 @@ textarea {
     <h3>Nama Guru Pelapor</h3>
 
     <input type="text"
-           class="input-box nama-search"
-           placeholder="Nama Pelapor"
-           oninput="searchNama(this)">
+       class="input-box"
+       list="guru_list"
+       placeholder="Nama Pelapor">
 </div>
 
 <div class="section">
@@ -106,7 +106,7 @@ textarea {
 
     <button class="btn btn-add" onclick="addKomen()">+ Tambah Perenggan</button>
 </div>
-
+<datalist id="guru_list"></datalist>
 <button class="btn btn-save" onclick="submitKantin()">💾 Simpan</button>
 
 </body>
