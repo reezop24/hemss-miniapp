@@ -8,30 +8,29 @@ function searchNama(inputElement) {
 
     const keyword = inputElement.value.toLowerCase();
 
-    // buang dropdown lama kalau ada
-    const oldList = inputElement.parentNode.querySelector(".suggestion-box");
-    if (oldList) oldList.remove();
+    // remove old dropdown
+    const old = document.querySelector(".suggestion-box");
+    if (old) old.remove();
 
     if (!keyword) return;
-
-    const list = document.createElement("div");
-    list.className = "suggestion-box";
-    list.style.background = "white";
-    list.style.color = "black";
-    list.style.borderRadius = "8px";
-    list.style.padding = "5px";
-    list.style.maxHeight = "150px";
-    list.style.overflowY = "auto";
-    list.style.marginTop = "-8px";
-    list.style.marginBottom = "8px";
 
     const filtered = NAME_SET.filter(nama =>
         nama.toLowerCase().includes(keyword)
     );
 
+    if (filtered.length === 0) return;
+
+    const list = document.createElement("div");
+    list.className = "suggestion-box";
+
+    // position dropdown exactly bawah input
+    const rect = inputElement.getBoundingClientRect();
+    list.style.top = (inputElement.offsetTop + inputElement.offsetHeight + 5) + "px";
+
     filtered.slice(0, 10).forEach(nama => {
+
         const item = document.createElement("div");
-        item.style.padding = "6px";
+        item.style.padding = "8px";
         item.style.cursor = "pointer";
         item.innerText = nama;
 
