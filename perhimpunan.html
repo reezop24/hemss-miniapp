@@ -28,11 +28,11 @@ h2 {
     padding: 20px;
     border-radius: 12px;
     margin-bottom: 25px;
+    position: relative;
 }
 
 .section h3 {
     margin-top: 0;
-    margin-bottom: 15px;
 }
 
 .input-box,
@@ -74,6 +74,18 @@ textarea {
     background: #2ecc71;
     color: white;
 }
+
+/* dropdown */
+.suggestion-box {
+    position: absolute;
+    background: white;
+    color: black;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    max-height: 180px;
+    overflow-y: auto;
+    z-index: 9999;
+}
 </style>
 </head>
 
@@ -81,16 +93,14 @@ textarea {
 
 <h2>🎤 LAPORAN PERHIMPUNAN</h2>
 
-<!-- ====================== -->
 <!-- UCAPAN PENTADBIR -->
-<!-- ====================== -->
 <div class="section">
     <h3>Ucapan Pentadbir</h3>
 
     <input type="text"
-           class="input-box"
-           list="guru_list"
-           placeholder="Nama Pentadbir">
+           class="input-box nama-search"
+           placeholder="Nama Pentadbir"
+           oninput="searchNama(this)">
 
     <div id="komen_pentadbir"></div>
 
@@ -99,17 +109,14 @@ textarea {
     </button>
 </div>
 
-
-<!-- ====================== -->
 <!-- GURU BERTUGAS -->
-<!-- ====================== -->
 <div class="section">
     <h3>Guru Bertugas Perhimpunan</h3>
 
     <input type="text"
-           class="input-box"
-           list="guru_list"
-           placeholder="Nama Guru Bertugas">
+           class="input-box nama-search"
+           placeholder="Nama Guru Bertugas"
+           oninput="searchNama(this)">
 
     <div id="komen_guru"></div>
 
@@ -118,22 +125,15 @@ textarea {
     </button>
 </div>
 
-
-<!-- ====================== -->
 <!-- NAMA PELAPOR -->
-<!-- ====================== -->
 <div class="section">
     <h3>Nama Guru Pelapor</h3>
 
     <input type="text"
-           class="input-box"
-           list="guru_list"
-           placeholder="Nama Pelapor">
+           class="input-box nama-search"
+           placeholder="Nama Pelapor"
+           oninput="searchNama(this)">
 </div>
-
-
-<!-- DATA LIST GLOBAL -->
-<datalist id="guru_list"></datalist>
 
 <button class="btn btn-save" onclick="submitPerhimpunan()">
     💾 Simpan
