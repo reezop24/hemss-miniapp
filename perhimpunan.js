@@ -2,15 +2,11 @@ const tg = window.Telegram.WebApp;
 tg.expand();
 
 /* =========================
-   SEARCH NAMA GLOBAL (STABLE)
+   SEARCH NAMA DROPDOWN
 ========================= */
-
 function searchNama(inputElement) {
 
-    if (typeof NAME_SET === "undefined") {
-        console.error("NAME_SET tidak load");
-        return;
-    }
+    if (!window.NAME_SET) return;
 
     const keyword = inputElement.value.toLowerCase().trim();
 
@@ -20,27 +16,16 @@ function searchNama(inputElement) {
 
     if (!keyword) return;
 
-    const filtered = NAME_SET.filter(nama =>
+    const filtered = window.NAME_SET.filter(nama =>
         nama.toLowerCase().includes(keyword)
     );
 
     if (filtered.length === 0) return;
 
-    // create dropdown
     const list = document.createElement("div");
     list.className = "suggestion-box";
-
-    list.style.position = "absolute";
-    list.style.background = "white";
-    list.style.color = "black";
-    list.style.borderRadius = "10px";
-    list.style.boxShadow = "0 4px 10px rgba(0,0,0,0.3)";
-    list.style.maxHeight = "180px";
-    list.style.overflowY = "auto";
-    list.style.zIndex = "9999";
     list.style.width = inputElement.offsetWidth + "px";
 
-    // kira posisi bawah input
     const rect = inputElement.getBoundingClientRect();
     list.style.left = rect.left + window.scrollX + "px";
     list.style.top = rect.bottom + window.scrollY + "px";
@@ -52,13 +37,8 @@ function searchNama(inputElement) {
         item.style.cursor = "pointer";
         item.innerText = nama;
 
-        item.onmouseover = function () {
-            item.style.background = "#eeeeee";
-        };
-
-        item.onmouseout = function () {
-            item.style.background = "white";
-        };
+        item.onmouseover = () => item.style.background = "#eeeeee";
+        item.onmouseout = () => item.style.background = "white";
 
         item.onclick = function () {
             inputElement.value = nama;
@@ -71,23 +51,19 @@ function searchNama(inputElement) {
     document.body.appendChild(list);
 }
 
-
 /* =========================
-   TUTUP DROPDOWN BILA CLICK LUAR
+   CLOSE DROPDOWN
 ========================= */
-
-document.addEventListener("click", function (e) {
+document.addEventListener("click", function(e) {
     if (!e.target.classList.contains("nama-search")) {
         const box = document.querySelector(".suggestion-box");
         if (box) box.remove();
     }
 });
 
-
 /* =========================
    TAMBAH / BUANG KOMEN
 ========================= */
-
 function addKomen(type) {
 
     const container = document.getElementById(
@@ -95,7 +71,6 @@ function addKomen(type) {
     );
 
     const wrapper = document.createElement("div");
-    wrapper.style.marginBottom = "12px";
 
     const textarea = document.createElement("textarea");
     textarea.placeholder = "Pengumuman / Ucapan";
@@ -103,8 +78,6 @@ function addKomen(type) {
     const removeBtn = document.createElement("button");
     removeBtn.innerText = "Buang";
     removeBtn.className = "btn btn-remove";
-    removeBtn.style.marginTop = "5px";
-
     removeBtn.onclick = function () {
         wrapper.remove();
     };
@@ -115,18 +88,16 @@ function addKomen(type) {
     container.appendChild(wrapper);
 }
 
-
 /* =========================
    SUBMIT DATA
 ========================= */
-
 function submitPerhimpunan() {
 
     const inputs = document.querySelectorAll(".nama-search");
 
-    const namaPentadbir = inputs[0]?.value.trim() || "";
-    const namaGuru = inputs[1]?.value.trim() || "";
-    const namaPelapor = inputs[2]?.value.trim() || "";
+    const namaPentadbir = inputs[0]?.value || "";
+    const namaGuru = inputs[1]?.value || "";
+    const namaPelapor = inputs[2]?.value || "";
 
     const komenPentadbir = [];
     document.querySelectorAll("#komen_pentadbir textarea")
