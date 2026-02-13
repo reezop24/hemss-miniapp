@@ -1,3 +1,5 @@
+console.log("NAME_SET =", typeof NAME_SET);
+
 const tg = window.Telegram.WebApp;
 tg.expand();
 
