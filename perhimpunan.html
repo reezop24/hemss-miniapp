@@ -2,179 +2,131 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>Laporan Perhimpunan</title>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<style>
 
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="nameset.js"></script>
+<script src="perhimpunan.js"></script>
+
+<style>
 body {
+    background: #243B55;
     font-family: sans-serif;
-    padding: 16px;
-    background: #f5f6fa;
+    color: white;
+    margin: 0;
+    padding: 20px;
 }
 
 h2 {
     text-align: center;
+    margin-bottom: 25px;
 }
 
 .section {
-    background: white;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 10px;
+    background: #2f4a6a;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
 }
 
-input[type="text"], textarea {
+.section h3 {
+    margin-top: 0;
+}
+
+.input-box,
+textarea {
     width: 100%;
-    padding: 8px;
-    margin-top: 6px;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
     margin-bottom: 10px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
 }
 
 textarea {
-    min-height: 80px;
+    min-height: 110px;
     resize: vertical;
 }
 
-.btn-row {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-
-button {
-    padding: 6px 10px;
-    border-radius: 6px;
+.btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
     border: none;
-    cursor: pointer;
+    font-size: 16px;
+    margin-top: 8px;
 }
 
-.add-btn {
+.btn-add {
+    background: #3c8dbc;
+    color: white;
+}
+
+.btn-remove {
+    background: #6c7f99;
+    color: white;
+}
+
+.btn-save {
     background: #2ecc71;
     color: white;
 }
-
-.remove-btn {
-    background: #e74c3c;
-    color: white;
-}
-
-.save-btn {
-    background: #3498db;
-    color: white;
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-}
-
 </style>
 </head>
 
 <body>
 
-<h2>🎤 Laporan Perhimpunan</h2>
+<h2>🎤 LAPORAN PERHIMPUNAN</h2>
 
-<!-- ================= Ucapan Pentadbir ================= -->
+<!-- ====================== -->
+<!-- UCAPAN PENTADBIR -->
+<!-- ====================== -->
 <div class="section">
     <h3>Ucapan Pentadbir</h3>
 
-    <label>Nama</label>
-    <input type="text" id="pentadbir_nama">
+    <input type="text" 
+           class="input-box nama-search" 
+           placeholder="Nama Pentadbir"
+           oninput="searchNama(this)">
 
-    <label>Pengumuman</label>
-    <div id="pentadbir_pengumuman"></div>
+    <div id="komen_pentadbir"></div>
 
-    <div class="btn-row">
-        <button class="add-btn" onclick="addTextarea('pentadbir_pengumuman')">➕ Tambah</button>
-        <button class="remove-btn" onclick="removeTextarea('pentadbir_pengumuman')">➖ Buang</button>
-    </div>
+    <button class="btn btn-add" onclick="addKomen('pentadbir')">+ Tambah Perenggan</button>
 </div>
 
-<!-- ================= Guru Bertugas ================= -->
+
+<!-- ====================== -->
+<!-- GURU BERTUGAS -->
+<!-- ====================== -->
 <div class="section">
     <h3>Guru Bertugas Perhimpunan</h3>
 
-    <label>Nama</label>
-    <input type="text" id="gb_nama">
+    <input type="text" 
+           class="input-box nama-search" 
+           placeholder="Nama Guru Bertugas"
+           oninput="searchNama(this)">
 
-    <label>Pengumuman</label>
-    <div id="gb_pengumuman"></div>
+    <div id="komen_guru"></div>
 
-    <div class="btn-row">
-        <button class="add-btn" onclick="addTextarea('gb_pengumuman')">➕ Tambah</button>
-        <button class="remove-btn" onclick="removeTextarea('gb_pengumuman')">➖ Buang</button>
-    </div>
+    <button class="btn btn-add" onclick="addKomen('guru')">+ Tambah Perenggan</button>
 </div>
 
-<!-- ================= Guru Pelapor ================= -->
+
+<!-- ====================== -->
+<!-- NAMA PELAPOR -->
+<!-- ====================== -->
 <div class="section">
     <h3>Nama Guru Pelapor</h3>
-    <input type="text" id="guru_pelapor">
+
+    <input type="text" 
+           class="input-box nama-search" 
+           placeholder="Nama Pelapor"
+           oninput="searchNama(this)">
 </div>
 
-<button class="save-btn" onclick="submitData()">💾 Simpan</button>
 
-<script>
-
-const tg = window.Telegram.WebApp;
-tg.expand();
-
-// Default 2 textarea setiap section
-function initDefault() {
-    addTextarea("pentadbir_pengumuman");
-    addTextarea("pentadbir_pengumuman");
-    addTextarea("gb_pengumuman");
-    addTextarea("gb_pengumuman");
-}
-
-function addTextarea(containerId) {
-    const container = document.getElementById(containerId);
-    const textarea = document.createElement("textarea");
-    container.appendChild(textarea);
-}
-
-function removeTextarea(containerId) {
-    const container = document.getElementById(containerId);
-    if (container.children.length > 0) {
-        container.removeChild(container.lastElementChild);
-    }
-}
-
-function getTextareaValues(containerId) {
-    const container = document.getElementById(containerId);
-    const values = [];
-    for (let el of container.children) {
-        if (el.value.trim() !== "") {
-            values.push(el.value.trim());
-        }
-    }
-    return values;
-}
-
-function submitData() {
-
-    const payload = {
-        type: "section_perhimpunan",
-        data: {
-            ucapan_pentadbir: {
-                nama: document.getElementById("pentadbir_nama").value,
-                pengumuman: getTextareaValues("pentadbir_pengumuman")
-            },
-            guru_bertugas_perhimpunan: {
-                nama: document.getElementById("gb_nama").value,
-                pengumuman: getTextareaValues("gb_pengumuman")
-            },
-            guru_pelapor: document.getElementById("guru_pelapor").value
-        }
-    };
-
-    tg.sendData(JSON.stringify(payload));
-}
-
-initDefault();
-
-</script>
+<button class="btn btn-save" onclick="submitPerhimpunan()">💾 Simpan</button>
 
 </body>
 </html>
