@@ -129,3 +129,42 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
 });
+
+function searchNama(inputElement) {
+
+    removeSuggestion();
+
+    const value = inputElement.value.toLowerCase();
+    if (!value) return;
+
+    const box = document.createElement("div");
+    box.className = "suggestion-box";
+    box.style.background = "#ffffff";
+    box.style.color = "#000";
+    box.style.borderRadius = "8px";
+    box.style.marginTop = "5px";
+
+    const matches = NAME_SET.filter(nama =>
+        nama.toLowerCase().includes(value)
+    );
+
+    matches.slice(0, 5).forEach(nama => {
+        const item = document.createElement("div");
+        item.innerText = nama;
+        item.style.padding = "8px";
+        item.style.cursor = "pointer";
+
+        item.onclick = () => {
+            inputElement.value = nama;
+            box.remove();
+        };
+
+        box.appendChild(item);
+    });
+
+    inputElement.parentNode.appendChild(box);
+}
+
+function removeSuggestion() {
+    document.querySelectorAll(".suggestion-box").forEach(e => e.remove());
+}
