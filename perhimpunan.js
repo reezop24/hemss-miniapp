@@ -4,13 +4,19 @@ tg.expand();
 /* =========================
    SEARCH NAMA GLOBAL
 ========================= */
+/* =========================
+   SEARCH NAMA GLOBAL (STABLE)
+========================= */
+
 function searchNama(inputElement) {
 
-    const keyword = inputElement.value.toLowerCase();
+    if (typeof NAME_SET === "undefined") return;
 
-    // remove old dropdown
-    const old = document.querySelector(".suggestion-box");
-    if (old) old.remove();
+    const keyword = inputElement.value.toLowerCase().trim();
+
+    // remove dropdown lama
+    const oldBox = document.querySelector(".suggestion-box");
+    if (oldBox) oldBox.remove();
 
     if (!keyword) return;
 
@@ -20,19 +26,41 @@ function searchNama(inputElement) {
 
     if (filtered.length === 0) return;
 
+    // buat container dropdown
     const list = document.createElement("div");
     list.className = "suggestion-box";
 
-    // position dropdown exactly bawah input
-    const rect = inputElement.getBoundingClientRect();
-    list.style.top = (inputElement.offsetTop + inputElement.offsetHeight + 5) + "px";
+    // styling
+    list.style.position = "absolute";
+    list.style.background = "white";
+    list.style.color = "black";
+    list.style.borderRadius = "10px";
+    list.style.boxShadow = "0 4px 10px rgba(0,0,0,0.3)";
+    list.style.maxHeight = "180px";
+    list.style.overflowY = "auto";
+    list.style.zIndex = "9999";
+    list.style.width = inputElement.offsetWidth + "px";
 
+    // kira posisi betul2 bawah input
+    const rect = inputElement.getBoundingClientRect();
+    list.style.left = rect.left + window.scrollX + "px";
+    list.style.top = rect.bottom + window.scrollY + "px";
+
+    // masukkan suggestion
     filtered.slice(0, 10).forEach(nama => {
 
         const item = document.createElement("div");
-        item.style.padding = "8px";
+        item.style.padding = "10px";
         item.style.cursor = "pointer";
         item.innerText = nama;
+
+        item.onmouseover = function() {
+            item.style.background = "#eeeeee";
+        };
+
+        item.onmouseout = function() {
+            item.style.background = "white";
+        };
 
         item.onclick = function () {
             inputElement.value = nama;
@@ -42,9 +70,20 @@ function searchNama(inputElement) {
         list.appendChild(item);
     });
 
-    inputElement.parentNode.appendChild(list);
+    document.body.appendChild(list);
 }
 
+
+/* =========================
+   CLOSE DROPDOWN BILA CLICK LUAR
+========================= */
+
+document.addEventListener("click", function(e) {
+    if (!e.target.classList.contains("nama-search")) {
+        const box = document.querySelector(".suggestion-box");
+        if (box) box.remove();
+    }
+});
 
 /* =========================
    TAMBAH / BUANG KOMEN
