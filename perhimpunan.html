@@ -76,11 +76,17 @@ textarea {
 
 <h2>🎤 LAPORAN PERHIMPUNAN</h2>
 
+<!-- ====================== -->
 <!-- UCAPAN PENTADBIR -->
+<!-- ====================== -->
 <div class="section">
     <h3>Ucapan Pentadbir</h3>
 
-    <input type="text" class="input-box" list="guru_list" placeholder="Nama Pentadbir">
+    <input type="text"
+           id="nama_pentadbir"
+           class="input-box"
+           list="pentadbir_list"
+           placeholder="Nama Pentadbir">
 
     <div id="komen_pentadbir"></div>
 
@@ -89,11 +95,17 @@ textarea {
     </button>
 </div>
 
+<!-- ====================== -->
 <!-- GURU BERTUGAS -->
+<!-- ====================== -->
 <div class="section">
     <h3>Guru Bertugas Perhimpunan</h3>
 
-    <input type="text" class="input-box" list="guru_list" placeholder="Nama Guru Bertugas">
+    <input type="text"
+           id="nama_guru"
+           class="input-box"
+           list="guru_list"
+           placeholder="Nama Guru Bertugas">
 
     <div id="komen_guru"></div>
 
@@ -102,14 +114,24 @@ textarea {
     </button>
 </div>
 
+<!-- ====================== -->
 <!-- NAMA PELAPOR -->
+<!-- ====================== -->
 <div class="section">
     <h3>Nama Guru Pelapor</h3>
 
-    <input type="text" class="input-box" list="guru_list" placeholder="Nama Pelapor">
+    <input type="text"
+           id="nama_pelapor"
+           class="input-box"
+           list="guru_list"
+           placeholder="Nama Pelapor">
 </div>
 
+<!-- ====================== -->
+<!-- DATA LIST -->
+<!-- ====================== -->
 <datalist id="guru_list"></datalist>
+<datalist id="pentadbir_list"></datalist>
 
 <button class="btn btn-save" onclick="submitPerhimpunan()">
     💾 Simpan
