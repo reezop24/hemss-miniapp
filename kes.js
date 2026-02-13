@@ -3,7 +3,6 @@ tg.expand();
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    // load nama guru
     const datalist = document.getElementById("guru_list");
 
     if (typeof NAME_SET !== "undefined") {
@@ -17,6 +16,10 @@ document.addEventListener("DOMContentLoaded", function () {
     addKes(); // default 1 kes
 });
 
+
+// ===============================
+// TAMBAH KES
+// ===============================
 function addKes() {
 
     const container = document.getElementById("kes_container");
@@ -37,42 +40,98 @@ function addKes() {
 
         <label>Nama Pelajar Terlibat</label>
         <div class="pelajar_container"></div>
-        <button class="btn btn-add btn-small" onclick="addPelajar(this)">+ Tambah Nama</button>
+        <button class="btn btn-add btn-small">+ Tambah Nama</button>
 
         <label>Keterangan Kejadian</label>
         <div class="keterangan_container"></div>
-        <button class="btn btn-add btn-small" onclick="addKeterangan(this)">+ Tambah Keterangan</button>
+        <button class="btn btn-add btn-small">+ Tambah Keterangan</button>
 
-        <button class="btn btn-remove" onclick="this.parentElement.remove()">Buang Laporan</button>
+        <button class="btn btn-remove">Buang Laporan</button>
     `;
 
     container.appendChild(wrapper);
 
+    const btnTambahNama = wrapper.querySelectorAll(".btn-small")[0];
+    const btnTambahKeterangan = wrapper.querySelectorAll(".btn-small")[1];
+    const btnBuangLaporan = wrapper.querySelector(".btn-remove");
+
+    btnTambahNama.onclick = function () {
+        addPelajar(wrapper);
+    };
+
+    btnTambahKeterangan.onclick = function () {
+        addKeterangan(wrapper);
+    };
+
+    btnBuangLaporan.onclick = function () {
+        wrapper.remove();
+    };
+
     // default 1 pelajar & 1 keterangan
-    addPelajar(wrapper.querySelector(".btn-small"));
-    addKeterangan(wrapper.querySelectorAll(".btn-small")[1]);
+    addPelajar(wrapper);
+    addKeterangan(wrapper);
 }
 
-function addPelajar(btn) {
 
-    const container = btn.parentElement.querySelector(".pelajar_container");
+// ===============================
+// TAMBAH / BUANG PELAJAR
+// ===============================
+function addPelajar(sectionWrapper) {
+
+    const container = sectionWrapper.querySelector(".pelajar_container");
+
+    const row = document.createElement("div");
 
     const input = document.createElement("input");
     input.placeholder = "Nama Pelajar";
 
-    container.appendChild(input);
+    const removeBtn = document.createElement("button");
+    removeBtn.innerText = "Buang";
+    removeBtn.className = "btn btn-remove btn-small";
+    removeBtn.style.marginBottom = "10px";
+
+    removeBtn.onclick = function () {
+        row.remove();
+    };
+
+    row.appendChild(input);
+    row.appendChild(removeBtn);
+
+    container.appendChild(row);
 }
 
-function addKeterangan(btn) {
 
-    const container = btn.parentElement.querySelector(".keterangan_container");
+// ===============================
+// TAMBAH / BUANG KETERANGAN
+// ===============================
+function addKeterangan(sectionWrapper) {
+
+    const container = sectionWrapper.querySelector(".keterangan_container");
+
+    const row = document.createElement("div");
 
     const textarea = document.createElement("textarea");
     textarea.placeholder = "Keterangan kejadian";
 
-    container.appendChild(textarea);
+    const removeBtn = document.createElement("button");
+    removeBtn.innerText = "Buang";
+    removeBtn.className = "btn btn-remove btn-small";
+    removeBtn.style.marginBottom = "10px";
+
+    removeBtn.onclick = function () {
+        row.remove();
+    };
+
+    row.appendChild(textarea);
+    row.appendChild(removeBtn);
+
+    container.appendChild(row);
 }
 
+
+// ===============================
+// SUBMIT
+// ===============================
 function submitKes() {
 
     const pelapor = document.getElementById("pelapor").value;
