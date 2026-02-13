@@ -3,16 +3,32 @@ tg.expand();
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    // Load NAME_SET ke datalist
-    const datalist = document.getElementById("guru_list");
+    // =========================
+    // LOAD NAME_SET (GURU)
+    // =========================
+    const guruList = document.getElementById("guru_list");
 
     if (typeof NAME_SET !== "undefined") {
         NAME_SET.forEach(name => {
             const option = document.createElement("option");
             option.value = name;
-            datalist.appendChild(option);
+            guruList.appendChild(option);
         });
     }
+
+    // =========================
+    // LOAD NAME_PENTADBIR
+    // =========================
+    const pentadbirList = document.getElementById("pentadbir_list");
+
+    if (typeof NAME_PENTADBIR !== "undefined") {
+        NAME_PENTADBIR.forEach(name => {
+            const option = document.createElement("option");
+            option.value = name;
+            pentadbirList.appendChild(option);
+        });
+    }
+
 });
 
 
@@ -26,6 +42,7 @@ function addKomen(type) {
     );
 
     const wrapper = document.createElement("div");
+    wrapper.style.marginBottom = "10px";
 
     const textarea = document.createElement("textarea");
     textarea.placeholder = "Pengumuman / Ucapan";
@@ -49,24 +66,24 @@ function addKomen(type) {
 ========================= */
 function submitPerhimpunan() {
 
-    const inputs = document.querySelectorAll(".input-box");
-
-    const namaPentadbir = inputs[0].value;
-    const namaGuru = inputs[1].value;
-    const namaPelapor = inputs[2].value;
+    const namaPentadbir = document.getElementById("nama_pentadbir").value;
+    const namaGuru = document.getElementById("nama_guru").value;
+    const namaPelapor = document.getElementById("nama_pelapor").value;
 
     const komenPentadbir = [];
     document.querySelectorAll("#komen_pentadbir textarea")
         .forEach(t => {
-            if (t.value.trim())
+            if (t.value.trim()) {
                 komenPentadbir.push(t.value.trim());
+            }
         });
 
     const komenGuru = [];
     document.querySelectorAll("#komen_guru textarea")
         .forEach(t => {
-            if (t.value.trim())
+            if (t.value.trim()) {
                 komenGuru.push(t.value.trim());
+            }
         });
 
     tg.sendData(JSON.stringify({
