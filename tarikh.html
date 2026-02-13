@@ -1,90 +1,81 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Pilih Tarikh Laporan</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Pilih Tarikh Laporan</title>
 
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <script src="menu.js" defer></script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="tarikh.js"></script>
 
-  <style>
-  body {
+<style>
+body {
+    background: #243B55;
+    font-family: sans-serif;
+    color: white;
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    background: #1e3a5f;
-    color: white;
-    padding: 24px;
-    font-size: 26px; /* BESAR GLOBAL */
-  }
+    padding: 20px;
+}
 
-  h2 {
+h2 {
     text-align: center;
-    margin-bottom: 18px;
-    font-size: 22px;
-  }
-
-  .warning-box {
-    background: rgba(255, 255, 255, 0.12);
-    padding: 18px;
-    border-radius: 12px;
-    font-size: 25px; /* BESARKAN */
-    line-height: 1.6;
     margin-bottom: 30px;
-  }
+}
 
-  .warning-box strong {
-    color: #ffd966;
-  }
+.section {
+    background: #2f4a6a;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+}
 
-  .container {
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input, select {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
     margin-top: 10px;
-  }
-
-  input[type="date"] {
-    width: 100%;
-    padding: 16px;
-    font-size: 28px; /* BESARKAN DATE */
-    border-radius: 10px;
-    border: none;
-    box-sizing: border-box;
-  }
-
-  button {
-    width: 100%;
-    margin-top: 28px;
-    padding: 16px;
-    font-size: 28px; /* BESAR BUTTON */
-    border-radius: 10px;
-    border: none;
-    background-color: #4da3ff;
+    background: #2ecc71;
     color: white;
-    cursor: pointer;
-    font-weight: 600;
-  }
-
-  button:active {
-    opacity: 0.85;
-  }
+}
 </style>
-
 </head>
 
 <body>
 
-  <h2>📅 Pemilihan Tarikh Laporan</h2>
+<h2>📅 PILIH TARIKH LAPORAN</h2>
 
-  <div class="warning-box">
-    ⚠️ <strong>Perhatian:</strong><br><br>
-    Sila pastikan tarikh yang dipilih adalah tepat mengikut jadual guru bertugas.
-    <br><br>
-    Pemilihan tarikh yang salah boleh menyebabkan laporan dikunci dan
-    menyukarkan guru lain untuk mengemaskini laporan sebenar.
-  </div>
+<div class="section">
 
-  <div class="container">
-    <input type="date" id="tarikhInput" />
-    <button onclick="hantarTarikh()">Sahkan Tarikh</button>
-  </div>
+    <label>Tarikh</label>
+    <input type="date" id="tarikh">
+
+    <label>Sesi</label>
+    <select id="sesi">
+        <option value="">- Sila Pilih -</option>
+        <option value="PAGI">Pagi</option>
+        <option value="PETANG">Petang</option>
+    </select>
+
+    <button class="btn" onclick="submitTarikh()">Teruskan</button>
+
+</div>
 
 </body>
 </html>
