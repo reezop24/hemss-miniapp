@@ -56,13 +56,23 @@ textarea {
 }
 
 .btn-add {
-    background: #3c8dbc;
+    width: auto;
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: 20px;
+    border: none;
+    background-color: rgba(255,255,255,0.15);
     color: white;
 }
 
 .btn-remove {
-    background: #6c7f99;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+    border: none;
+    background: #c0392b;
     color: white;
+    margin-bottom: 8px;
 }
 
 .btn-save {
@@ -90,7 +100,8 @@ textarea {
 
     <div id="pelajar_container"></div>
 
-    <button class="btn btn-add" onclick="addPelajar()">+ Tambah Nama</button>
+    <button class="btn-add" onclick="addPelajar()">+ Tambah Nama</button>
+    <textarea id="catatan_pelajar" placeholder="CATATAN NAMA PELAJAR (Jika Perlu)"></textarea>
 </div>
 
 <!-- CATATAN -->
@@ -99,7 +110,7 @@ textarea {
 
     <div id="catatan_container"></div>
 
-    <button class="btn btn-add" onclick="addCatatan()">+ Tambah Catatan</button>
+    <button class="btn-add" onclick="addCatatan()">+ Tambah Catatan</button>
 </div>
 
 <datalist id="guru_list"></datalist>

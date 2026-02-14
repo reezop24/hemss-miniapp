@@ -39,7 +39,7 @@ function addPelajar(removable = true) {
     if (removable) {
         const btn = document.createElement("button");
         btn.innerText = "Buang";
-        btn.className = "btn btn-remove";
+        btn.className = "btn-remove";
         btn.onclick = function () {
             wrapper.remove();
         };
@@ -64,7 +64,7 @@ function addCatatan(removable = true) {
     if (removable) {
         const btn = document.createElement("button");
         btn.innerText = "Buang";
-        btn.className = "btn btn-remove";
+        btn.className = "btn-remove";
         btn.onclick = function () {
             wrapper.remove();
         };
@@ -88,6 +88,12 @@ function submitPagar() {
         });
 
     const catatan = [];
+
+    const catatanPelajar = document.getElementById("catatan_pelajar");
+    if (catatanPelajar && catatanPelajar.value.trim()) {
+        catatan.push(catatanPelajar.value.trim());
+    }
+
     document.querySelectorAll("#catatan_container textarea")
         .forEach(t => {
             if (t.value.trim())
