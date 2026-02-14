@@ -103,3 +103,24 @@ hr {
   border: none;
   border-top: 1px solid var(--line-soft);
 }
+
+.hemss-brand {
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.hemss-logo {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  display: inline-block;
+}
+
+.hemss-title {
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
