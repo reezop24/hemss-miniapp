@@ -47,27 +47,32 @@ function createUlasanSection() {
 
     const container = document.createElement("div");
 
-    function addUlasan() {
+    function addUlasan(removable = true) {
         const wrap = document.createElement("div");
 
         const textarea = document.createElement("textarea");
-        textarea.placeholder = "Ulasan";
-
-        const btn = document.createElement("button");
-        btn.innerText = "Buang";
-        btn.className = "btn btn-remove";
-        btn.onclick = () => wrap.remove();
+        textarea.placeholder = "ULASAN";
 
         wrap.appendChild(textarea);
-        wrap.appendChild(btn);
+
+        if (removable) {
+            const btn = document.createElement("button");
+            btn.innerText = "Buang";
+            btn.className = "remove-btn";
+            btn.onclick = () => wrap.remove();
+            wrap.appendChild(btn);
+        }
 
         container.appendChild(wrap);
     }
 
     const addBtn = document.createElement("button");
     addBtn.innerText = "+ Tambah Ulasan";
-    addBtn.className = "btn btn-add";
-    addBtn.onclick = addUlasan;
+    addBtn.className = "add-btn";
+    addBtn.onclick = () => addUlasan(true);
+
+    // Default 1 ulasan tanpa butang buang
+    addUlasan(false);
 
     return { container, addBtn };
 }
