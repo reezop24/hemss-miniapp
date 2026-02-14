@@ -10,23 +10,42 @@ document.addEventListener("DOMContentLoaded", function () {
     tg.expand();
 
     const maxGuru = 6;
-    let currentGuru = 5;
+    let currentGuru = 0;
+    const urlParams = new URLSearchParams(window.location.search);
+    const mode = (urlParams.get("mode") || "edit").toLowerCase();
+    const isReadOnly = mode === "view";
+    let prefill = {};
+    try {
+        const rawPrefill = urlParams.get("prefill");
+        if (rawPrefill) {
+            prefill = JSON.parse(rawPrefill);
+        }
+    } catch (e) {
+        prefill = {};
+    }
 
     const container = document.getElementById("guru-container");
+    const addGuruBtn = document.getElementById("add-guru-btn");
+    const saveBtn = document.getElementById("save-btn");
+    const editBtn = document.getElementById("edit-btn");
+    const statusBox = document.getElementById("read-only-status");
 
     // ===============================
     // LOAD TARIKH & HARI
     // ===============================
-    const selectedDate = localStorage.getItem("laporan_tarikh");
+    const selectedDate = prefill.tarikh || localStorage.getItem("laporan_tarikh");
 
     if (selectedDate) {
 
         // Papar tarikh
         document.getElementById("tarikh").value = selectedDate;
 
-        // Kira hari automatik
-        const dateObj = new Date(selectedDate);
-        const hari = dateObj.toLocaleDateString("ms-MY", { weekday: "long" });
+        // Kira hari automatik / guna prefill jika ada
+        let hari = prefill.hari || "";
+        if (!hari) {
+            const dateObj = new Date(selectedDate);
+            hari = dateObj.toLocaleDateString("ms-MY", { weekday: "long" });
+        }
 
         document.getElementById("hari").value = hari;
     }
@@ -34,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // ===============================
     // CREATE INPUT BOX
     // ===============================
-    function createGuruBox(index, removable = false) {
+    function createGuruBox(index, removable = false, value = "") {
 
         const wrapper = document.createElement("div");
         wrapper.style.marginBottom = "10px";
@@ -43,10 +62,14 @@ document.addEventListener("DOMContentLoaded", function () {
         input.setAttribute("list", "guru_list");
         input.id = "guru_" + index;
         input.placeholder = "Nama Guru " + index;
+        input.value = value || "";
+        if (isReadOnly) {
+            input.disabled = true;
+        }
 
         wrapper.appendChild(input);
 
-        if (removable) {
+        if (removable && !isReadOnly) {
             const removeBtn = document.createElement("button");
             removeBtn.innerText = "Buang";
             removeBtn.style.background = "#c0392b";
@@ -68,16 +91,26 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ===============================
-    // INIT 5 DEFAULT (NO BUANG)
+    // INIT INPUT BOX
     // ===============================
-    for (let i = 1; i <= 5; i++) {
-        container.appendChild(createGuruBox(i, false));
+    const savedGuru = prefill.guru && typeof prefill.guru === "object"
+        ? Object.values(prefill.guru).filter(Boolean)
+        : [];
+
+    const initialCount = Math.max(5, Math.min(maxGuru, savedGuru.length || 5));
+    currentGuru = initialCount;
+
+    for (let i = 1; i <= initialCount; i++) {
+        const isRemovable = i > 5;
+        const value = savedGuru[i - 1] || "";
+        container.appendChild(createGuruBox(i, isRemovable, value));
     }
 
     // ===============================
     // ADD BOX (HANYA BOX KE-6 BOLEH BUANG)
     // ===============================
     window.addBox = function () {
+        if (isReadOnly) return;
 
         if (currentGuru >= maxGuru) return;
 
@@ -112,11 +145,32 @@ document.addEventListener("DOMContentLoaded", function () {
             mingguSelect.appendChild(option);
         });
     }
+    if (prefill.minggu) {
+        mingguSelect.value = prefill.minggu;
+    }
+    if (isReadOnly) {
+        mingguSelect.disabled = true;
+    }
+
+    if (isReadOnly) {
+        addGuruBtn.style.display = "none";
+        saveBtn.style.display = "none";
+        statusBox.style.display = "block";
+        editBtn.style.display = "block";
+        editBtn.onclick = function () {
+            tg.sendData(JSON.stringify({
+                type: "request_edit_section",
+                section: "guru_bertugas"
+            }));
+            tg.close();
+        };
+    }
 
     // ===============================
     // SUBMIT
     // ===============================
     window.submitData = function () {
+        if (isReadOnly) return;
 
         const guruData = {};
 

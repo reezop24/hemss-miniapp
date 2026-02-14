@@ -95,10 +95,16 @@ hr {
 
 <h2>Kumpulan Guru Bertugas</h2>
 
+<div id="read-only-status" class="section" style="display:none;">
+  <div class="section-title">STATUS</div>
+  <div style="font-weight:600;">READ ONLY</div>
+  <div style="margin-top:8px; opacity:0.9;">Bahagian ini telah disimpan. Tekan butang di bawah untuk ubah semula.</div>
+</div>
+
 <div class="section">
   <div class="section-title">Senarai Guru</div>
   <div id="guru-container"></div>
-  <button type="button" class="add-btn" onclick="addBox()">+ Tambah Guru (Max 6)</button>
+  <button type="button" id="add-guru-btn" class="add-btn" onclick="addBox()">+ Tambah Guru (Max 6)</button>
 </div>
 
 <hr>
@@ -122,7 +128,8 @@ hr {
 
 <hr>
 
-<button class="save-btn" onclick="submitData()">Simpan</button>
+<button id="save-btn" class="save-btn" onclick="submitData()">Simpan</button>
+<button id="edit-btn" class="save-btn" style="display:none; margin-top:10px;">Ubah Semula</button>
 
 <datalist id="guru_list"></datalist>
 
