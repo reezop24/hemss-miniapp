@@ -39,7 +39,7 @@ function addPelajar(removable = true) {
     if (removable) {
         const btn = document.createElement("button");
         btn.innerText = "Buang";
-        btn.className = "btn-remove";
+        btn.className = "remove-btn";
         btn.onclick = function () {
             wrapper.remove();
         };
@@ -64,7 +64,7 @@ function addCatatan(removable = true) {
     if (removable) {
         const btn = document.createElement("button");
         btn.innerText = "Buang";
-        btn.className = "btn-remove";
+        btn.className = "remove-btn";
         btn.onclick = function () {
             wrapper.remove();
         };
