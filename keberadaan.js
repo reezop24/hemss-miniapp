@@ -21,15 +21,15 @@ document.addEventListener("DOMContentLoaded", function () {
     kategoriList.forEach(k => initDefault(k));
 
     function initDefault(id) {
-        addInput(id);
-        addInput(id);
+        addInput(id, false);
+        addInput(id, false);
     }
 
     window.addBox = function(id) {
-        addInput(id);
+        addInput(id, true);
     };
 
-    function addInput(sectionId) {
+    function addInput(sectionId, removable) {
         const section = document.getElementById(sectionId);
         const container = section.querySelector(".container");
 
@@ -39,16 +39,20 @@ document.addEventListener("DOMContentLoaded", function () {
         input.setAttribute("list", "guru_list");
         input.placeholder = "Nama Guru";
 
-        const removeBtn = document.createElement("button");
-        removeBtn.innerText = "Buang";
-        removeBtn.className = "secondary";
-
-        removeBtn.onclick = function () {
-            container.removeChild(wrapper);
-        };
-
         wrapper.appendChild(input);
-        wrapper.appendChild(removeBtn);
+
+        if (removable) {
+            const removeBtn = document.createElement("button");
+            removeBtn.innerText = "Buang";
+            removeBtn.className = "remove-btn";
+
+            removeBtn.onclick = function () {
+                container.removeChild(wrapper);
+            };
+
+            wrapper.appendChild(removeBtn);
+        }
+
         container.appendChild(wrapper);
     }
 

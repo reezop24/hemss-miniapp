@@ -5,61 +5,43 @@
 <title>Keberadaan Guru</title>
 
 <style>
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #1f3554;
-  color: #f1f1f1;
-  padding: 20px;
-  font-size: 16px;
-}
-
-h2 {
-  text-align: center;
-  margin-bottom: 25px;
-  font-weight: 600;
-}
-
 .section {
-  margin-bottom: 30px;
-  padding-bottom: 15px;
+  margin-bottom: 24px;
+  padding-bottom: 14px;
   border-bottom: 1px solid rgba(255,255,255,0.2);
 }
 
 .section-title {
   font-weight: 600;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 input {
-  width: 100%;
-  padding: 10px;
-  font-size: 15px;
   margin-bottom: 10px;
-  border-radius: 6px;
-  border: none;
-  box-sizing: border-box;
 }
 
-button.secondary {
-  width: 100%;
-  padding: 8px;
-  font-size: 14px;
-  border-radius: 6px;
+.add-btn {
+  width: auto;
+  padding: 6px 12px;
+  font-size: 13px;
+  border-radius: 20px;
   border: none;
   background-color: rgba(255,255,255,0.15);
+  color: white;
+}
+
+.remove-btn {
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 4px;
+  border: none;
+  background: #c0392b;
   color: white;
   margin-bottom: 8px;
 }
 
 textarea {
-  width: 100%;
   min-height: 120px;
-  padding: 12px;
-  font-size: 15px;
-  border-radius: 6px;
-  border: none;
-  box-sizing: border-box;
 }
 
 button.primary {
@@ -85,25 +67,25 @@ button.primary {
 <div id="kategori_1" class="section">
   <div class="section-title">CR / CTR / CRK / MC / KUARANTIN</div>
   <div class="container"></div>
-  <button class="secondary" onclick="addBox('kategori_1')">+ Tambah</button>
+  <button class="add-btn" onclick="addBox('kategori_1')">+ Tambah</button>
 </div>
 
 <div id="kategori_2" class="section">
   <div class="section-title">BENGKEL / MESYUARAT / TAKLIMAT</div>
   <div class="container"></div>
-  <button class="secondary" onclick="addBox('kategori_2')">+ Tambah</button>
+  <button class="add-btn" onclick="addBox('kategori_2')">+ Tambah</button>
 </div>
 
 <div id="kategori_3" class="section">
   <div class="section-title">TEMUJANJI / RAWATAN</div>
   <div class="container"></div>
-  <button class="secondary" onclick="addBox('kategori_3')">+ Tambah</button>
+  <button class="add-btn" onclick="addBox('kategori_3')">+ Tambah</button>
 </div>
 
 <div id="kategori_4" class="section">
   <div class="section-title">LAIN-LAIN</div>
   <div class="container"></div>
-  <button class="secondary" onclick="addBox('kategori_4')">+ Tambah</button>
+  <button class="add-btn" onclick="addBox('kategori_4')">+ Tambah</button>
 </div>
 
 <div class="section">
@@ -118,7 +100,6 @@ button.primary {
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="nameset.js"></script>
 <script src="keberadaan.js"></script>
-
 <script src="brand.js"></script>
 
 </body>
