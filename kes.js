@@ -13,14 +13,14 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    addKes(); // default 1 kes
+    addKes(false); // default 1 kes (tanpa butang buang)
 });
 
 
 // ===============================
 // TAMBAH KES
 // ===============================
-function addKes() {
+function addKes(removable = true) {
 
     const container = document.getElementById("kes_container");
 
@@ -40,20 +40,28 @@ function addKes() {
 
         <label>Nama Pelajar Terlibat</label>
         <div class="pelajar_container"></div>
-        <button class="btn btn-add btn-small">+ Tambah Nama</button>
+        <button class="add-btn btn-small">+ Tambah Nama</button>
 
         <label>Keterangan Kejadian</label>
         <div class="keterangan_container"></div>
-        <button class="btn btn-add btn-small">+ Tambah Keterangan</button>
-
-        <button class="btn btn-remove">Buang Laporan</button>
+        <button class="add-btn btn-small">+ Tambah Keterangan</button>
     `;
+
+    if (removable) {
+        const btnBuang = document.createElement("button");
+        btnBuang.className = "remove-btn";
+        btnBuang.innerText = "Buang Laporan";
+        btnBuang.onclick = function () {
+            wrapper.remove();
+        };
+        wrapper.appendChild(btnBuang);
+    }
 
     container.appendChild(wrapper);
 
     const btnTambahNama = wrapper.querySelectorAll(".btn-small")[0];
     const btnTambahKeterangan = wrapper.querySelectorAll(".btn-small")[1];
-    const btnBuangLaporan = wrapper.querySelector(".btn-remove");
+    const btnBuangLaporan = wrapper.querySelector(".remove-btn");
 
     btnTambahNama.onclick = function () {
         addPelajar(wrapper);
@@ -63,20 +71,22 @@ function addKes() {
         addKeterangan(wrapper);
     };
 
-    btnBuangLaporan.onclick = function () {
-        wrapper.remove();
-    };
+    if (btnBuangLaporan) {
+        btnBuangLaporan.onclick = function () {
+            wrapper.remove();
+        };
+    }
 
     // default 1 pelajar & 1 keterangan
-    addPelajar(wrapper);
-    addKeterangan(wrapper);
+    addPelajar(wrapper, false);
+    addKeterangan(wrapper, false);
 }
 
 
 // ===============================
 // TAMBAH / BUANG PELAJAR
 // ===============================
-function addPelajar(sectionWrapper) {
+function addPelajar(sectionWrapper, removable = true) {
 
     const container = sectionWrapper.querySelector(".pelajar_container");
 
@@ -85,17 +95,19 @@ function addPelajar(sectionWrapper) {
     const input = document.createElement("input");
     input.placeholder = "Nama Pelajar";
 
-    const removeBtn = document.createElement("button");
-    removeBtn.innerText = "Buang";
-    removeBtn.className = "btn btn-remove btn-small";
-    removeBtn.style.marginBottom = "10px";
-
-    removeBtn.onclick = function () {
-        row.remove();
-    };
-
     row.appendChild(input);
-    row.appendChild(removeBtn);
+
+    if (removable) {
+        const removeBtn = document.createElement("button");
+        removeBtn.innerText = "Buang";
+        removeBtn.className = "remove-btn btn-small";
+        removeBtn.style.marginBottom = "10px";
+
+        removeBtn.onclick = function () {
+            row.remove();
+        };
+        row.appendChild(removeBtn);
+    }
 
     container.appendChild(row);
 }
@@ -104,7 +116,7 @@ function addPelajar(sectionWrapper) {
 // ===============================
 // TAMBAH / BUANG KETERANGAN
 // ===============================
-function addKeterangan(sectionWrapper) {
+function addKeterangan(sectionWrapper, removable = true) {
 
     const container = sectionWrapper.querySelector(".keterangan_container");
 
@@ -113,17 +125,19 @@ function addKeterangan(sectionWrapper) {
     const textarea = document.createElement("textarea");
     textarea.placeholder = "Keterangan kejadian";
 
-    const removeBtn = document.createElement("button");
-    removeBtn.innerText = "Buang";
-    removeBtn.className = "btn btn-remove btn-small";
-    removeBtn.style.marginBottom = "10px";
-
-    removeBtn.onclick = function () {
-        row.remove();
-    };
-
     row.appendChild(textarea);
-    row.appendChild(removeBtn);
+
+    if (removable) {
+        const removeBtn = document.createElement("button");
+        removeBtn.innerText = "Buang";
+        removeBtn.className = "remove-btn btn-small";
+        removeBtn.style.marginBottom = "10px";
+
+        removeBtn.onclick = function () {
+            row.remove();
+        };
+        row.appendChild(removeBtn);
+    }
 
     container.appendChild(row);
 }
