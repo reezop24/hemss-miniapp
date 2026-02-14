@@ -1,5 +1,17 @@
 const tg = window.Telegram.WebApp;
 tg.expand();
+const params = new URLSearchParams(window.location.search);
+const mode = (params.get("mode") || "edit").toLowerCase();
+const isReadOnly = mode === "view";
+let prefill = {};
+try {
+    const rawPrefill = params.get("prefill");
+    if (rawPrefill) {
+        prefill = JSON.parse(rawPrefill);
+    }
+} catch (e) {
+    prefill = {};
+}
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -13,14 +25,44 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    addKes(false); // default 1 kes (tanpa butang buang)
+    const savedList = Array.isArray(prefill.senarai_kes) ? prefill.senarai_kes : [];
+    if (savedList.length > 0) {
+        savedList.forEach((item, idx) => addKes(idx > 0, item || {}));
+    } else {
+        addKes(false); // default 1 kes (tanpa butang buang)
+    }
+
+    const pelaporEl = document.getElementById("pelapor");
+    if (prefill.pelapor) {
+        pelaporEl.value = prefill.pelapor;
+    }
+
+    if (isReadOnly) {
+        pelaporEl.disabled = true;
+        document.querySelectorAll(".add-btn").forEach(btn => btn.style.display = "none");
+        const saveBtn = document.querySelector("button.btn-save[onclick='submitKes()']");
+        const statusBox = document.getElementById("read-only-status");
+        const editBtn = document.getElementById("edit-btn");
+        if (saveBtn) saveBtn.style.display = "none";
+        if (statusBox) statusBox.style.display = "block";
+        if (editBtn) {
+            editBtn.style.display = "block";
+            editBtn.onclick = function () {
+                tg.sendData(JSON.stringify({
+                    type: "request_edit_section",
+                    section: "kes"
+                }));
+                tg.close();
+            };
+        }
+    }
 });
 
 
 // ===============================
 // TAMBAH KES
 // ===============================
-function addKes(removable = true) {
+function addKes(removable = true, preset = {}) {
 
     const container = document.getElementById("kes_container");
 
@@ -47,7 +89,7 @@ function addKes(removable = true) {
         <button class="add-btn btn-small">+ Tambah Keterangan</button>
     `;
 
-    if (removable) {
+    if (removable && !isReadOnly) {
         const btnBuang = document.createElement("button");
         btnBuang.className = "remove-btn";
         btnBuang.innerText = "Buang Laporan";
@@ -63,30 +105,58 @@ function addKes(removable = true) {
     const btnTambahKeterangan = wrapper.querySelectorAll(".btn-small")[1];
     const btnBuangLaporan = wrapper.querySelector(".remove-btn");
 
-    btnTambahNama.onclick = function () {
-        addPelajar(wrapper);
-    };
+    if (!isReadOnly) {
+        btnTambahNama.onclick = function () {
+            addPelajar(wrapper);
+        };
 
-    btnTambahKeterangan.onclick = function () {
-        addKeterangan(wrapper);
-    };
+        btnTambahKeterangan.onclick = function () {
+            addKeterangan(wrapper);
+        };
+    } else {
+        btnTambahNama.style.display = "none";
+        btnTambahKeterangan.style.display = "none";
+    }
 
-    if (btnBuangLaporan) {
+    if (btnBuangLaporan && !isReadOnly) {
         btnBuangLaporan.onclick = function () {
             wrapper.remove();
         };
     }
 
-    // default 1 pelajar & 1 keterangan
-    addPelajar(wrapper, false);
-    addKeterangan(wrapper, false);
+    const jenisSelect = wrapper.querySelector(".jenis");
+    if (preset.jenis) {
+        jenisSelect.value = preset.jenis;
+    }
+    if (isReadOnly) {
+        jenisSelect.disabled = true;
+    }
+
+    // default / prefill pelajar & keterangan
+    const savedPelajar = Array.isArray(preset.pelajar) ? preset.pelajar : [];
+    const savedKeterangan = Array.isArray(preset.keterangan) ? preset.keterangan : [];
+    if (savedPelajar.length > 0) {
+        savedPelajar.forEach((item, idx) => addPelajar(wrapper, idx > 0, item));
+    } else {
+        addPelajar(wrapper, false);
+    }
+
+    if (savedKeterangan.length > 0) {
+        savedKeterangan.forEach((item, idx) => addKeterangan(wrapper, idx > 0, item));
+    } else {
+        addKeterangan(wrapper, false);
+    }
+
+    if (isReadOnly) {
+        wrapper.querySelectorAll("input, textarea").forEach(el => el.disabled = true);
+    }
 }
 
 
 // ===============================
 // TAMBAH / BUANG PELAJAR
 // ===============================
-function addPelajar(sectionWrapper, removable = true) {
+function addPelajar(sectionWrapper, removable = true, value = "") {
 
     const container = sectionWrapper.querySelector(".pelajar_container");
 
@@ -94,10 +164,14 @@ function addPelajar(sectionWrapper, removable = true) {
 
     const input = document.createElement("input");
     input.placeholder = "Nama Pelajar";
+    input.value = value || "";
+    if (isReadOnly) {
+        input.disabled = true;
+    }
 
     row.appendChild(input);
 
-    if (removable) {
+    if (removable && !isReadOnly) {
         const removeBtn = document.createElement("button");
         removeBtn.innerText = "Buang";
         removeBtn.className = "remove-btn btn-small";
@@ -116,7 +190,7 @@ function addPelajar(sectionWrapper, removable = true) {
 // ===============================
 // TAMBAH / BUANG KETERANGAN
 // ===============================
-function addKeterangan(sectionWrapper, removable = true) {
+function addKeterangan(sectionWrapper, removable = true, value = "") {
 
     const container = sectionWrapper.querySelector(".keterangan_container");
 
@@ -124,10 +198,14 @@ function addKeterangan(sectionWrapper, removable = true) {
 
     const textarea = document.createElement("textarea");
     textarea.placeholder = "Keterangan kejadian";
+    textarea.value = value || "";
+    if (isReadOnly) {
+        textarea.disabled = true;
+    }
 
     row.appendChild(textarea);
 
-    if (removable) {
+    if (removable && !isReadOnly) {
         const removeBtn = document.createElement("button");
         removeBtn.innerText = "Buang";
         removeBtn.className = "remove-btn btn-small";
@@ -147,6 +225,7 @@ function addKeterangan(sectionWrapper, removable = true) {
 // SUBMIT
 // ===============================
 function submitKes() {
+    if (isReadOnly) return;
 
     const pelapor = document.getElementById("pelapor").value;
 

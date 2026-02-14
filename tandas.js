@@ -1,5 +1,17 @@
 const tg = window.Telegram.WebApp;
 tg.expand();
+const params = new URLSearchParams(window.location.search);
+const mode = (params.get("mode") || "edit").toLowerCase();
+const isReadOnly = mode === "view";
+let prefill = {};
+try {
+    const rawPrefill = params.get("prefill");
+    if (rawPrefill) {
+        prefill = JSON.parse(rawPrefill);
+    }
+} catch (e) {
+    prefill = {};
+}
 
 /* =========================
    LOAD NAME SET (DATALIST)
@@ -21,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 const OPTION = ["", "Memuaskan", "Kurang memuaskan"];
 
-function createDropdown(label) {
+function createDropdown(label, value = "") {
 
     const wrapper = document.createElement("div");
 
@@ -36,6 +48,12 @@ function createDropdown(label) {
         option.text = opt === "" ? "- Sila Pilih -" : opt;
         select.appendChild(option);
     });
+    if (value) {
+        select.value = value;
+    }
+    if (isReadOnly) {
+        select.disabled = true;
+    }
 
     wrapper.appendChild(title);
     wrapper.appendChild(select);
@@ -43,19 +61,23 @@ function createDropdown(label) {
     return { wrapper, select };
 }
 
-function createUlasanSection() {
+function createUlasanSection(savedUlasan = []) {
 
     const container = document.createElement("div");
 
-    function addUlasan(removable = true) {
+    function addUlasan(removable = true, value = "") {
         const wrap = document.createElement("div");
 
         const textarea = document.createElement("textarea");
         textarea.placeholder = "ULASAN";
+        textarea.value = value || "";
+        if (isReadOnly) {
+            textarea.disabled = true;
+        }
 
         wrap.appendChild(textarea);
 
-        if (removable) {
+        if (removable && !isReadOnly) {
             const btn = document.createElement("button");
             btn.innerText = "Buang";
             btn.className = "remove-btn";
@@ -70,14 +92,20 @@ function createUlasanSection() {
     addBtn.innerText = "+ Tambah Ulasan";
     addBtn.className = "add-btn";
     addBtn.onclick = () => addUlasan(true);
+    if (isReadOnly) {
+        addBtn.style.display = "none";
+    }
 
-    // Default 1 ulasan tanpa butang buang
-    addUlasan(false);
+    if (Array.isArray(savedUlasan) && savedUlasan.length > 0) {
+        savedUlasan.forEach((item, idx) => addUlasan(idx > 0, item));
+    } else {
+        addUlasan(false);
+    }
 
     return { container, addBtn };
 }
 
-function createBlok(title, fields) {
+function createBlok(title, fields, savedBlok = {}) {
 
     const section = document.createElement("div");
     section.className = "section";
@@ -89,12 +117,12 @@ function createBlok(title, fields) {
     const selects = {};
 
     fields.forEach(f => {
-        const dd = createDropdown(f);
+        const dd = createDropdown(f, savedBlok[f] || "");
         selects[f] = dd.select;
         section.appendChild(dd.wrapper);
     });
 
-    const ulasan = createUlasanSection();
+    const ulasan = createUlasanSection(savedBlok.ulasan || []);
     section.appendChild(ulasan.container);
     section.appendChild(ulasan.addBtn);
 
@@ -106,23 +134,48 @@ const container = document.getElementById("container");
 const blokT1 = createBlok("BLOK TINGKATAN 1", [
     "Tandas Lelaki",
     "Tandas Perempuan"
-]);
+], prefill.blok_t1 || {});
 
 const blokBangunan = createBlok("BLOK BANGUNAN BARU", [
     "Tandas Lelaki",
     "Tandas Perempuan"
-]);
+], prefill.blok_bangunan_baru || {});
 
 const blokTengah = createBlok("BLOK TENGAH", [
     "Tandas Lelaki",
     "Tandas Perempuan",
     "Tandas Guru Lelaki",
     "Tandas Guru Perempuan"
-]);
+], prefill.blok_tengah || {});
 
 container.appendChild(blokT1.section);
 container.appendChild(blokBangunan.section);
 container.appendChild(blokTengah.section);
+
+document.addEventListener("DOMContentLoaded", function () {
+    const pelaporEl = document.querySelector("input[list='guru_list']");
+    if (prefill.pelapor) {
+        pelaporEl.value = prefill.pelapor;
+    }
+    if (isReadOnly) {
+        pelaporEl.disabled = true;
+        const saveBtn = document.querySelector("button.btn-save[onclick='submitTandas()']");
+        const statusBox = document.getElementById("read-only-status");
+        const editBtn = document.getElementById("edit-btn");
+        if (saveBtn) saveBtn.style.display = "none";
+        if (statusBox) statusBox.style.display = "block";
+        if (editBtn) {
+            editBtn.style.display = "block";
+            editBtn.onclick = function () {
+                tg.sendData(JSON.stringify({
+                    type: "request_edit_section",
+                    section: "tandas"
+                }));
+                tg.close();
+            };
+        }
+    }
+});
 
 function collectBlok(blok) {
 
@@ -142,6 +195,7 @@ function collectBlok(blok) {
 }
 
 function submitTandas() {
+    if (isReadOnly) return;
 
     const pelapor =
         document.querySelector("input[list='guru_list']").value;

@@ -1,5 +1,17 @@
 const tg = window.Telegram.WebApp;
 tg.expand();
+const params = new URLSearchParams(window.location.search);
+const mode = (params.get("mode") || "edit").toLowerCase();
+const isReadOnly = mode === "view";
+let prefill = {};
+try {
+    const rawPrefill = params.get("prefill");
+    if (rawPrefill) {
+        prefill = JSON.parse(rawPrefill);
+    }
+} catch (e) {
+    prefill = {};
+}
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -14,17 +26,52 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // 3 default pelajar
-    for (let i = 0; i < 3; i++) {
-        addPelajar(false);
+    const savedPelajar = Array.isArray(prefill.pelajar_lewat) ? prefill.pelajar_lewat : [];
+    const savedCatatan = Array.isArray(prefill.catatan) ? prefill.catatan : [];
+
+    if (savedPelajar.length > 0) {
+        savedPelajar.forEach((item, idx) => addPelajar(idx >= 3, item));
+    } else {
+        for (let i = 0; i < 3; i++) addPelajar(false);
     }
 
-    // 1 default catatan (tidak boleh buang)
-    addCatatan(false);
+    if (savedCatatan.length > 0) {
+        savedCatatan.forEach((item, idx) => addCatatan(idx > 0, item));
+    } else {
+        addCatatan(false);
+    }
+
+    const pelaporEl = document.querySelectorAll(".input-box")[0];
+    if (prefill.pelapor) {
+        pelaporEl.value = prefill.pelapor;
+    }
+
+    if (isReadOnly) {
+        pelaporEl.disabled = true;
+        document.querySelectorAll("#pelajar_container input, #catatan_container textarea").forEach(el => {
+            el.disabled = true;
+        });
+        document.querySelectorAll(".add-btn").forEach(btn => btn.style.display = "none");
+        const saveBtn = document.querySelector("button.btn-save[onclick='submitPagar()']");
+        const statusBox = document.getElementById("read-only-status");
+        const editBtn = document.getElementById("edit-btn");
+        if (saveBtn) saveBtn.style.display = "none";
+        if (statusBox) statusBox.style.display = "block";
+        if (editBtn) {
+            editBtn.style.display = "block";
+            editBtn.onclick = function () {
+                tg.sendData(JSON.stringify({
+                    type: "request_edit_section",
+                    section: "laporan_pagar"
+                }));
+                tg.close();
+            };
+        }
+    }
 });
 
 
-function addPelajar(removable = true) {
+function addPelajar(removable = true, value = "") {
 
     const container = document.getElementById("pelajar_container");
 
@@ -33,10 +80,14 @@ function addPelajar(removable = true) {
     const input = document.createElement("input");
     input.className = "input-box";
     input.placeholder = "Nama Pelajar";
+    input.value = value || "";
+    if (isReadOnly) {
+        input.disabled = true;
+    }
 
     wrapper.appendChild(input);
 
-    if (removable) {
+    if (removable && !isReadOnly) {
         const btn = document.createElement("button");
         btn.innerText = "Buang";
         btn.className = "remove-btn";
@@ -50,7 +101,7 @@ function addPelajar(removable = true) {
 }
 
 
-function addCatatan(removable = true) {
+function addCatatan(removable = true, value = "") {
 
     const container = document.getElementById("catatan_container");
 
@@ -58,10 +109,14 @@ function addCatatan(removable = true) {
 
     const textarea = document.createElement("textarea");
     textarea.placeholder = "Catatan";
+    textarea.value = value || "";
+    if (isReadOnly) {
+        textarea.disabled = true;
+    }
 
     wrapper.appendChild(textarea);
 
-    if (removable) {
+    if (removable && !isReadOnly) {
         const btn = document.createElement("button");
         btn.innerText = "Buang";
         btn.className = "remove-btn";
@@ -76,6 +131,7 @@ function addCatatan(removable = true) {
 
 
 function submitPagar() {
+    if (isReadOnly) return;
 
     const pelapor =
         document.querySelectorAll(".input-box")[0].value;
