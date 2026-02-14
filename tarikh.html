@@ -37,6 +37,9 @@ label {
 
 input, select {
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    min-width: 0;
     padding: 14px;
     border-radius: 10px;
     border: none;
@@ -44,8 +47,16 @@ input, select {
     margin-bottom: 15px;
 }
 
+input[type="date"] {
+    display: block;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
 .btn {
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
     padding: 14px;
     border-radius: 10px;
     border: none;
@@ -53,6 +64,17 @@ input, select {
     margin-top: 10px;
     background: #2ecc71;
     color: white;
+}
+
+.section {
+    overflow: hidden;
+}
+
+.tarikh-warning {
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.92);
 }
 </style>
 
@@ -76,6 +98,10 @@ input, select {
     </select>
 
     <button class="btn" onclick="submitTarikh()">Teruskan</button>
+
+    <div class="tarikh-warning">
+        ⚠️ Sila pastikan tarikh dan sesi yang dipilih benar-benar mengikut jadual giliran bertugas anda.
+    </div>
 
 </div>
 
