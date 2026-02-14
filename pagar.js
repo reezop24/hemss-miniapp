@@ -88,12 +88,6 @@ function submitPagar() {
         });
 
     const catatan = [];
-
-    const catatanPelajar = document.getElementById("catatan_pelajar");
-    if (catatanPelajar && catatanPelajar.value.trim()) {
-        catatan.push(catatanPelajar.value.trim());
-    }
-
     document.querySelectorAll("#catatan_container textarea")
         .forEach(t => {
             if (t.value.trim())
