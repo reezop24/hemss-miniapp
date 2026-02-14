@@ -57,21 +57,33 @@ textarea {
     border: none;
     font-size: 16px;
     margin-top: 8px;
-}
-
-.btn-add {
-    background: #3c8dbc;
-    color: white;
-}
-
-.btn-remove {
-    background: #6c7f99;
+    background: #2ecc71;
     color: white;
 }
 
 .btn-save {
     background: #2ecc71;
     color: white;
+}
+
+.add-btn {
+    width: auto;
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: 20px;
+    border: none;
+    background-color: rgba(255,255,255,0.15);
+    color: white;
+}
+
+.remove-btn {
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+    border: none;
+    background: #c0392b;
+    color: white;
+    margin-bottom: 8px;
 }
 
 .suggestion-box {
@@ -99,14 +111,12 @@ textarea {
        class="input-box"
        list="guru_list"
        placeholder="Nama Pelapor">
-</div>
-
-<div class="section">
+       
     <h3>Ulasan</h3>
 
     <div id="komen_kantin"></div>
 
-    <button class="btn btn-add" onclick="addKomen()">+ Tambah Ulasan</button>
+    <button class="add-btn" onclick="addKomen()">+ Tambah Ulasan</button>
 </div>
 <datalist id="guru_list"></datalist>
 <button class="btn btn-save" onclick="submitKantin()">💾 Simpan</button>

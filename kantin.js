@@ -11,25 +11,31 @@ document.addEventListener("DOMContentLoaded", function () {
             datalist.appendChild(option);
         });
     }
+
+    // Default 1 ruang ulasan tanpa butang buang
+    addKomen(false);
 });
 
-function addKomen() {
+function addKomen(removable = true) {
     const container = document.getElementById("komen_kantin");
 
     const wrapper = document.createElement("div");
 
     const textarea = document.createElement("textarea");
-    textarea.placeholder = "Komen Kantin";
-
-    const removeBtn = document.createElement("button");
-    removeBtn.innerText = "Buang";
-    removeBtn.className = "btn btn-remove";
-    removeBtn.onclick = function () {
-        wrapper.remove();
-    };
+    textarea.placeholder = "ULASAN";
 
     wrapper.appendChild(textarea);
-    wrapper.appendChild(removeBtn);
+
+    if (removable) {
+        const removeBtn = document.createElement("button");
+        removeBtn.innerText = "Buang";
+        removeBtn.className = "remove-btn";
+        removeBtn.onclick = function () {
+            wrapper.remove();
+        };
+        wrapper.appendChild(removeBtn);
+    }
+
     container.appendChild(wrapper);
 }
 
