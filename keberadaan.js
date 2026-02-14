@@ -80,6 +80,8 @@ document.addEventListener("DOMContentLoaded", function () {
             data: result,
             catatan: catatan
         }));
+
+        tg.close();
     };
 
 });

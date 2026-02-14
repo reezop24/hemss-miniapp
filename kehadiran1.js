@@ -126,6 +126,8 @@ document.addEventListener("DOMContentLoaded", function () {
             total_daftar: totalDaftar,
             peratus: peratus
         }));
+
+        tg.close();
     };
 
 });
