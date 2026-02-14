@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Galeri Laporan</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      font-size: 16px;
+    }
+
+    button {
+      margin-top: 20px;
+      background: #0088cc;
+      color: white;
+      border: none;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>🗂 Galeri Laporan</h2>
+
+    <label>Tarikh</label>
+    <input type="date" id="tarikh" />
+
+    <label>Sesi</label>
+    <select id="sesi">
+      <option value="">- Sila Pilih -</option>
+      <option value="PAGI">PAGI</option>
+      <option value="PETANG">PETANG</option>
+    </select>
+
+    <button onclick="submitData()">Cari Laporan</button>
+  </div>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+
+    function submitData() {
+
+      const tarikh = document.getElementById("tarikh").value;
+      const sesi = document.getElementById("sesi").value;
+
+      if (!tarikh || !sesi) {
+        alert("Sila pilih tarikh dan sesi.");
+        return;
+      }
+
+      const payload = {
+        type: "galeri_laporan",
+        date: tarikh,
+        sesi: sesi
+      };
+
+      tg.sendData(JSON.stringify(payload));
+    }
+  </script>
+
+</body>
+</html>
