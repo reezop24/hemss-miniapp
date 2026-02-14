@@ -5,6 +5,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const params = new URLSearchParams(window.location.search);
     const tingkatan = params.get("tingkatan");
+    const mode = (params.get("mode") || "edit").toLowerCase();
+    const isReadOnly = mode === "view";
+    let prefill = {};
+    try {
+        const rawPrefill = params.get("prefill");
+        if (rawPrefill) {
+            prefill = JSON.parse(rawPrefill);
+        }
+    } catch (e) {
+        prefill = {};
+    }
 
     if (!tingkatan) {
         alert("Tingkatan tidak diterima.");
@@ -52,6 +63,19 @@ document.addEventListener("DOMContentLoaded", function () {
         kelasContainer.appendChild(row);
     });
 
+    // Prefill data jika dibuka mode view/edit dengan data sedia ada
+    const savedClasses = prefill.classes && typeof prefill.classes === "object"
+        ? prefill.classes
+        : {};
+    kelasList.forEach((kelasNama, index) => {
+        const saved = savedClasses[kelasNama];
+        if (!saved) return;
+        const hadirInput = document.getElementById(`hadir_${index}`);
+        const daftarInput = document.getElementById(`daftar_${index}`);
+        if (typeof saved.hadir !== "undefined") hadirInput.value = saved.hadir;
+        if (typeof saved.daftar !== "undefined") daftarInput.value = saved.daftar;
+    });
+
     // =========================
     // AUTO KIRA
     // =========================
@@ -88,12 +112,38 @@ document.addEventListener("DOMContentLoaded", function () {
             kiraSemula();
         }
     });
+    kiraSemula();
+
+    if (isReadOnly) {
+        document.querySelectorAll(".input-box").forEach(input => {
+            input.disabled = true;
+        });
+
+        const saveBtn = document.querySelector("button[onclick='submitData()']");
+        const statusBox = document.getElementById("read-only-status");
+        const editBtn = document.getElementById("edit-btn");
+
+        if (saveBtn) saveBtn.style.display = "none";
+        if (statusBox) statusBox.style.display = "block";
+        if (editBtn) {
+            editBtn.style.display = "block";
+            editBtn.onclick = function () {
+                tg.sendData(JSON.stringify({
+                    type: "request_edit_section",
+                    section: "kehadiran",
+                    tingkatan: tingkatan
+                }));
+                tg.close();
+            };
+        }
+    }
 
     // =========================
     // SUBMIT
     // =========================
 
     window.submitData = function () {
+        if (isReadOnly) return;
 
         const data = {};
         let totalHadir = 0;
