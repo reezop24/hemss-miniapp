@@ -29,13 +29,17 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // Default 1 ruang ucapan untuk setiap bahagian
+    addKomen("pentadbir", false);
+    addKomen("guru", false);
+
 });
 
 
 /* =========================
    TAMBAH / BUANG KOMEN
 ========================= */
-function addKomen(type) {
+function addKomen(type, removable = true) {
 
     const container = document.getElementById(
         type === "pentadbir" ? "komen_pentadbir" : "komen_guru"
@@ -45,17 +49,19 @@ function addKomen(type) {
     wrapper.style.marginBottom = "10px";
 
     const textarea = document.createElement("textarea");
-    textarea.placeholder = "Pengumuman / Ucapan";
-
-    const removeBtn = document.createElement("button");
-    removeBtn.innerText = "Buang";
-    removeBtn.className = "btn btn-remove";
-    removeBtn.onclick = function () {
-        wrapper.remove();
-    };
+    textarea.placeholder = "Ucapan";
 
     wrapper.appendChild(textarea);
-    wrapper.appendChild(removeBtn);
+
+    if (removable) {
+        const removeBtn = document.createElement("button");
+        removeBtn.innerText = "Buang";
+        removeBtn.className = "remove-btn";
+        removeBtn.onclick = function () {
+            wrapper.remove();
+        };
+        wrapper.appendChild(removeBtn);
+    }
 
     container.appendChild(wrapper);
 }
