@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
   brand.className = 'hemss-brand';
   brand.innerHTML = [
     '<img src="logo.png" alt="Logo Sekolah" class="hemss-logo">',
-    '<div class="hemss-title">Unit HEMSS</div>'
+    '<div class="hemss-title">Unit HEM Seri Sendayan</div>'
   ].join('');
 
   const firstHeading = body.querySelector('h2');
