@@ -15,18 +15,16 @@ try {
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    const datalist = document.getElementById("guru_list");
-    const allowedPelapor = Array.isArray(prefill.guru_pelapor_list) ? prefill.guru_pelapor_list : [];
-
-    if (allowedPelapor.length > 0) {
-        allowedPelapor.forEach(name => {
-            const option = document.createElement("option");
-            option.value = name;
-            datalist.appendChild(option);
-        });
-    } else if (!isReadOnly) {
-        alert("Sila isi Bahagian 1 (Nama Guru Bertugas) dahulu.");
-    }
+    const pelaporSelect = document.getElementById("pelapor");
+    const allowedPelapor = Array.isArray(prefill.guru_pelapor_list)
+        ? prefill.guru_pelapor_list.map(v => (v || "").trim()).filter(Boolean)
+        : [];
+    allowedPelapor.forEach(name => {
+        const option = document.createElement("option");
+        option.value = name;
+        option.textContent = name;
+        pelaporSelect.appendChild(option);
+    });
 
     const savedList = Array.isArray(prefill.senarai_kes) ? prefill.senarai_kes : [];
     if (savedList.length > 0) {
@@ -231,7 +229,9 @@ function submitKes() {
     if (isReadOnly) return;
 
     const pelapor = document.getElementById("pelapor").value.trim();
-    const allowedPelapor = Array.isArray(prefill.guru_pelapor_list) ? prefill.guru_pelapor_list : [];
+    const allowedPelapor = Array.isArray(prefill.guru_pelapor_list)
+        ? prefill.guru_pelapor_list.map(v => (v || "").trim()).filter(Boolean)
+        : [];
     if (!pelapor) {
         alert("Sila isi nama guru pelapor.");
         return;

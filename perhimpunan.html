@@ -117,7 +117,7 @@ textarea {
     <input type="text"
            id="nama_guru"
            class="input-box"
-           list="guru_list"
+           list="guru_bertugas_list"
            placeholder="Nama Guru Bertugas">
 
     <div id="komen_guru"></div>
@@ -133,17 +133,15 @@ textarea {
 <div class="section">
     <h3>Nama Guru Pelapor</h3>
 
-    <input type="text"
-           id="nama_pelapor"
-           class="input-box"
-           list="guru_list"
-           placeholder="Nama Pelapor">
+    <select id="nama_pelapor" class="input-box">
+        <option value="">- Sila Pilih Nama Guru Pelapor -</option>
+    </select>
 </div>
 
 <!-- ====================== -->
 <!-- DATA LIST -->
 <!-- ====================== -->
-<datalist id="guru_list"></datalist>
+<datalist id="guru_bertugas_list"></datalist>
 <datalist id="pentadbir_list"></datalist>
 
 <button class="btn btn-save" onclick="submitPerhimpunan()">

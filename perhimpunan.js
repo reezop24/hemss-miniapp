@@ -16,23 +16,31 @@ try {
 document.addEventListener("DOMContentLoaded", function () {
 
     // =========================
-    // LOAD NAME_SET (GURU)
+    // LOAD GURU BERTUGAS (DATALIST)
     // =========================
-    const guruList = document.getElementById("guru_list");
+    const guruBertugasList = document.getElementById("guru_bertugas_list");
+    if (typeof NAME_SET !== "undefined") {
+        NAME_SET.forEach(name => {
+            const option = document.createElement("option");
+            option.value = name;
+            guruBertugasList.appendChild(option);
+        });
+    }
+
+    // =========================
+    // LOAD GURU PELAPOR (SELECT)
+    // =========================
+    const pelaporSelect = document.getElementById("nama_pelapor");
     const allowedPelapor = Array.isArray(prefill.guru_pelapor_list)
         ? prefill.guru_pelapor_list.map(v => (v || "").trim()).filter(Boolean)
         : [];
-    const allowedSet = new Set(allowedPelapor);
 
     allowedPelapor.forEach(name => {
         const option = document.createElement("option");
         option.value = name;
-        guruList.appendChild(option);
+        option.textContent = name;
+        pelaporSelect.appendChild(option);
     });
-
-    if (!isReadOnly && allowedPelapor.length === 0) {
-        alert("Sila lengkapkan Bahagian 1 (Kumpulan Guru Bertugas) terlebih dahulu.");
-    }
 
     // =========================
     // LOAD NAME_PENTADBIR
@@ -69,13 +77,13 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("nama_guru").value = prefill.guru_bertugas.nama;
     }
     if (prefill?.pelapor) {
-        document.getElementById("nama_pelapor").value = prefill.pelapor;
+        pelaporSelect.value = prefill.pelapor;
     }
 
     if (isReadOnly) {
         document.getElementById("nama_pentadbir").disabled = true;
         document.getElementById("nama_guru").disabled = true;
-        document.getElementById("nama_pelapor").disabled = true;
+        pelaporSelect.disabled = true;
         document.querySelectorAll("textarea").forEach(t => t.disabled = true);
         document.querySelectorAll(".add-btn").forEach(btn => btn.style.display = "none");
 
@@ -181,7 +189,7 @@ function submitPerhimpunan() {
                 nama: namaGuru,
                 komen: komenGuru
             },
-            pelapor: namaPelapor
+            pelapor: pelaporTrimmed
         }
     }));
 

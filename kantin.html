@@ -107,10 +107,9 @@ textarea {
 <div class="section">
     <h3>Nama Guru Pelapor</h3>
 
-    <input type="text"
-       class="input-box"
-       list="guru_list"
-       placeholder="Nama Pelapor">
+    <select id="pelapor" class="input-box">
+        <option value="">- Sila Pilih Nama Guru Pelapor -</option>
+    </select>
        
     <h3>Ulasan</h3>
 
@@ -118,7 +117,6 @@ textarea {
 
     <button class="add-btn" onclick="addKomen()">+ Tambah Ulasan</button>
 </div>
-<datalist id="guru_list"></datalist>
 <button class="btn btn-save" onclick="submitKantin()">💾 Simpan</button>
 <div id="read-only-status" class="section" style="display:none;">
     <h3>STATUS</h3>

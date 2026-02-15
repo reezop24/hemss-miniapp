@@ -85,14 +85,12 @@ textarea {
 <div class="section">
     <h3>Nama Guru Pelapor</h3>
 
-    <input type="text"
-           list="guru_list"
-           placeholder="Nama Guru Pelapor">
+    <select id="pelapor">
+        <option value="">- Sila Pilih Nama Guru Pelapor -</option>
+    </select>
 </div>
 
 <div id="container"></div>
-
-<datalist id="guru_list"></datalist>
 
 <button class="btn btn-save" onclick="submitTandas()">💾 Simpan</button>
 <div id="read-only-status" class="section" style="display:none;">

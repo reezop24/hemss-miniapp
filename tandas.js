@@ -19,7 +19,7 @@ try {
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    const datalist = document.getElementById("guru_list");
+    const pelaporSelect = document.getElementById("pelapor");
     const allowedPelapor = Array.isArray(prefill.guru_pelapor_list)
         ? prefill.guru_pelapor_list.map(v => (v || "").trim()).filter(Boolean)
         : [];
@@ -27,12 +27,9 @@ document.addEventListener("DOMContentLoaded", function () {
     allowedPelapor.forEach(name => {
         const option = document.createElement("option");
         option.value = name;
-        datalist.appendChild(option);
+        option.textContent = name;
+        pelaporSelect.appendChild(option);
     });
-
-    if (!isReadOnly && allowedPelapor.length === 0) {
-        alert("Sila lengkapkan Bahagian 1 (Kumpulan Guru Bertugas) terlebih dahulu.");
-    }
 });
 
 
@@ -158,7 +155,7 @@ container.appendChild(blokBangunan.section);
 container.appendChild(blokTengah.section);
 
 document.addEventListener("DOMContentLoaded", function () {
-    const pelaporEl = document.querySelector("input[list='guru_list']");
+    const pelaporEl = document.getElementById("pelapor");
     if (prefill.pelapor) {
         pelaporEl.value = prefill.pelapor;
     }
@@ -203,7 +200,7 @@ function submitTandas() {
     if (isReadOnly) return;
 
     const pelapor =
-        document.querySelector("input[list='guru_list']").value;
+        document.getElementById("pelapor").value;
     const allowedPelapor = Array.isArray(prefill.guru_pelapor_list)
         ? prefill.guru_pelapor_list.map(v => (v || "").trim()).filter(Boolean)
         : [];
