@@ -9,6 +9,8 @@
   --accent-primary: #2abf73;
   --accent-secondary: #4a84d8;
   --accent-danger: #c14a4a;
+  --readonly-red: #ff5a5f;
+  --readonly-red-soft: #ff8a8e;
   --radius-md: 10px;
   --radius-sm: 6px;
   --shadow-soft: 0 8px 22px rgba(0, 0, 0, 0.18);
@@ -162,4 +164,19 @@ hr {
   letter-spacing: 0.6px;
   color: var(--text-muted);
   text-transform: uppercase;
+}
+
+/* Read-only mode styling (all laporan miniapps) */
+#read-only-status,
+#read-only-status * {
+  color: var(--readonly-red) !important;
+}
+
+input:disabled,
+select:disabled,
+textarea:disabled {
+  color: var(--readonly-red-soft) !important;
+  -webkit-text-fill-color: var(--readonly-red-soft);
+  border-color: rgba(255, 90, 95, 0.55) !important;
+  background: rgba(255, 234, 235, 0.08) !important;
 }
