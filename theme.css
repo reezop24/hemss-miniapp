@@ -171,12 +171,3 @@ hr {
 #read-only-status * {
   color: var(--readonly-red) !important;
 }
-
-input:disabled,
-select:disabled,
-textarea:disabled {
-  color: var(--readonly-red-soft) !important;
-  -webkit-text-fill-color: var(--readonly-red-soft);
-  border-color: rgba(255, 90, 95, 0.55) !important;
-  background: rgba(255, 234, 235, 0.08) !important;
-}
