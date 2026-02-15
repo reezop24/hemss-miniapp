@@ -1,94 +1,133 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Galeri Laporan</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background: #f5f5f5;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Galeri Laporan</title>
 
-    h2 {
-      text-align: center;
-    }
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="galeri.js"></script>
 
-    .container {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-    }
+<style>
+* {
+    box-sizing: border-box;
+}
 
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-    }
+body {
+    background: #243B55;
+    font-family: sans-serif;
+    color: white;
+    margin: 0;
+    padding: 20px;
+}
 
-    input, select, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      font-size: 16px;
-    }
+h2 {
+    text-align: center;
+    margin-bottom: 24px;
+}
 
-    button {
-      margin-top: 20px;
-      background: #0088cc;
-      color: white;
-      border: none;
-      border-radius: 6px;
-    }
-  </style>
+.section {
+    background: #2f4a6a;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    overflow: hidden;
+}
 
-<link rel="stylesheet" href="theme.css">
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input, select {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+input[type="date"] {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+button {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+    margin-top: 8px;
+    background: #2ecc71;
+    color: white;
+}
+
+.history-title {
+    font-size: 14px;
+    opacity: 0.95;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.history-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+}
+
+.history-item {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.empty-history {
+    opacity: 0.8;
+    font-size: 13px;
+}
+</style>
+
+<link rel="stylesheet" href="theme.css?v=20260215b">
 </head>
 <body>
 
-  <div class="container">
-    <h2>Galeri Laporan</h2>
+  <h2>GALERI LAPORAN</h2>
 
-    <label>Tarikh</label>
+  <div class="section">
+    <label for="tarikh">Tarikh Laporan</label>
     <input type="date" id="tarikh" />
 
-    <label>Sesi</label>
+    <label for="sesi">Sesi</label>
     <select id="sesi">
       <option value="">- Sila Pilih -</option>
-      <option value="PAGI">PAGI</option>
-      <option value="PETANG">PETANG</option>
+      <option value="PAGI">Pagi</option>
+      <option value="PETANG">Petang</option>
     </select>
 
-    <button onclick="submitData()">Cari Laporan</button>
+    <button id="btnCari">Cari Laporan</button>
   </div>
 
-  <script>
-    const tg = window.Telegram.WebApp;
-    tg.expand();
+  <div class="section">
+    <div class="history-title">📌 10 Laporan Terkini Diterima</div>
+    <ul id="historyList" class="history-list"></ul>
+    <div id="emptyHistory" class="empty-history" style="display:none;">
+      Tiada rekod laporan diterima setakat ini.
+    </div>
+  </div>
 
-    function submitData() {
-
-      const tarikh = document.getElementById("tarikh").value;
-      const sesi = document.getElementById("sesi").value;
-
-      if (!tarikh || !sesi) {
-        alert("Sila pilih tarikh dan sesi.");
-        return;
-      }
-
-      const payload = {
-        type: "galeri_laporan",
-        date: tarikh,
-        sesi: sesi
-      };
-
-      tg.sendData(JSON.stringify(payload));
-      tg.close();
-    }
-  </script>
-
-<script src="brand.js"></script>
+  <script src="brand.js"></script>
 
 </body>
 </html>
