@@ -95,10 +95,11 @@ const KELAS_BY_TINGKATAN = {
 
 
 const NAME_PENTADBIR = [
-  "Pengetua",
-  "PK Pentadbiran",
-  "PK HEM",
-  "PK Kokurikulum"
+  "Mohd Zaid bin Abdul Rauf",
+  "Roozana binti Maaris",
+  "Noraini binti Md Din",
+  "Mas Ayu binti Mustapa",
+  "Noraini binti Mohamad"
 ];
 
 
