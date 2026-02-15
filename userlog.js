@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const guruStat = document.getElementById("guruStat");
   const totalStat = document.getElementById("totalStat");
+  const truncateNote = document.getElementById("truncateNote");
   const userList = document.getElementById("userList");
   const emptyState = document.getElementById("emptyState");
 
@@ -39,10 +40,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const guruRegistered = Number(safe.guru_registered || 0);
     const guruTotal = Number(safe.guru_total || 0);
     const totalUsers = Number(safe.total_users || 0);
+    const truncated = Number(safe.truncated || 0);
     const rows = Array.isArray(safe.rows) ? safe.rows : [];
 
     guruStat.textContent = `Guru berdaftar: ${guruRegistered}/${guruTotal}`;
     totalStat.textContent = `Jumlah pengguna: ${totalUsers}`;
+    if (truncated > 0) {
+      truncateNote.style.display = "block";
+      truncateNote.textContent = `Paparan terhad. ${truncated} rekod lama tidak dipaparkan.`;
+    } else {
+      truncateNote.style.display = "none";
+      truncateNote.textContent = "";
+    }
 
     userList.innerHTML = "";
     if (!rows.length) {
