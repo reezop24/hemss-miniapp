@@ -15,13 +15,18 @@ try {
 
 document.addEventListener("DOMContentLoaded", function () {
     const datalist = document.getElementById("guru_list");
+    const allowedPelapor = Array.isArray(prefill.guru_pelapor_list)
+        ? prefill.guru_pelapor_list.map(v => (v || "").trim()).filter(Boolean)
+        : [];
 
-    if (typeof NAME_SET !== "undefined") {
-        NAME_SET.forEach(name => {
-            const option = document.createElement("option");
-            option.value = name;
-            datalist.appendChild(option);
-        });
+    allowedPelapor.forEach(name => {
+        const option = document.createElement("option");
+        option.value = name;
+        datalist.appendChild(option);
+    });
+
+    if (!isReadOnly && allowedPelapor.length === 0) {
+        alert("Sila lengkapkan Bahagian 1 (Kumpulan Guru Bertugas) terlebih dahulu.");
     }
 
     const savedKomen = Array.isArray(prefill.komen) ? prefill.komen : [];
@@ -88,6 +93,16 @@ function addKomen(removable = true, value = "") {
 function submitKantin() {
     if (isReadOnly) return;
     const namaPelapor = document.querySelector("input[list='guru_list']").value;
+    const allowedPelapor = Array.isArray(prefill.guru_pelapor_list)
+        ? prefill.guru_pelapor_list.map(v => (v || "").trim()).filter(Boolean)
+        : [];
+    const allowedSet = new Set(allowedPelapor);
+    const pelaporTrimmed = (namaPelapor || "").trim();
+
+    if (!allowedSet.has(pelaporTrimmed)) {
+        alert("Nama Guru Pelapor mesti dipilih daripada senarai guru bertugas (Bahagian 1).");
+        return;
+    }
 
     const komen = [];
     document.querySelectorAll("#komen_kantin textarea").forEach(t => {
@@ -99,7 +114,7 @@ function submitKantin() {
     tg.sendData(JSON.stringify({
         type: "section_kantin",
         data: {
-            pelapor: namaPelapor,
+            pelapor: pelaporTrimmed,
             komen: komen
         }
     }));

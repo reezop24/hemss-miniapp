@@ -20,13 +20,18 @@ try {
 document.addEventListener("DOMContentLoaded", function () {
 
     const datalist = document.getElementById("guru_list");
+    const allowedPelapor = Array.isArray(prefill.guru_pelapor_list)
+        ? prefill.guru_pelapor_list.map(v => (v || "").trim()).filter(Boolean)
+        : [];
 
-    if (typeof NAME_SET !== "undefined") {
-        NAME_SET.forEach(name => {
-            const option = document.createElement("option");
-            option.value = name;
-            datalist.appendChild(option);
-        });
+    allowedPelapor.forEach(name => {
+        const option = document.createElement("option");
+        option.value = name;
+        datalist.appendChild(option);
+    });
+
+    if (!isReadOnly && allowedPelapor.length === 0) {
+        alert("Sila lengkapkan Bahagian 1 (Kumpulan Guru Bertugas) terlebih dahulu.");
     }
 });
 
@@ -199,11 +204,21 @@ function submitTandas() {
 
     const pelapor =
         document.querySelector("input[list='guru_list']").value;
+    const allowedPelapor = Array.isArray(prefill.guru_pelapor_list)
+        ? prefill.guru_pelapor_list.map(v => (v || "").trim()).filter(Boolean)
+        : [];
+    const allowedSet = new Set(allowedPelapor);
+    const pelaporTrimmed = (pelapor || "").trim();
+
+    if (!allowedSet.has(pelaporTrimmed)) {
+        alert("Nama Guru Pelapor mesti dipilih daripada senarai guru bertugas (Bahagian 1).");
+        return;
+    }
 
     tg.sendData(JSON.stringify({
         type: "section_tandas",
         data: {
-            pelapor: pelapor,
+            pelapor: pelaporTrimmed,
             blok_t1: collectBlok(blokT1),
             blok_bangunan_baru: collectBlok(blokBangunan),
             blok_tengah: collectBlok(blokTengah)

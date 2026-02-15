@@ -19,13 +19,19 @@ document.addEventListener("DOMContentLoaded", function () {
     // LOAD NAME_SET (GURU)
     // =========================
     const guruList = document.getElementById("guru_list");
+    const allowedPelapor = Array.isArray(prefill.guru_pelapor_list)
+        ? prefill.guru_pelapor_list.map(v => (v || "").trim()).filter(Boolean)
+        : [];
+    const allowedSet = new Set(allowedPelapor);
 
-    if (typeof NAME_SET !== "undefined") {
-        NAME_SET.forEach(name => {
-            const option = document.createElement("option");
-            option.value = name;
-            guruList.appendChild(option);
-        });
+    allowedPelapor.forEach(name => {
+        const option = document.createElement("option");
+        option.value = name;
+        guruList.appendChild(option);
+    });
+
+    if (!isReadOnly && allowedPelapor.length === 0) {
+        alert("Sila lengkapkan Bahagian 1 (Kumpulan Guru Bertugas) terlebih dahulu.");
     }
 
     // =========================
@@ -137,6 +143,16 @@ function submitPerhimpunan() {
     const namaPentadbir = document.getElementById("nama_pentadbir").value;
     const namaGuru = document.getElementById("nama_guru").value;
     const namaPelapor = document.getElementById("nama_pelapor").value;
+    const allowedPelapor = Array.isArray(prefill.guru_pelapor_list)
+        ? prefill.guru_pelapor_list.map(v => (v || "").trim()).filter(Boolean)
+        : [];
+    const allowedSet = new Set(allowedPelapor);
+    const pelaporTrimmed = (namaPelapor || "").trim();
+
+    if (!allowedSet.has(pelaporTrimmed)) {
+        alert("Nama Guru Pelapor mesti dipilih daripada senarai guru bertugas (Bahagian 1).");
+        return;
+    }
 
     const komenPentadbir = [];
     document.querySelectorAll("#komen_pentadbir textarea")

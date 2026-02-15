@@ -15,15 +15,20 @@ try {
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    // load NAME_SET
+    // load senarai guru pelapor dari Bahagian 1
     const datalist = document.getElementById("guru_list");
+    const allowedPelapor = Array.isArray(prefill.guru_pelapor_list)
+        ? prefill.guru_pelapor_list.map(v => (v || "").trim()).filter(Boolean)
+        : [];
 
-    if (typeof NAME_SET !== "undefined") {
-        NAME_SET.forEach(name => {
-            const option = document.createElement("option");
-            option.value = name;
-            datalist.appendChild(option);
-        });
+    allowedPelapor.forEach(name => {
+        const option = document.createElement("option");
+        option.value = name;
+        datalist.appendChild(option);
+    });
+
+    if (!isReadOnly && allowedPelapor.length === 0) {
+        alert("Sila lengkapkan Bahagian 1 (Kumpulan Guru Bertugas) terlebih dahulu.");
     }
 
     const savedPelajar = Array.isArray(prefill.pelajar_lewat) ? prefill.pelajar_lewat : [];
@@ -135,6 +140,16 @@ function submitPagar() {
 
     const pelapor =
         document.querySelectorAll(".input-box")[0].value;
+    const allowedPelapor = Array.isArray(prefill.guru_pelapor_list)
+        ? prefill.guru_pelapor_list.map(v => (v || "").trim()).filter(Boolean)
+        : [];
+    const allowedSet = new Set(allowedPelapor);
+    const pelaporTrimmed = (pelapor || "").trim();
+
+    if (!allowedSet.has(pelaporTrimmed)) {
+        alert("Nama Guru Pelapor mesti dipilih daripada senarai guru bertugas (Bahagian 1).");
+        return;
+    }
 
     const pelajar_lewat = [];
     document.querySelectorAll("#pelajar_container input")
@@ -153,7 +168,7 @@ function submitPagar() {
     tg.sendData(JSON.stringify({
         type: "section_laporan_pagar",
         data: {
-            pelapor: pelapor,
+            pelapor: pelaporTrimmed,
             pelajar_lewat: pelajar_lewat,
             catatan: catatan
         }

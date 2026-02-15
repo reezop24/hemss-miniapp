@@ -16,13 +16,16 @@ try {
 document.addEventListener("DOMContentLoaded", function () {
 
     const datalist = document.getElementById("guru_list");
+    const allowedPelapor = Array.isArray(prefill.guru_pelapor_list) ? prefill.guru_pelapor_list : [];
 
-    if (typeof NAME_SET !== "undefined") {
-        NAME_SET.forEach(name => {
+    if (allowedPelapor.length > 0) {
+        allowedPelapor.forEach(name => {
             const option = document.createElement("option");
             option.value = name;
             datalist.appendChild(option);
         });
+    } else if (!isReadOnly) {
+        alert("Sila isi Bahagian 1 (Nama Guru Bertugas) dahulu.");
     }
 
     const savedList = Array.isArray(prefill.senarai_kes) ? prefill.senarai_kes : [];
@@ -227,7 +230,16 @@ function addKeterangan(sectionWrapper, removable = true, value = "") {
 function submitKes() {
     if (isReadOnly) return;
 
-    const pelapor = document.getElementById("pelapor").value;
+    const pelapor = document.getElementById("pelapor").value.trim();
+    const allowedPelapor = Array.isArray(prefill.guru_pelapor_list) ? prefill.guru_pelapor_list : [];
+    if (!pelapor) {
+        alert("Sila isi nama guru pelapor.");
+        return;
+    }
+    if (allowedPelapor.length > 0 && !allowedPelapor.includes(pelapor)) {
+        alert("Nama guru pelapor mesti dari senarai Guru Bertugas (Bahagian 1).");
+        return;
+    }
 
     const allKes = [];
 
