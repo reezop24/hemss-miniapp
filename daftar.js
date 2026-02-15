@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function updateStatusGuru() {
     const value = (input.value || "").trim();
     if (Array.isArray(NAME_SET) && NAME_SET.includes(value)) {
-      statusGuruEl.textContent = "Status: Guru";
+      statusGuruEl.textContent = "Guru";
       return true;
     }
     statusGuruEl.textContent = "";
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const jawatan = (typeof PENTADBIR_JAWATAN === "object" && PENTADBIR_JAWATAN[value])
         ? PENTADBIR_JAWATAN[value]
         : "Pentadbir";
-      statusPentadbirEl.textContent = `Status: ${jawatan}`;
+      statusPentadbirEl.textContent = jawatan;
       return true;
     }
     statusPentadbirEl.textContent = "";
