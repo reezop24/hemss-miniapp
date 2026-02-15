@@ -6,10 +6,35 @@ document.addEventListener("DOMContentLoaded", function () {
   const inputPentadbir = document.getElementById("namaPentadbir");
   const datalist = document.getElementById("senaraiNamaGuru");
   const datalistPentadbir = document.getElementById("senaraiNamaPentadbir");
+  const statusGuruEl = document.getElementById("statusGuru");
+  const statusPentadbirEl = document.getElementById("statusPentadbir");
   const btn = document.getElementById("submitDaftar");
   const superBtn = document.getElementById("superLoginBtn");
   const params = new URLSearchParams(window.location.search);
   const isSuperMode = params.get("su") === "1";
+
+  function updateStatusGuru() {
+    const value = (input.value || "").trim();
+    if (Array.isArray(NAME_SET) && NAME_SET.includes(value)) {
+      statusGuruEl.textContent = "Status: Guru";
+      return true;
+    }
+    statusGuruEl.textContent = "";
+    return false;
+  }
+
+  function updateStatusPentadbir() {
+    const value = (inputPentadbir.value || "").trim();
+    if (Array.isArray(NAME_PENTADBIR) && NAME_PENTADBIR.includes(value)) {
+      const jawatan = (typeof PENTADBIR_JAWATAN === "object" && PENTADBIR_JAWATAN[value])
+        ? PENTADBIR_JAWATAN[value]
+        : "Pentadbir";
+      statusPentadbirEl.textContent = `Status: ${jawatan}`;
+      return true;
+    }
+    statusPentadbirEl.textContent = "";
+    return false;
+  }
 
   if (Array.isArray(NAME_SET)) {
     NAME_SET.forEach((name) => {
@@ -42,6 +67,22 @@ document.addEventListener("DOMContentLoaded", function () {
       tg.close();
     });
   }
+
+  input.addEventListener("input", function () {
+    const isGuruValid = updateStatusGuru();
+    if (isGuruValid) {
+      inputPentadbir.value = "";
+      statusPentadbirEl.textContent = "";
+    }
+  });
+
+  inputPentadbir.addEventListener("input", function () {
+    const isPentadbirValid = updateStatusPentadbir();
+    if (isPentadbirValid) {
+      input.value = "";
+      statusGuruEl.textContent = "";
+    }
+  });
 
   btn.addEventListener("click", function () {
     const selectedGuru = (input.value || "").trim();
@@ -84,4 +125,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     tg.close();
   });
+
+  updateStatusGuru();
+  updateStatusPentadbir();
 });

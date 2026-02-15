@@ -102,4 +102,11 @@ const NAME_PENTADBIR = [
   "Noraini binti Mohamad"
 ];
 
+const PENTADBIR_JAWATAN = {
+  "Mohd Zaid bin Abdul Rauf": "Pengetua",
+  "Roozana binti Maaris": "Penolong Kanan Pentadbiran",
+  "Noraini binti Md Din": "Penolong Kanan Hal Ehwal Murid",
+  "Mas Ayu binti Mustapa": "Penolong Kanan Kokurikulum",
+  "Noraini binti Mohamad": "Guru Kanan Mata Pelajaran"
+};
 

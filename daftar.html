@@ -57,6 +57,14 @@ input {
   margin-bottom: 12px;
 }
 
+.status-line {
+  min-height: 20px;
+  font-size: 13px;
+  opacity: 0.95;
+  margin-top: -4px;
+  margin-bottom: 10px;
+}
+
 .hint {
   font-size: 13px;
   opacity: 0.9;
@@ -93,6 +101,7 @@ input {
           placeholder="Cari atau pilih nama guru..."
           autocomplete="off"
         >
+        <div id="statusGuru" class="status-line"></div>
         <datalist id="senaraiNamaGuru"></datalist>
       </div>
 
@@ -104,6 +113,7 @@ input {
           placeholder="Cari atau pilih nama pentadbir sekolah..."
           autocomplete="off"
         >
+        <div id="statusPentadbir" class="status-line"></div>
         <datalist id="senaraiNamaPentadbir"></datalist>
       </div>
     </div>
