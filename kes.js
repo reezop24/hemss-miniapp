@@ -149,7 +149,7 @@ function addKes(removable = true, preset = {}) {
     }
 
     if (isReadOnly) {
-        wrapper.querySelectorAll("input, textarea").forEach(el => el.disabled = true);
+        wrapper.querySelectorAll("input, textarea, select").forEach(el => el.disabled = true);
     }
 }
 
@@ -157,31 +157,123 @@ function addKes(removable = true, preset = {}) {
 // ===============================
 // TAMBAH / BUANG PELAJAR
 // ===============================
+function parseSavedPelajar(value) {
+    if (value && typeof value === "object") {
+        return {
+            nama: (value.nama || "").trim(),
+            tingkatan: (value.tingkatan || "").trim(),
+            kelas: (value.kelas || "").trim()
+        };
+    }
+    if (typeof value === "string") {
+        const trimmed = value.trim();
+        const match = trimmed.match(/^(.*?)\s*\((.*?)\s*-\s*(.*?)\)$/);
+        if (match) {
+            return {
+                nama: (match[1] || "").trim(),
+                tingkatan: (match[2] || "").trim(),
+                kelas: (match[3] || "").trim()
+            };
+        }
+        return { nama: trimmed, tingkatan: "", kelas: "" };
+    }
+    return { nama: "", tingkatan: "", kelas: "" };
+}
+
+function getSortedTingkatanList() {
+    if (typeof KELAS_BY_TINGKATAN === "undefined" || !KELAS_BY_TINGKATAN) return [];
+    return Object.keys(KELAS_BY_TINGKATAN).sort((a, b) => Number(a) - Number(b));
+}
+
+function fillKelasOptions(selectEl, tingkatan, selectedKelas = "") {
+    selectEl.innerHTML = "";
+    const defaultOpt = document.createElement("option");
+    defaultOpt.value = "";
+    defaultOpt.textContent = "- Kelas -";
+    selectEl.appendChild(defaultOpt);
+
+    let kelasList = [];
+    if (typeof KELAS_BY_TINGKATAN !== "undefined" && KELAS_BY_TINGKATAN[tingkatan]) {
+        kelasList = KELAS_BY_TINGKATAN[tingkatan];
+    } else if (typeof KE_LAS2 !== "undefined" && Array.isArray(KE_LAS2)) {
+        kelasList = KE_LAS2;
+    }
+
+    kelasList.forEach(k => {
+        const option = document.createElement("option");
+        option.value = k;
+        option.textContent = k;
+        selectEl.appendChild(option);
+    });
+
+    if (selectedKelas && kelasList.includes(selectedKelas)) {
+        selectEl.value = selectedKelas;
+    }
+}
+
 function addPelajar(sectionWrapper, removable = true, value = "") {
 
     const container = sectionWrapper.querySelector(".pelajar_container");
+    const parsed = parseSavedPelajar(value);
+    const tingkatanList = getSortedTingkatanList();
 
     const row = document.createElement("div");
+    row.className = "pelajar-row";
 
     const input = document.createElement("input");
     input.placeholder = "Nama Pelajar";
-    input.value = value || "";
+    input.value = parsed.nama || "";
     if (isReadOnly) {
         input.disabled = true;
     }
 
+    const tingkatanSelect = document.createElement("select");
+    tingkatanSelect.className = "tingkatan-select";
+    const tingkatanDefault = document.createElement("option");
+    tingkatanDefault.value = "";
+    tingkatanDefault.textContent = "- Tingkatan -";
+    tingkatanSelect.appendChild(tingkatanDefault);
+    tingkatanList.forEach(t => {
+        const option = document.createElement("option");
+        option.value = t;
+        option.textContent = t;
+        tingkatanSelect.appendChild(option);
+    });
+    if (parsed.tingkatan && tingkatanList.includes(parsed.tingkatan)) {
+        tingkatanSelect.value = parsed.tingkatan;
+    }
+    if (isReadOnly) {
+        tingkatanSelect.disabled = true;
+    }
+
+    const kelasSelect = document.createElement("select");
+    kelasSelect.className = "kelas-select";
+    fillKelasOptions(kelasSelect, tingkatanSelect.value, parsed.kelas);
+    if (isReadOnly) {
+        kelasSelect.disabled = true;
+    }
+
+    tingkatanSelect.onchange = function () {
+        fillKelasOptions(kelasSelect, tingkatanSelect.value);
+    };
+
+    const metaWrapper = document.createElement("div");
+    metaWrapper.className = "pelajar-meta";
+    metaWrapper.appendChild(tingkatanSelect);
+    metaWrapper.appendChild(kelasSelect);
+
     row.appendChild(input);
+    row.appendChild(metaWrapper);
 
     if (removable && !isReadOnly) {
         const removeBtn = document.createElement("button");
         removeBtn.innerText = "Buang";
         removeBtn.className = "remove-btn btn-small";
-        removeBtn.style.marginBottom = "10px";
 
         removeBtn.onclick = function () {
             row.remove();
         };
-        row.appendChild(removeBtn);
+        metaWrapper.appendChild(removeBtn);
     }
 
     container.appendChild(row);
@@ -248,8 +340,17 @@ function submitKes() {
         const jenis = sec.querySelector(".jenis").value;
 
         const pelajar = [];
-        sec.querySelectorAll(".pelajar_container input").forEach(i => {
-            if (i.value.trim()) pelajar.push(i.value.trim());
+        sec.querySelectorAll(".pelajar_container .pelajar-row").forEach(row => {
+            const nama = (row.querySelector("input")?.value || "").trim();
+            const tingkatan = (row.querySelector(".tingkatan-select")?.value || "").trim();
+            const kelas = (row.querySelector(".kelas-select")?.value || "").trim();
+            if (nama) {
+                let label = nama;
+                if (tingkatan || kelas) {
+                    label += ` (${tingkatan || "-"} - ${kelas || "-"})`;
+                }
+                pelajar.push(label);
+            }
         });
 
         const keterangan = [];

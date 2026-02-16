@@ -100,10 +100,13 @@ function fillKelasOptions(selectEl, tingkatan, selectedKelas = "") {
     defaultOpt.textContent = "- Kelas -";
     selectEl.appendChild(defaultOpt);
 
-    const kelasList =
-        (typeof KELAS_BY_TINGKATAN !== "undefined" && KELAS_BY_TINGKATAN[tingkatan])
-            ? KELAS_BY_TINGKATAN[tingkatan]
-            : [];
+    let kelasList = [];
+    if (typeof KELAS_BY_TINGKATAN !== "undefined" && KELAS_BY_TINGKATAN[tingkatan]) {
+        kelasList = KELAS_BY_TINGKATAN[tingkatan];
+    } else if (typeof KE_LAS2 !== "undefined" && Array.isArray(KE_LAS2)) {
+        // Fallback: papar semua kelas (10) bila tingkatan belum dipilih.
+        kelasList = KE_LAS2;
+    }
 
     kelasList.forEach(k => {
         const option = document.createElement("option");
