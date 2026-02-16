@@ -54,9 +54,9 @@ document.addEventListener("DOMContentLoaded", function () {
         row.innerHTML = `
             <div class="kelas">${kelasNama}</div>
             <div class="input-group">
-                <input type="number" class="input-box hadir" id="hadir_${index}" min="0">
+                <input type="number" class="input-box hadir" id="hadir_${index}" min="0" inputmode="numeric" pattern="[0-9]*">
                 <span class="separator">/</span>
-                <input type="number" class="input-box daftar" id="daftar_${index}" min="0">
+                <input type="number" class="input-box daftar" id="daftar_${index}" min="0" inputmode="numeric" pattern="[0-9]*">
             </div>
         `;
 
@@ -109,6 +109,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // Trigger auto kira bila user taip
     document.addEventListener("input", function (e) {
         if (e.target.classList.contains("input-box")) {
+            // Lock angka sahaja untuk hadir/daftar.
+            e.target.value = (e.target.value || "").replace(/\D/g, "");
             kiraSemula();
         }
     });

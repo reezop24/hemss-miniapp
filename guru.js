@@ -173,12 +173,25 @@ document.addEventListener("DOMContentLoaded", function () {
         if (isReadOnly) return;
 
         const guruData = {};
+        const requiredMissing = [];
 
         for (let i = 1; i <= currentGuru; i++) {
             const el = document.getElementById("guru_" + i);
-            if (el && el.value) {
-                guruData["guru_" + i] = el.value;
+            const value = el ? el.value.trim() : "";
+
+            // Guru 1-5 wajib diisi
+            if (i <= 5 && !value) {
+                requiredMissing.push(i);
             }
+
+            if (value) {
+                guruData["guru_" + i] = value;
+            }
+        }
+
+        if (requiredMissing.length > 0) {
+            alert("Sila lengkapkan Nama Guru 1 hingga Nama Guru 5 sebelum simpan.");
+            return;
         }
 
         const data = {

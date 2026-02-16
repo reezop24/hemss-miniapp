@@ -79,6 +79,31 @@ textarea {
     background: #2ecc71;
     color: white;
 }
+
+.pelajar-row {
+    margin-bottom: 12px;
+}
+
+.pelajar-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 8px;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.pelajar-meta select {
+    margin-bottom: 0;
+}
+
+.pelajar-row .remove-btn {
+    margin-bottom: 0;
+    white-space: nowrap;
+}
+
+.pelajar-row .input-box {
+    margin-bottom: 10px;
+}
 </style>
 
 <link rel="stylesheet" href="theme.css?v=20260214a">
@@ -102,7 +127,7 @@ textarea {
 
     <div id="pelajar_container"></div>
 
-    <button class="add-btn" onclick="addPelajar()">+ Tambah Nama</button>
+    <button class="add-btn" onclick="addPelajar()">+ Tambah Pelajar</button>
 
     <h3>Catatan</h3>
 

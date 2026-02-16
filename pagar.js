@@ -32,9 +32,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const savedCatatan = Array.isArray(prefill.catatan) ? prefill.catatan : [];
 
     if (savedPelajar.length > 0) {
-        savedPelajar.forEach((item, idx) => addPelajar(idx >= 3, item));
+        savedPelajar.forEach((item, idx) => addPelajar(idx > 0, item));
     } else {
-        for (let i = 0; i < 3; i++) addPelajar(false);
+        addPelajar(false);
     }
 
     if (savedCatatan.length > 0) {
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (isReadOnly) {
         pelaporEl.disabled = true;
-        document.querySelectorAll("#pelajar_container input, #catatan_container textarea").forEach(el => {
+        document.querySelectorAll("#pelajar_container input, #pelajar_container select, #catatan_container textarea").forEach(el => {
             el.disabled = true;
         });
         document.querySelectorAll(".add-btn").forEach(btn => btn.style.display = "none");
@@ -73,21 +73,104 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
+function parseSavedPelajar(value) {
+    if (value && typeof value === "object") {
+        return {
+            nama: (value.nama || "").trim(),
+            tingkatan: (value.tingkatan || "").trim(),
+            kelas: (value.kelas || "").trim()
+        };
+    }
+    return {
+        nama: (value || "").trim(),
+        tingkatan: "",
+        kelas: ""
+    };
+}
+
+function getSortedTingkatanList() {
+    if (typeof KELAS_BY_TINGKATAN === "undefined" || !KELAS_BY_TINGKATAN) return [];
+    return Object.keys(KELAS_BY_TINGKATAN).sort((a, b) => Number(a) - Number(b));
+}
+
+function fillKelasOptions(selectEl, tingkatan, selectedKelas = "") {
+    selectEl.innerHTML = "";
+    const defaultOpt = document.createElement("option");
+    defaultOpt.value = "";
+    defaultOpt.textContent = "- Kelas -";
+    selectEl.appendChild(defaultOpt);
+
+    const kelasList =
+        (typeof KELAS_BY_TINGKATAN !== "undefined" && KELAS_BY_TINGKATAN[tingkatan])
+            ? KELAS_BY_TINGKATAN[tingkatan]
+            : [];
+
+    kelasList.forEach(k => {
+        const option = document.createElement("option");
+        option.value = k;
+        option.textContent = k;
+        selectEl.appendChild(option);
+    });
+
+    if (selectedKelas && kelasList.includes(selectedKelas)) {
+        selectEl.value = selectedKelas;
+    }
+}
+
 function addPelajar(removable = true, value = "") {
 
     const container = document.getElementById("pelajar_container");
+    const parsed = parseSavedPelajar(value);
+    const tingkatanList = getSortedTingkatanList();
 
     const wrapper = document.createElement("div");
+    wrapper.className = "pelajar-row";
 
     const input = document.createElement("input");
     input.className = "input-box";
     input.placeholder = "Nama Pelajar";
-    input.value = value || "";
+    input.value = parsed.nama || "";
     if (isReadOnly) {
         input.disabled = true;
     }
 
+    const tingkatanSelect = document.createElement("select");
+    tingkatanSelect.className = "tingkatan-select";
+    const tingkatanDefault = document.createElement("option");
+    tingkatanDefault.value = "";
+    tingkatanDefault.textContent = "- Tingkatan -";
+    tingkatanSelect.appendChild(tingkatanDefault);
+    tingkatanList.forEach(t => {
+        const option = document.createElement("option");
+        option.value = t;
+        option.textContent = t;
+        tingkatanSelect.appendChild(option);
+    });
+    if (parsed.tingkatan && tingkatanList.includes(parsed.tingkatan)) {
+        tingkatanSelect.value = parsed.tingkatan;
+    }
+    if (isReadOnly) {
+        tingkatanSelect.disabled = true;
+    }
+
+    const kelasSelect = document.createElement("select");
+    kelasSelect.className = "kelas-select";
+    fillKelasOptions(kelasSelect, tingkatanSelect.value, parsed.kelas);
+    if (isReadOnly) {
+        kelasSelect.disabled = true;
+    }
+
+    tingkatanSelect.onchange = function () {
+        fillKelasOptions(kelasSelect, tingkatanSelect.value);
+    };
+
+    const metaWrapper = document.createElement("div");
+    metaWrapper.className = "pelajar-meta";
+    metaWrapper.appendChild(tingkatanSelect);
+    metaWrapper.appendChild(kelasSelect);
+
     wrapper.appendChild(input);
+    wrapper.appendChild(metaWrapper);
 
     if (removable && !isReadOnly) {
         const btn = document.createElement("button");
@@ -96,7 +179,7 @@ function addPelajar(removable = true, value = "") {
         btn.onclick = function () {
             wrapper.remove();
         };
-        wrapper.appendChild(btn);
+        metaWrapper.appendChild(btn);
     }
 
     container.appendChild(wrapper);
@@ -149,10 +232,19 @@ function submitPagar() {
     }
 
     const pelajar_lewat = [];
-    document.querySelectorAll("#pelajar_container input")
-        .forEach(i => {
-            if (i.value.trim())
-                pelajar_lewat.push(i.value.trim());
+    document.querySelectorAll("#pelajar_container .pelajar-row")
+        .forEach(row => {
+            const nama = (row.querySelector("input")?.value || "").trim();
+            const tingkatan = (row.querySelector(".tingkatan-select")?.value || "").trim();
+            const kelas = (row.querySelector(".kelas-select")?.value || "").trim();
+
+            if (nama) {
+                let label = nama;
+                if (tingkatan || kelas) {
+                    label += ` (${tingkatan || "-"} - ${kelas || "-"})`;
+                }
+                pelajar_lewat.push(label);
+            }
         });
 
     const catatan = [];
