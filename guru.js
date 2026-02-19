@@ -58,16 +58,98 @@ document.addEventListener("DOMContentLoaded", function () {
         const wrapper = document.createElement("div");
         wrapper.style.marginBottom = "10px";
 
+        const fieldWrap = document.createElement("div");
+        fieldWrap.style.position = "relative";
+
         const input = document.createElement("input");
         input.setAttribute("list", "guru_list");
         input.id = "guru_" + index;
         input.placeholder = "Nama Guru " + index;
         input.value = value || "";
-        if (isReadOnly) {
-            input.disabled = true;
+        input.style.paddingRight = "36px";
+
+        const arrowBtn = document.createElement("button");
+        arrowBtn.type = "button";
+        arrowBtn.innerText = "▾";
+        arrowBtn.style.position = "absolute";
+        arrowBtn.style.right = "0";
+        arrowBtn.style.top = "0";
+        arrowBtn.style.height = "calc(100% - 10px)";
+        arrowBtn.style.width = "34px";
+        arrowBtn.style.border = "none";
+        arrowBtn.style.borderLeft = "1px solid rgba(0,0,0,0.1)";
+        arrowBtn.style.background = "rgba(0,0,0,0.08)";
+        arrowBtn.style.color = "#1f3554";
+        arrowBtn.style.borderTopRightRadius = "5px";
+        arrowBtn.style.borderBottomRightRadius = "5px";
+        arrowBtn.style.cursor = "pointer";
+
+        const select = document.createElement("select");
+        select.style.position = "absolute";
+        select.style.right = "0";
+        select.style.top = "0";
+        select.style.width = "34px";
+        select.style.height = "calc(100% - 10px)";
+        select.style.opacity = "0";
+        select.style.cursor = "pointer";
+
+        const defaultOption = document.createElement("option");
+        defaultOption.value = "";
+        defaultOption.textContent = "Pilih";
+        select.appendChild(defaultOption);
+
+        if (typeof NAME_SET !== "undefined" && Array.isArray(NAME_SET)) {
+            NAME_SET.forEach(name => {
+                const option = document.createElement("option");
+                option.value = name;
+                option.textContent = name;
+                select.appendChild(option);
+            });
         }
 
-        wrapper.appendChild(input);
+        const normalize = (s) => (s || "").trim().toLowerCase();
+
+        input.addEventListener("input", function () {
+            const typed = normalize(input.value);
+            const exact = Array.isArray(NAME_SET)
+                ? NAME_SET.find(name => normalize(name) === typed)
+                : null;
+            select.value = exact || "";
+        });
+
+        select.addEventListener("change", function () {
+            if (select.value) {
+                input.value = select.value;
+            }
+        });
+
+        arrowBtn.addEventListener("click", function () {
+            select.focus();
+            select.click();
+        });
+
+        if (value) {
+            const exact = Array.isArray(NAME_SET)
+                ? NAME_SET.find(name => normalize(name) === normalize(value))
+                : null;
+            if (exact) {
+                input.value = exact;
+                select.value = exact;
+            }
+        }
+
+        if (isReadOnly) {
+            input.disabled = true;
+            select.disabled = true;
+            arrowBtn.disabled = true;
+            arrowBtn.style.opacity = "0.5";
+            arrowBtn.style.cursor = "default";
+        }
+
+        fieldWrap.appendChild(input);
+        fieldWrap.appendChild(arrowBtn);
+        fieldWrap.appendChild(select);
+        wrapper.appendChild(fieldWrap);
 
         if (removable && !isReadOnly) {
             const removeBtn = document.createElement("button");

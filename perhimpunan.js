@@ -55,6 +55,93 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+
+    function attachSearchDropdown(inputId, listData) {
+        const input = document.getElementById(inputId);
+        if (!input) return;
+
+        const wrap = document.createElement("div");
+        wrap.style.position = "relative";
+
+        input.parentNode.insertBefore(wrap, input);
+        wrap.appendChild(input);
+
+        input.style.paddingRight = "36px";
+        input.style.marginBottom = "12px";
+
+        const arrowBtn = document.createElement("button");
+        arrowBtn.type = "button";
+        arrowBtn.innerText = "▾";
+        arrowBtn.style.position = "absolute";
+        arrowBtn.style.right = "0";
+        arrowBtn.style.top = "0";
+        arrowBtn.style.height = "calc(100% - 12px)";
+        arrowBtn.style.width = "34px";
+        arrowBtn.style.border = "none";
+        arrowBtn.style.borderLeft = "1px solid rgba(0,0,0,0.1)";
+        arrowBtn.style.background = "rgba(0,0,0,0.08)";
+        arrowBtn.style.color = "#1f3554";
+        arrowBtn.style.borderTopRightRadius = "10px";
+        arrowBtn.style.borderBottomRightRadius = "10px";
+        arrowBtn.style.cursor = "pointer";
+
+        const select = document.createElement("select");
+        select.style.position = "absolute";
+        select.style.right = "0";
+        select.style.top = "0";
+        select.style.width = "34px";
+        select.style.height = "calc(100% - 12px)";
+        select.style.opacity = "0";
+        select.style.cursor = "pointer";
+
+        const defaultOption = document.createElement("option");
+        defaultOption.value = "";
+        defaultOption.textContent = "Pilih";
+        select.appendChild(defaultOption);
+
+        (Array.isArray(listData) ? listData : []).forEach(name => {
+            const option = document.createElement("option");
+            option.value = name;
+            option.textContent = name;
+            select.appendChild(option);
+        });
+
+        const normalize = (s) => (s || "").trim().toLowerCase();
+
+        input.addEventListener("input", function () {
+            const typed = normalize(input.value);
+            const exact = (Array.isArray(listData) ? listData : []).find(name => normalize(name) === typed);
+            select.value = exact || "";
+        });
+
+        select.addEventListener("change", function () {
+            if (select.value) {
+                input.value = select.value;
+            }
+        });
+
+        arrowBtn.addEventListener("click", function () {
+            select.focus();
+            select.click();
+        });
+
+        const exact = (Array.isArray(listData) ? listData : []).find(name => normalize(name) === normalize(input.value));
+        if (exact) {
+            input.value = exact;
+            select.value = exact;
+        }
+
+        if (isReadOnly) {
+            select.disabled = true;
+            arrowBtn.disabled = true;
+            arrowBtn.style.opacity = "0.5";
+            arrowBtn.style.cursor = "default";
+        }
+
+        wrap.appendChild(arrowBtn);
+        wrap.appendChild(select);
+    }
+
     const savedPentadbir = Array.isArray(prefill?.pentadbir?.komen) ? prefill.pentadbir.komen : [];
     const savedGuru = Array.isArray(prefill?.guru_bertugas?.komen) ? prefill.guru_bertugas.komen : [];
 
@@ -79,6 +166,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if (prefill?.pelapor) {
         pelaporSelect.value = prefill.pelapor;
     }
+
+    attachSearchDropdown("nama_pentadbir", Array.isArray(NAME_PENTADBIR) ? NAME_PENTADBIR : []);
+    attachSearchDropdown("nama_guru", Array.isArray(NAME_SET) ? NAME_SET : []);
 
     if (isReadOnly) {
         document.getElementById("nama_pentadbir").disabled = true;
