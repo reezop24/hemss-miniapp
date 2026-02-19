@@ -55,16 +55,66 @@ document.addEventListener("DOMContentLoaded", function () {
         const container = section.querySelector(".container");
 
         const wrapper = document.createElement("div");
+        wrapper.className = "guru-entry";
+
+        const fieldRow = document.createElement("div");
+        fieldRow.style.display = "flex";
+        fieldRow.style.gap = "8px";
+        fieldRow.style.alignItems = "center";
 
         const input = document.createElement("input");
+        input.className = "guru-search";
         input.setAttribute("list", "guru_list");
-        input.placeholder = "Nama Guru";
+        input.placeholder = "Cari Nama Guru";
         input.value = value || "";
-        if (isReadOnly) {
-            input.disabled = true;
+        input.style.flex = "1";
+
+        const select = document.createElement("select");
+        select.className = "guru-dropdown";
+        select.style.flex = "1";
+
+        const defaultOption = document.createElement("option");
+        defaultOption.value = "";
+        defaultOption.textContent = "Pilih dari dropdown";
+        select.appendChild(defaultOption);
+
+        NAME_SET.forEach(name => {
+            const option = document.createElement("option");
+            option.value = name;
+            option.textContent = name;
+            select.appendChild(option);
+        });
+
+        const normalize = (s) => (s || "").trim().toLowerCase();
+
+        input.addEventListener("input", function () {
+            const typed = normalize(input.value);
+            const exact = NAME_SET.find(name => normalize(name) === typed);
+            select.value = exact || "";
+        });
+
+        select.addEventListener("change", function () {
+            if (select.value) {
+                input.value = select.value;
+            }
+        });
+
+        if (value) {
+            const exact = NAME_SET.find(name => normalize(name) === normalize(value));
+            if (exact) {
+                input.value = exact;
+                select.value = exact;
+            }
         }
 
-        wrapper.appendChild(input);
+        if (isReadOnly) {
+            input.disabled = true;
+            select.disabled = true;
+        }
+
+        fieldRow.appendChild(input);
+        fieldRow.appendChild(select);
+        wrapper.appendChild(fieldRow);
 
         if (removable && !isReadOnly) {
             const removeBtn = document.createElement("button");
@@ -114,7 +164,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         kategoriList.forEach(k => {
             const section = document.getElementById(k);
-            const inputs = section.querySelectorAll("input");
+            const inputs = section.querySelectorAll("input.guru-search");
 
             result[k] = [];
 
