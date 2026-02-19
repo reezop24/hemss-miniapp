@@ -57,25 +57,46 @@ document.addEventListener("DOMContentLoaded", function () {
         const wrapper = document.createElement("div");
         wrapper.className = "guru-entry";
 
-        const fieldRow = document.createElement("div");
-        fieldRow.style.display = "flex";
-        fieldRow.style.gap = "8px";
-        fieldRow.style.alignItems = "center";
+        const fieldWrap = document.createElement("div");
+        fieldWrap.style.position = "relative";
 
         const input = document.createElement("input");
         input.className = "guru-search";
         input.setAttribute("list", "guru_list");
-        input.placeholder = "Cari Nama Guru";
+        input.placeholder = "Cari / pilih nama guru";
         input.value = value || "";
-        input.style.flex = "1";
+        input.style.width = "100%";
+        input.style.paddingRight = "36px";
+
+        const arrowBtn = document.createElement("button");
+        arrowBtn.type = "button";
+        arrowBtn.innerText = "▾";
+        arrowBtn.style.position = "absolute";
+        arrowBtn.style.right = "0";
+        arrowBtn.style.top = "0";
+        arrowBtn.style.height = "100%";
+        arrowBtn.style.width = "34px";
+        arrowBtn.style.border = "none";
+        arrowBtn.style.borderLeft = "1px solid rgba(255,255,255,0.2)";
+        arrowBtn.style.background = "rgba(255,255,255,0.12)";
+        arrowBtn.style.color = "white";
+        arrowBtn.style.borderTopRightRadius = "6px";
+        arrowBtn.style.borderBottomRightRadius = "6px";
+        arrowBtn.style.cursor = "pointer";
 
         const select = document.createElement("select");
-        select.className = "guru-dropdown";
-        select.style.flex = "1";
+        select.className = "guru-dropdown-native";
+        select.style.position = "absolute";
+        select.style.right = "0";
+        select.style.top = "0";
+        select.style.width = "34px";
+        select.style.height = "100%";
+        select.style.opacity = "0";
+        select.style.cursor = "pointer";
 
         const defaultOption = document.createElement("option");
         defaultOption.value = "";
-        defaultOption.textContent = "Pilih dari dropdown";
+        defaultOption.textContent = "Pilih";
         select.appendChild(defaultOption);
 
         NAME_SET.forEach(name => {
@@ -99,6 +120,11 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 
+        arrowBtn.addEventListener("click", function () {
+            select.focus();
+            select.click();
+        });
+
         if (value) {
             const exact = NAME_SET.find(name => normalize(name) === normalize(value));
             if (exact) {
@@ -110,11 +136,15 @@ document.addEventListener("DOMContentLoaded", function () {
         if (isReadOnly) {
             input.disabled = true;
             select.disabled = true;
+            arrowBtn.disabled = true;
+            arrowBtn.style.opacity = "0.5";
+            arrowBtn.style.cursor = "default";
         }
 
-        fieldRow.appendChild(input);
-        fieldRow.appendChild(select);
-        wrapper.appendChild(fieldRow);
+        fieldWrap.appendChild(input);
+        fieldWrap.appendChild(arrowBtn);
+        fieldWrap.appendChild(select);
+        wrapper.appendChild(fieldWrap);
 
         if (removable && !isReadOnly) {
             const removeBtn = document.createElement("button");
