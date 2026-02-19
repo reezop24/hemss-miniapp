@@ -54,9 +54,9 @@ document.addEventListener("DOMContentLoaded", function () {
         row.innerHTML = `
             <div class="kelas">${kelasNama}</div>
             <div class="input-group">
-                <input type="number" class="input-box hadir" id="hadir_${index}" min="0" inputmode="numeric" pattern="[0-9]*">
+                <input type="text" class="input-box hadir" id="hadir_${index}" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off">
                 <span class="separator">/</span>
-                <input type="number" class="input-box daftar" id="daftar_${index}" min="0" inputmode="numeric" pattern="[0-9]*">
+                <input type="text" class="input-box daftar" id="daftar_${index}" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off">
             </div>
         `;
 
@@ -106,14 +106,50 @@ document.addEventListener("DOMContentLoaded", function () {
             `Peratusan: ${peratus}%`;
     }
 
-    // Trigger auto kira bila user taip
+    function getInputOrder() {
+        return Array.from(document.querySelectorAll(".input-box"));
+    }
+
+    function focusNextInput(currentInput) {
+        const all = getInputOrder();
+        const idx = all.indexOf(currentInput);
+        if (idx >= 0 && idx < all.length - 1) {
+            all[idx + 1].focus();
+            all[idx + 1].select();
+        }
+    }
+
+    function focusPrevInput(currentInput) {
+        const all = getInputOrder();
+        const idx = all.indexOf(currentInput);
+        if (idx > 0) {
+            all[idx - 1].focus();
+            all[idx - 1].select();
+        }
+    }
+
+    // Trigger auto kira + auto gerak fokus bila capai 2 digit.
     document.addEventListener("input", function (e) {
-        if (e.target.classList.contains("input-box")) {
-            // Lock angka sahaja untuk hadir/daftar.
-            e.target.value = (e.target.value || "").replace(/\D/g, "");
-            kiraSemula();
+        if (!e.target.classList.contains("input-box")) return;
+
+        const cleaned = (e.target.value || "").replace(/\D/g, "").slice(0, 2);
+        e.target.value = cleaned;
+
+        if (!isReadOnly && cleaned.length === 2 && document.activeElement === e.target) {
+            focusNextInput(e.target);
+        }
+
+        kiraSemula();
+    });
+
+    // Backspace pada input kosong akan kembali ke input sebelumnya.
+    document.addEventListener("keydown", function (e) {
+        if (!e.target.classList.contains("input-box")) return;
+        if (e.key === "Backspace" && !e.target.value) {
+            focusPrevInput(e.target);
         }
     });
+
     kiraSemula();
 
     if (isReadOnly) {
