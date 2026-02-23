@@ -113,26 +113,27 @@ textarea {
 
 <h2>LAPORAN PAGAR 2</h2>
 
-<!-- GURU PELAPOR -->
 <div class="section">
-    <h3>Nama Guru Pelapor</h3>
-    <select id="pelapor" class="input-box">
+    <h3>Waktu Datang</h3>
+    <h4>Nama Guru Pelapor</h4>
+    <select id="pelapor_datang" class="input-box">
         <option value="">- Sila Pilih Nama Guru Pelapor -</option>
     </select>
+
+    <h4>Nama Pelajar Lewat</h4>
+    <div id="pelajar_container"></div>
+    <button class="add-btn" onclick="addPelajar()">+ Tambah Pelajar</button>
 </div>
 
-<!-- PELAJAR LEWAT -->
 <div class="section">
-    <h3>Nama Pelajar Lewat</h3>
+    <h3>Waktu Balik</h3>
+    <h4>Nama Guru Pelapor</h4>
+    <select id="pelapor_balik" class="input-box">
+        <option value="">- Sila Pilih Nama Guru Pelapor -</option>
+    </select>
 
-    <div id="pelajar_container"></div>
-
-    <button class="add-btn" onclick="addPelajar()">+ Tambah Pelajar</button>
-
-    <h3>Catatan</h3>
-
+    <h4>Catatan</h4>
     <div id="catatan_container"></div>
-
     <button class="add-btn" onclick="addCatatan()">+ Tambah Catatan</button>
 </div>
 

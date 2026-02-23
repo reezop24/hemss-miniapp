@@ -15,21 +15,38 @@ try {
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    // load senarai guru pelapor dari Bahagian 1
-    const pelaporSelect = document.getElementById("pelapor");
+    const pelaporDatangSelect = document.getElementById("pelapor_datang");
+    const pelaporBalikSelect = document.getElementById("pelapor_balik");
     const allowedPelapor = Array.isArray(prefill.guru_pelapor_list)
         ? prefill.guru_pelapor_list.map(v => (v || "").trim()).filter(Boolean)
         : [];
 
     allowedPelapor.forEach(name => {
-        const option = document.createElement("option");
-        option.value = name;
-        option.textContent = name;
-        pelaporSelect.appendChild(option);
+        const opt1 = document.createElement("option");
+        opt1.value = name;
+        opt1.textContent = name;
+        pelaporDatangSelect.appendChild(opt1);
+
+        const opt2 = document.createElement("option");
+        opt2.value = name;
+        opt2.textContent = name;
+        pelaporBalikSelect.appendChild(opt2);
     });
 
-    const savedPelajar = Array.isArray(prefill.pelajar_lewat) ? prefill.pelajar_lewat : [];
-    const savedCatatan = Array.isArray(prefill.catatan) ? prefill.catatan : [];
+    const savedWaktuDatang = prefill.waktu_datang && typeof prefill.waktu_datang === "object"
+        ? prefill.waktu_datang
+        : {};
+    const savedWaktuBalik = prefill.waktu_balik && typeof prefill.waktu_balik === "object"
+        ? prefill.waktu_balik
+        : {};
+
+    const savedPelajar = Array.isArray(savedWaktuDatang.pelajar_lewat)
+        ? savedWaktuDatang.pelajar_lewat
+        : (Array.isArray(prefill.pelajar_lewat) ? prefill.pelajar_lewat : []);
+
+    const savedCatatanBalik = Array.isArray(savedWaktuBalik.catatan)
+        ? savedWaktuBalik.catatan
+        : (Array.isArray(prefill.catatan) ? prefill.catatan : []);
 
     if (savedPelajar.length > 0) {
         savedPelajar.forEach((item, idx) => addPelajar(idx > 0, item));
@@ -37,19 +54,25 @@ document.addEventListener("DOMContentLoaded", function () {
         addPelajar(false);
     }
 
-    if (savedCatatan.length > 0) {
-        savedCatatan.forEach((item, idx) => addCatatan(idx > 0, item));
+    if (savedCatatanBalik.length > 0) {
+        savedCatatanBalik.forEach((item, idx) => addCatatan(idx > 0, item));
     } else {
         addCatatan(false);
     }
 
-    const pelaporEl = document.getElementById("pelapor");
-    if (prefill.pelapor) {
-        pelaporEl.value = prefill.pelapor;
+    const pelaporDatang = (savedWaktuDatang.pelapor || prefill.pelapor || "").trim();
+    const pelaporBalik = (savedWaktuBalik.pelapor || prefill.pelapor_balik || "").trim();
+
+    if (pelaporDatang) {
+        pelaporDatangSelect.value = pelaporDatang;
+    }
+    if (pelaporBalik) {
+        pelaporBalikSelect.value = pelaporBalik;
     }
 
     if (isReadOnly) {
-        pelaporEl.disabled = true;
+        pelaporDatangSelect.disabled = true;
+        pelaporBalikSelect.disabled = true;
         document.querySelectorAll("#pelajar_container input, #pelajar_container select, #catatan_container textarea").forEach(el => {
             el.disabled = true;
         });
@@ -104,7 +127,6 @@ function fillKelasOptions(selectEl, tingkatan, selectedKelas = "") {
     if (typeof KELAS_BY_TINGKATAN !== "undefined" && KELAS_BY_TINGKATAN[tingkatan]) {
         kelasList = KELAS_BY_TINGKATAN[tingkatan];
     } else if (typeof KE_LAS2 !== "undefined" && Array.isArray(KE_LAS2)) {
-        // Fallback: papar semua kelas (10) bila tingkatan belum dipilih.
         kelasList = KE_LAS2;
     }
 
@@ -221,16 +243,22 @@ function addCatatan(removable = true, value = "") {
 function submitPagar() {
     if (isReadOnly) return;
 
-    const pelapor =
-        document.getElementById("pelapor").value;
+    const pelaporDatang = document.getElementById("pelapor_datang").value;
+    const pelaporBalik = document.getElementById("pelapor_balik").value;
     const allowedPelapor = Array.isArray(prefill.guru_pelapor_list)
         ? prefill.guru_pelapor_list.map(v => (v || "").trim()).filter(Boolean)
         : [];
     const allowedSet = new Set(allowedPelapor);
-    const pelaporTrimmed = (pelapor || "").trim();
+    const pelaporDatangTrimmed = (pelaporDatang || "").trim();
+    const pelaporBalikTrimmed = (pelaporBalik || "").trim();
 
-    if (!allowedSet.has(pelaporTrimmed)) {
-        alert("Nama Guru Pelapor mesti dipilih daripada senarai guru bertugas (Bahagian 1).");
+    if (!allowedSet.has(pelaporDatangTrimmed)) {
+        alert("Nama Guru Pelapor (Waktu Datang) mesti dipilih daripada senarai guru bertugas (Bahagian 1).");
+        return;
+    }
+
+    if (!allowedSet.has(pelaporBalikTrimmed)) {
+        alert("Nama Guru Pelapor (Waktu Balik) mesti dipilih daripada senarai guru bertugas (Bahagian 1).");
         return;
     }
 
@@ -250,19 +278,25 @@ function submitPagar() {
             }
         });
 
-    const catatan = [];
+    const catatan_balik = [];
     document.querySelectorAll("#catatan_container textarea")
         .forEach(t => {
-            if (t.value.trim())
-                catatan.push(t.value.trim());
+            if (t.value.trim()) {
+                catatan_balik.push(t.value.trim());
+            }
         });
 
     tg.sendData(JSON.stringify({
         type: "section_laporan_pagar",
         data: {
-            pelapor: pelaporTrimmed,
-            pelajar_lewat: pelajar_lewat,
-            catatan: catatan
+            waktu_datang: {
+                pelapor: pelaporDatangTrimmed,
+                pelajar_lewat: pelajar_lewat,
+            },
+            waktu_balik: {
+                pelapor: pelaporBalikTrimmed,
+                catatan: catatan_balik,
+            }
         }
     }));
 
