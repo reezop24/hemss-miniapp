@@ -13,6 +13,17 @@ try {
     prefill = {};
 }
 
+const GURU_DISIPLIN_OPTIONS = [
+    "Mohd Fairus bin Abd Aziz",
+    "Nordie Azrai bin Abd Wahab",
+    "Mohd Hasif bin Abd Hamid",
+    "Nur Azian binti Mohd Isa"
+];
+
+function getGuruDisiplinOptions() {
+    return GURU_DISIPLIN_OPTIONS;
+}
+
 document.addEventListener("DOMContentLoaded", function () {
 
     const pelaporSelect = document.getElementById("pelapor");
@@ -30,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (savedList.length > 0) {
         savedList.forEach((item, idx) => addKes(idx > 0, item || {}));
     } else {
-        addKes(false); // default 1 kes (tanpa butang buang)
+        addKes(false);
     }
 
     const pelaporEl = document.getElementById("pelapor");
@@ -60,6 +71,50 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
+function setGuruDisiplinOptions(selectEl, selected = "") {
+    const options = getGuruDisiplinOptions();
+    selectEl.innerHTML = "";
+
+    const defaultOpt = document.createElement("option");
+    defaultOpt.value = "";
+    defaultOpt.textContent = "- Sila Pilih Nama Guru Disiplin -";
+    selectEl.appendChild(defaultOpt);
+
+    options.forEach(name => {
+        const opt = document.createElement("option");
+        opt.value = name;
+        opt.textContent = name;
+        selectEl.appendChild(opt);
+    });
+
+    if (selected) {
+        const exist = options.includes(selected);
+        if (!exist) {
+            const opt = document.createElement("option");
+            opt.value = selected;
+            opt.textContent = selected;
+            selectEl.appendChild(opt);
+        }
+        selectEl.value = selected;
+    }
+}
+
+
+function updateGuruDisiplinVisibility(wrapper) {
+    const jenisSelect = wrapper.querySelector(".jenis");
+    const guruLabel = wrapper.querySelector(".guru-disiplin-label");
+    const guruSelect = wrapper.querySelector(".guru-disiplin");
+    const show = (jenisSelect.value || "").trim().toLowerCase() === "disiplin";
+
+    guruLabel.style.display = show ? "block" : "none";
+    guruSelect.style.display = show ? "block" : "none";
+
+    if (!show && !isReadOnly) {
+        guruSelect.value = "";
+    }
+}
+
+
 // ===============================
 // TAMBAH KES
 // ===============================
@@ -80,6 +135,9 @@ function addKes(removable = true, preset = {}) {
             <option value="Kemalangan">Kemalangan</option>
             <option value="Bencana">Bencana</option>
         </select>
+
+        <label class="guru-disiplin-label" style="display:none;">Nama Guru Disiplin</label>
+        <select class="guru-disiplin" style="display:none;"></select>
 
         <label>Nama Pelajar Terlibat</label>
         <div class="pelajar_container"></div>
@@ -126,14 +184,25 @@ function addKes(removable = true, preset = {}) {
     }
 
     const jenisSelect = wrapper.querySelector(".jenis");
+    const guruDisiplinSelect = wrapper.querySelector(".guru-disiplin");
+
+    setGuruDisiplinOptions(guruDisiplinSelect, (preset.guru_disiplin || "").trim());
+
     if (preset.jenis) {
         jenisSelect.value = preset.jenis;
     }
+
+    jenisSelect.addEventListener("change", function () {
+        updateGuruDisiplinVisibility(wrapper);
+    });
+
+    updateGuruDisiplinVisibility(wrapper);
+
     if (isReadOnly) {
         jenisSelect.disabled = true;
+        guruDisiplinSelect.disabled = true;
     }
 
-    // default / prefill pelajar & keterangan
     const savedPelajar = Array.isArray(preset.pelajar) ? preset.pelajar : [];
     const savedKeterangan = Array.isArray(preset.keterangan) ? preset.keterangan : [];
     if (savedPelajar.length > 0) {
@@ -334,10 +403,12 @@ function submitKes() {
     }
 
     const allKes = [];
+    let hasInvalidDisiplin = false;
 
     document.querySelectorAll("#kes_container .section").forEach(sec => {
 
         const jenis = sec.querySelector(".jenis").value;
+        const guruDisiplin = (sec.querySelector(".guru-disiplin")?.value || "").trim();
 
         const pelajar = [];
         sec.querySelectorAll(".pelajar_container .pelajar-row").forEach(row => {
@@ -359,13 +430,23 @@ function submitKes() {
         });
 
         if (jenis) {
+            if ((jenis || "").toLowerCase() === "disiplin" && !guruDisiplin) {
+                alert("Sila pilih Nama Guru Disiplin untuk kes Disiplin.");
+                hasInvalidDisiplin = true;
+                return;
+            }
             allKes.push({
                 jenis: jenis,
+                guru_disiplin: guruDisiplin,
                 pelajar: pelajar,
                 keterangan: keterangan
             });
         }
     });
+
+    if (hasInvalidDisiplin) {
+        return;
+    }
 
     tg.sendData(JSON.stringify({
         type: "section_kes",
