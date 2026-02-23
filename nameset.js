@@ -99,7 +99,10 @@ const NAME_PENTADBIR = [
   "Roozana binti Maaris",
   "Noraini binti Md Din",
   "Mas Ayu binti Mustapa",
-  "Noraini binti Mohamad"
+  "Noraini binti Mohamad",
+  "Nozama binti Mahadi",
+  "Amira Hasya binti Azhar",
+  "Rega Dhevi a/p Marimuthu"
 ];
 
 const PENTADBIR_JAWATAN = {

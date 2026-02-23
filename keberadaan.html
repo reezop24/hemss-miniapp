@@ -20,6 +20,12 @@ input {
   margin-bottom: 10px;
 }
 
+.section-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 .add-btn {
   width: auto;
   padding: 6px 12px;
@@ -67,25 +73,37 @@ button.primary {
 <div id="kategori_1" class="section">
   <div class="section-title">CR / CTR / CRK / MC / KUARANTIN</div>
   <div class="container"></div>
-  <button class="add-btn" onclick="addBox('kategori_1')">+ Tambah</button>
+  <div class="section-actions">
+    <button class="add-btn" onclick="addBox('kategori_1')">+ Tambah Guru</button>
+    <button class="add-btn" onclick="addBox('kategori_1', 'pentadbir')">+ Tambah Pentadbir</button>
+  </div>
 </div>
 
 <div id="kategori_2" class="section">
   <div class="section-title">BENGKEL / MESYUARAT / TAKLIMAT</div>
   <div class="container"></div>
-  <button class="add-btn" onclick="addBox('kategori_2')">+ Tambah</button>
+  <div class="section-actions">
+    <button class="add-btn" onclick="addBox('kategori_2')">+ Tambah Guru</button>
+    <button class="add-btn" onclick="addBox('kategori_2', 'pentadbir')">+ Tambah Pentadbir</button>
+  </div>
 </div>
 
 <div id="kategori_3" class="section">
   <div class="section-title">TEMUJANJI / RAWATAN</div>
   <div class="container"></div>
-  <button class="add-btn" onclick="addBox('kategori_3')">+ Tambah</button>
+  <div class="section-actions">
+    <button class="add-btn" onclick="addBox('kategori_3')">+ Tambah Guru</button>
+    <button class="add-btn" onclick="addBox('kategori_3', 'pentadbir')">+ Tambah Pentadbir</button>
+  </div>
 </div>
 
 <div id="kategori_4" class="section">
   <div class="section-title">LAIN-LAIN</div>
   <div class="container"></div>
-  <button class="add-btn" onclick="addBox('kategori_4')">+ Tambah</button>
+  <div class="section-actions">
+    <button class="add-btn" onclick="addBox('kategori_4')">+ Tambah Guru</button>
+    <button class="add-btn" onclick="addBox('kategori_4', 'pentadbir')">+ Tambah Pentadbir</button>
+  </div>
 </div>
 
 <div class="section">
@@ -102,6 +120,7 @@ button.primary {
 <button id="edit-btn" class="primary" style="display:none;">✏️ Ubah Semula</button>
 
 <datalist id="guru_list"></datalist>
+<datalist id="pentadbir_list"></datalist>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="nameset.js"></script>

@@ -20,13 +20,22 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
-    const datalist = document.getElementById("guru_list");
+    const datalistGuru = document.getElementById("guru_list");
+    const datalistPentadbir = document.getElementById("pentadbir_list");
 
     NAME_SET.forEach(name => {
         const option = document.createElement("option");
         option.value = name;
-        datalist.appendChild(option);
+        datalistGuru.appendChild(option);
     });
+
+    if (Array.isArray(NAME_PENTADBIR)) {
+        NAME_PENTADBIR.forEach(name => {
+            const option = document.createElement("option");
+            option.value = name;
+            datalistPentadbir.appendChild(option);
+        });
+    }
 
     const kategoriList = ["kategori_1", "kategori_2", "kategori_3", "kategori_4"];
     const savedKategori = prefill.kategori && typeof prefill.kategori === "object"
@@ -38,21 +47,30 @@ document.addEventListener("DOMContentLoaded", function () {
     function initSection(id) {
         const savedList = Array.isArray(savedKategori[id]) ? savedKategori[id] : [];
         if (savedList.length > 0) {
-            savedList.forEach((nama, idx) => addInput(id, idx >= 2, nama || ""));
+            savedList.forEach((nama, idx) => addInput(id, idx >= 2, nama || "", "guru"));
             return;
         }
-        addInput(id, false, "");
-        addInput(id, false, "");
+        addInput(id, false, "", "guru");
+        addInput(id, false, "", "guru");
     }
 
-    window.addBox = function(id) {
+    window.addBox = function (id, source = "guru") {
         if (isReadOnly) return;
-        addInput(id, true);
+        addInput(id, true, "", source);
     };
 
-    function addInput(sectionId, removable, value = "") {
+    function addInput(sectionId, removable, value = "", source = "guru") {
         const section = document.getElementById(sectionId);
         const container = section.querySelector(".container");
+
+        const sourceIsPentadbir = source === "pentadbir";
+        const nameSource = sourceIsPentadbir && Array.isArray(NAME_PENTADBIR)
+            ? NAME_PENTADBIR
+            : NAME_SET;
+        const listId = sourceIsPentadbir ? "pentadbir_list" : "guru_list";
+        const placeholder = sourceIsPentadbir
+            ? "Cari / pilih nama pentadbir"
+            : "Cari / pilih nama guru";
 
         const wrapper = document.createElement("div");
         wrapper.className = "guru-entry";
@@ -62,8 +80,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const input = document.createElement("input");
         input.className = "guru-search";
-        input.setAttribute("list", "guru_list");
-        input.placeholder = "Cari / pilih nama guru";
+        input.setAttribute("list", listId);
+        input.placeholder = placeholder;
         input.value = value || "";
         input.style.width = "100%";
         input.style.paddingRight = "36px";
@@ -99,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
         defaultOption.textContent = "Pilih";
         select.appendChild(defaultOption);
 
-        NAME_SET.forEach(name => {
+        nameSource.forEach(name => {
             const option = document.createElement("option");
             option.value = name;
             option.textContent = name;
@@ -110,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         input.addEventListener("input", function () {
             const typed = normalize(input.value);
-            const exact = NAME_SET.find(name => normalize(name) === typed);
+            const exact = nameSource.find(name => normalize(name) === typed);
             select.value = exact || "";
         });
 
@@ -126,7 +144,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         if (value) {
-            const exact = NAME_SET.find(name => normalize(name) === normalize(value));
+            const exact = nameSource.find(name => normalize(name) === normalize(value));
             if (exact) {
                 input.value = exact;
                 select.value = exact;
