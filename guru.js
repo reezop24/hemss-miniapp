@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     tg.expand();
+    let isSubmitted = false;
 
     const maxGuru = 6;
     let currentGuru = 0;
@@ -29,6 +30,40 @@ document.addEventListener("DOMContentLoaded", function () {
     const saveBtn = document.getElementById("save-btn");
     const editBtn = document.getElementById("edit-btn");
     const statusBox = document.getElementById("read-only-status");
+
+    function closeWarningText() {
+        return "Semua maklumat tidak akan disimpan jika anda menutup halaman ini sekarang.";
+    }
+
+    function enableCloseWarning() {
+        if (typeof tg.enableClosingConfirmation === "function") {
+            tg.enableClosingConfirmation();
+            return;
+        }
+        if (typeof tg.setClosingConfirmation === "function") {
+            tg.setClosingConfirmation(true);
+        }
+    }
+
+    function disableCloseWarning() {
+        if (typeof tg.disableClosingConfirmation === "function") {
+            tg.disableClosingConfirmation();
+            return;
+        }
+        if (typeof tg.setClosingConfirmation === "function") {
+            tg.setClosingConfirmation(false);
+        }
+    }
+
+    if (!isReadOnly) {
+        enableCloseWarning();
+        window.addEventListener("beforeunload", function (e) {
+            if (isSubmitted) return;
+            e.preventDefault();
+            e.returnValue = closeWarningText();
+            return closeWarningText();
+        });
+    }
 
     // ===============================
     // LOAD TARIKH & HARI
@@ -286,6 +321,8 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         };
 
+        isSubmitted = true;
+        disableCloseWarning();
         tg.sendData(JSON.stringify(data));
         tg.close();
     };
