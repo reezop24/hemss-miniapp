@@ -13,6 +13,43 @@ document.addEventListener("DOMContentLoaded", function () {
   const params = new URLSearchParams(window.location.search);
   const isSuperMode = params.get("su") === "1";
 
+  let isSubmitted = false;
+
+  function closeWarningText() {
+    return "Semua maklumat tidak akan disimpan jika anda menutup halaman ini sekarang.";
+  }
+
+  function enableCloseWarning() {
+    if (typeof tg.enableClosingConfirmation === "function") {
+      tg.enableClosingConfirmation();
+      return;
+    }
+    if (typeof tg.setClosingConfirmation === "function") {
+      tg.setClosingConfirmation(true);
+    }
+  }
+
+  function disableCloseWarning() {
+    if (typeof tg.disableClosingConfirmation === "function") {
+      tg.disableClosingConfirmation();
+      return;
+    }
+    if (typeof tg.setClosingConfirmation === "function") {
+      tg.setClosingConfirmation(false);
+    }
+  }
+
+  // Telegram native close guard
+  enableCloseWarning();
+
+  // Browser fallback close guard
+  window.addEventListener("beforeunload", function (e) {
+    if (isSubmitted) return;
+    e.preventDefault();
+    e.returnValue = closeWarningText();
+    return closeWarningText();
+  });
+
   function updateStatusGuru() {
     const value = (input.value || "").trim();
     if (Array.isArray(NAME_SET) && NAME_SET.includes(value)) {
@@ -140,6 +177,9 @@ document.addEventListener("DOMContentLoaded", function () {
       const user = (tg.initDataUnsafe && tg.initDataUnsafe.user) || {};
       const fallbackName = [user.first_name, user.last_name].filter(Boolean).join(" ").trim();
 
+      isSubmitted = true;
+      disableCloseWarning();
+
       tg.sendData(JSON.stringify({
         type: "register_name",
         role: "superuser",
@@ -198,6 +238,9 @@ document.addEventListener("DOMContentLoaded", function () {
       role = "pentadbir";
       selectedName = selectedPentadbir;
     }
+
+    isSubmitted = true;
+    disableCloseWarning();
 
     tg.sendData(JSON.stringify({
       type: "register_name",
