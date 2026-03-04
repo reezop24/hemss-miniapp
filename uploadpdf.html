@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Muat Naik PDF Manual</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="nameset.js"></script>
+<script src="uploadpdf.js"></script>
+<link rel="stylesheet" href="theme.css?v=20260304a">
+
+<style>
+body {
+  background: #243B55;
+  font-family: sans-serif;
+  color: white;
+  margin: 0;
+  padding: 20px;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.section {
+  background: #2f4a6a;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+input, select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.btn {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+  margin-top: 8px;
+  background: #2ecc71;
+  color: white;
+  font-weight: 700;
+}
+
+.hint {
+  font-size: 13px;
+  opacity: 0.9;
+  margin-bottom: 14px;
+}
+</style>
+</head>
+<body>
+  <h2>MUAT NAIK PDF MANUAL</h2>
+
+  <div class="section">
+    <label for="tarikh">Tarikh Laporan</label>
+    <input id="tarikh" type="date">
+
+    <label for="sesi">Sesi</label>
+    <select id="sesi">
+      <option value="">- Sila Pilih Sesi -</option>
+      <option value="PAGI">PAGI</option>
+      <option value="PETANG">PETANG</option>
+    </select>
+
+    <label for="namaGuru">Nama Guru</label>
+    <input id="namaGuru" list="senaraiNamaGuru" placeholder="Cari atau pilih nama guru..." autocomplete="off">
+    <datalist id="senaraiNamaGuru"></datalist>
+
+    <div class="hint">Selepas tekan butang di bawah, bot akan masuk mod upload PDF dalam chat.</div>
+
+    <button class="btn" id="submitBtn">📥 Muat Naik PDF</button>
+  </div>
+
+  <script src="brand.js"></script>
+</body>
+</html>
