@@ -8,6 +8,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     tg.expand();
+    if (typeof tg.ready === "function") {
+        tg.ready();
+    }
     let isSubmitted = false;
 
     const maxGuru = 6;
@@ -57,6 +60,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (!isReadOnly) {
         enableCloseWarning();
+
+        if (typeof tg.BackButton === "object") {
+            tg.BackButton.show();
+            tg.onEvent("backButtonClicked", function () {
+                if (isSubmitted) {
+                    tg.close();
+                    return;
+                }
+                const ok = window.confirm(closeWarningText());
+                if (ok) {
+                    disableCloseWarning();
+                    tg.close();
+                }
+            });
+        }
+
         window.addEventListener("beforeunload", function (e) {
             if (isSubmitted) return;
             e.preventDefault();
@@ -323,6 +342,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         isSubmitted = true;
         disableCloseWarning();
+        if (typeof tg.BackButton === "object") {
+            tg.BackButton.hide();
+        }
         tg.sendData(JSON.stringify(data));
         tg.close();
     };

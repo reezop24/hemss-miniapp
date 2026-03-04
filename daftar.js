@@ -1,6 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
   const tg = window.Telegram.WebApp;
   tg.expand();
+  if (typeof tg.ready === "function") {
+    tg.ready();
+  }
 
   const input = document.getElementById("namaGuru");
   const inputPentadbir = document.getElementById("namaPentadbir");
@@ -41,6 +44,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Telegram native close guard
   enableCloseWarning();
+
+  // Strong fallback: back button confirmation (lebih konsisten merentas klien Telegram)
+  if (typeof tg.BackButton === "object") {
+    tg.BackButton.show();
+    tg.onEvent("backButtonClicked", function () {
+      if (isSubmitted) {
+        tg.close();
+        return;
+      }
+      const ok = window.confirm(closeWarningText());
+      if (ok) {
+        disableCloseWarning();
+        tg.close();
+      }
+    });
+  }
 
   // Browser fallback close guard
   window.addEventListener("beforeunload", function (e) {
@@ -179,6 +198,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
       isSubmitted = true;
       disableCloseWarning();
+      if (typeof tg.BackButton === "object") {
+        tg.BackButton.hide();
+      }
 
       tg.sendData(JSON.stringify({
         type: "register_name",
@@ -241,6 +263,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     isSubmitted = true;
     disableCloseWarning();
+    if (typeof tg.BackButton === "object") {
+      tg.BackButton.hide();
+    }
 
     tg.sendData(JSON.stringify({
       type: "register_name",
