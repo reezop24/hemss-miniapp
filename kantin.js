@@ -1,5 +1,64 @@
 const tg = window.Telegram.WebApp;
 tg.expand();
+
+if (typeof tg.ready === "function") {
+    tg.ready();
+}
+
+let isSubmitted = false;
+
+function closeWarningText() {
+    return "Semua maklumat tidak akan disimpan jika anda menutup halaman ini sekarang.";
+}
+
+function enableCloseWarning() {
+    if (typeof tg.enableClosingConfirmation === "function") {
+        tg.enableClosingConfirmation();
+        return;
+    }
+    if (typeof tg.setClosingConfirmation === "function") {
+        tg.setClosingConfirmation(true);
+    }
+}
+
+function disableCloseWarning() {
+    if (typeof tg.disableClosingConfirmation === "function") {
+        tg.disableClosingConfirmation();
+        return;
+    }
+    if (typeof tg.setClosingConfirmation === "function") {
+        tg.setClosingConfirmation(false);
+    }
+}
+
+function setupCloseWarning() {
+    if (isReadOnly) return;
+
+    enableCloseWarning();
+
+    if (typeof tg.BackButton === "object") {
+        tg.BackButton.show();
+        tg.onEvent("backButtonClicked", function () {
+            if (isSubmitted) {
+                tg.close();
+                return;
+            }
+            const ok = window.confirm(closeWarningText());
+            if (ok) {
+                disableCloseWarning();
+                tg.close();
+            }
+        });
+    }
+
+    window.addEventListener("beforeunload", function (e) {
+        if (isSubmitted) return;
+        e.preventDefault();
+        e.returnValue = closeWarningText();
+        return closeWarningText();
+    });
+}
+
 const params = new URLSearchParams(window.location.search);
 const mode = (params.get("mode") || "edit").toLowerCase();
 const isReadOnly = mode === "view";
@@ -14,6 +73,8 @@ try {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+
+    setupCloseWarning();
     const pelaporSelect = document.getElementById("pelapor");
     const allowedPelapor = Array.isArray(prefill.guru_pelapor_list)
         ? prefill.guru_pelapor_list.map(v => (v || "").trim()).filter(Boolean)
@@ -50,7 +111,13 @@ document.addEventListener("DOMContentLoaded", function () {
         if (editBtn) {
             editBtn.style.display = "block";
             editBtn.onclick = function () {
-                tg.sendData(JSON.stringify({
+                isSubmitted = true;
+    disableCloseWarning();
+    if (typeof tg.BackButton === "object") {
+        tg.BackButton.hide();
+    }
+
+    tg.sendData(JSON.stringify({
                     type: "request_edit_section",
                     section: "kantin"
                 }));
@@ -107,6 +174,12 @@ function submitKantin() {
             komen.push(t.value.trim());
         }
     });
+
+    isSubmitted = true;
+    disableCloseWarning();
+    if (typeof tg.BackButton === "object") {
+        tg.BackButton.hide();
+    }
 
     tg.sendData(JSON.stringify({
         type: "section_kantin",
