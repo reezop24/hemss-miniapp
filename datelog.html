@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Date Log</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="datelog.js"></script>
+<link rel="stylesheet" href="theme.css?v=20260314a">
+
+<style>
+body {
+  margin: 0;
+  padding: 20px;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.section {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+input,
+select,
+button {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+input,
+select {
+  padding: 14px;
+  border: none;
+  margin-bottom: 12px;
+}
+
+button {
+  border: none;
+  padding: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.search-btn {
+  background: #2ecc71;
+  color: #fff;
+}
+
+.release-btn {
+  background: #ffb347;
+  color: #1f3554;
+  margin-top: 12px;
+}
+
+.meta {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.user-name {
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.empty {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+</style>
+</head>
+<body>
+  <h2>DATE LOG</h2>
+
+  <div class="section">
+    <label for="tarikh">Tarikh</label>
+    <input id="tarikh" type="date">
+
+    <label for="sesi">Sesi</label>
+    <select id="sesi">
+      <option value="">- Sila Pilih Sesi -</option>
+      <option value="PAGI">PAGI</option>
+      <option value="PETANG">PETANG</option>
+    </select>
+
+    <button id="searchBtn" class="search-btn">Cari</button>
+  </div>
+
+  <div class="section">
+    <div id="resultEmpty" class="empty">Sila pilih tarikh dan sesi, kemudian tekan Cari.</div>
+    <div id="resultBox" style="display:none;">
+      <div id="resultName" class="user-name"></div>
+      <div id="resultMeta" class="meta"></div>
+      <button id="releaseBtn" class="release-btn">Release Tarikh</button>
+    </div>
+  </div>
+
+  <script src="brand.js"></script>
+</body>
+</html>

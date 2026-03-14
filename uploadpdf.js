@@ -11,13 +11,13 @@ document.addEventListener("DOMContentLoaded", function () {
   const datalist = document.getElementById("senaraiNamaGuru");
   const submitBtn = document.getElementById("submitBtn");
 
-  if (Array.isArray(NAME_SET)) {
-    NAME_SET.forEach((name) => {
-      const opt = document.createElement("option");
-      opt.value = name;
-      datalist.appendChild(opt);
-    });
-  }
+  const guruOptions = Array.isArray(NAME_SET) ? NAME_SET.slice() : [];
+
+  guruOptions.forEach((name) => {
+    const opt = document.createElement("option");
+    opt.value = name;
+    datalist.appendChild(opt);
+  });
 
   function attachSearchDropdown(inputEl, options) {
     if (!inputEl) return;
@@ -46,51 +46,102 @@ document.addEventListener("DOMContentLoaded", function () {
     arrowBtn.style.borderBottomRightRadius = "10px";
     arrowBtn.style.cursor = "pointer";
 
-    const select = document.createElement("select");
-    select.style.position = "absolute";
-    select.style.right = "0";
-    select.style.top = "0";
-    select.style.width = "34px";
-    select.style.height = "calc(100% - 12px)";
-    select.style.opacity = "0";
-    select.style.cursor = "pointer";
+    const panel = document.createElement("div");
+    panel.style.position = "absolute";
+    panel.style.left = "0";
+    panel.style.right = "0";
+    panel.style.top = "calc(100% - 10px)";
+    panel.style.maxHeight = "220px";
+    panel.style.overflowY = "auto";
+    panel.style.background = "#ffffff";
+    panel.style.color = "#1f3554";
+    panel.style.border = "1px solid #d7dbe2";
+    panel.style.borderRadius = "8px";
+    panel.style.boxShadow = "0 10px 24px rgba(0,0,0,0.16)";
+    panel.style.zIndex = "20";
+    panel.style.display = "none";
 
-    const defaultOption = document.createElement("option");
-    defaultOption.value = "";
-    defaultOption.textContent = "Pilih";
-    select.appendChild(defaultOption);
+    function normalize(value) {
+      return (value || "").trim().toLowerCase();
+    }
 
-    (Array.isArray(options) ? options : []).forEach((name) => {
-      const option = document.createElement("option");
-      option.value = name;
-      option.textContent = name;
-      select.appendChild(option);
-    });
+    function renderList(list) {
+      panel.innerHTML = "";
+      if (!list.length) {
+        const empty = document.createElement("div");
+        empty.textContent = "Tiada padanan";
+        empty.style.padding = "10px 12px";
+        empty.style.fontSize = "13px";
+        empty.style.opacity = "0.75";
+        panel.appendChild(empty);
+      } else {
+        list.forEach((name) => {
+          const item = document.createElement("button");
+          item.type = "button";
+          item.textContent = name;
+          item.style.display = "block";
+          item.style.width = "100%";
+          item.style.textAlign = "left";
+          item.style.padding = "10px 12px";
+          item.style.border = "none";
+          item.style.background = "#fff";
+          item.style.color = "#1f3554";
+          item.style.cursor = "pointer";
+          item.style.fontSize = "14px";
 
-    const normalize = (s) => (s || "").trim().toLowerCase();
+          item.addEventListener("mouseenter", function () {
+            item.style.background = "#f3f6fb";
+          });
+          item.addEventListener("mouseleave", function () {
+            item.style.background = "#fff";
+          });
+          item.addEventListener("click", function () {
+            inputEl.value = name;
+            panel.style.display = "none";
+          });
+
+          panel.appendChild(item);
+        });
+      }
+      panel.style.display = "block";
+    }
 
     inputEl.addEventListener("input", function () {
       const typed = normalize(inputEl.value);
-      const exact = (Array.isArray(options) ? options : []).find((name) => normalize(name) === typed);
-      select.value = exact || "";
+      const filtered = options
+        .filter((name) => normalize(name).includes(typed))
+        .slice(0, 25);
+      renderList(filtered);
     });
 
-    select.addEventListener("change", function () {
-      if (select.value) {
-        inputEl.value = select.value;
-      }
+    inputEl.addEventListener("focus", function () {
+      const typed = normalize(inputEl.value);
+      const filtered = options
+        .filter((name) => normalize(name).includes(typed))
+        .slice(0, 25);
+      renderList(filtered);
     });
 
     arrowBtn.addEventListener("click", function () {
-      select.focus();
-      select.click();
+      if (panel.style.display === "block") {
+        panel.style.display = "none";
+        return;
+      }
+      renderList(options.slice(0, 25));
+      inputEl.focus();
+    });
+
+    document.addEventListener("click", function (e) {
+      if (!wrap.contains(e.target)) {
+        panel.style.display = "none";
+      }
     });
 
     wrap.appendChild(arrowBtn);
-    wrap.appendChild(select);
+    wrap.appendChild(panel);
   }
 
-  attachSearchDropdown(namaGuruEl, Array.isArray(NAME_SET) ? NAME_SET : []);
+  attachSearchDropdown(namaGuruEl, guruOptions);
 
   submitBtn.addEventListener("click", function () {
     const dateValue = (tarikhEl.value || "").trim();
