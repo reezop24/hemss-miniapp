@@ -71,7 +71,7 @@ const NAME_SET = [
   "Siti Norain Binti Idris",
   "Sree Devi A/p Lokanathan",
   "Syahida Afifah Binti Md Nor",
-  "Syarfiah Nur Alya Binti Sted Muhammas Ghazi",
+  "Syarifah Nur Alya Binti Syed Muhammad Ghazi",
   "Uma Mageswary a/p Jallendran",
   "Ummi Habibah Binti Aman @Ab Rahman",
   "Vimalah a/p Velayutham",
