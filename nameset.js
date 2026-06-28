@@ -4,6 +4,7 @@
 const NAME_SET = [
   "Ahmad Fikri Bin Abu Bakar",
   "Ainaa Farah Binti Kayat",
+  "Ainnul Izzati Binti Ruslan",
   "Amadifilzah Binti Abindi",
   "Amirul Hasnan Bin Faridon",
   "Anitha a/p Ponnaiah",
@@ -103,21 +104,21 @@ const KELAS_BY_TINGKATAN = {
 
 
 const NAME_PENTADBIR = [
+  "Aida Roslaini Binti Ayob",
+  "Khairul Aliza bin Abd Rashid",
   "Mohd Zaid bin Abdul Rauf",
-  "Roozana binti Maaris",
+  "Mohd Shahyar bin Zulkafli",
   "Noraini binti Md Din",
-  "Mas Ayu binti Mustapa",
   "Noraini binti Mohamad",
   "Nor Hashimah Binti Seman",
   "Nozama binti Mahadi",
   "Amira Hasya binti Azhar",
-  "Rega Dhevi a/p Marimuthu"
+  "Rega Dhevi a/p Marimuthu",
+  "Wahyu Akmal Binti Hussein"
 ];
 
 const PENTADBIR_JAWATAN = {
   "Mohd Zaid bin Abdul Rauf": "Pengetua",
-  "Roozana binti Maaris": "Penolong Kanan Hal Ehwal Murid",
   "Noraini binti Md Din": "Penolong Kanan Pentadbiran",
-  "Mas Ayu binti Mustapa": "Penolong Kanan Kokurikulum",
   "Noraini binti Mohamad": "Penolong Kanan Petang"
 };
